@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 v0.6 §7). Edit here, then run: python scripts/build_ui_texts_sql.py  and paste the generated SQL into Supabase SQL Editor. Status: drafts until advisor approval (NFR-ETH-001).",
-  "ui_texts_version": "1.0",
+  "ui_texts_version": "1.1",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Tool",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Aracı"
@@ -23,6 +23,26 @@
       "title": "Gereksinim Kalite Metrikleri Değerlendirme Aracına Hoş Geldiniz",
       "body": "Araştırmamıza katıldığınız için teşekkür ederiz. Yazılım gereksinimlerini altı kalite ölçütüne göre değerlendirmeniz istenecektir. Bir set (30 gereksinim) yaklaşık 30–45 dakika sürer.\n\nYanıtlarınız adınızla değil, rastgele bir oturum kimliğiyle kaydedilir ve yalnızca akademik araştırma amacıyla kullanılır.",
       "button": "Devam Et"
+    }
+  },
+  "consent": {
+    "en": {
+      "title": "Information and Consent",
+      "body": "This study is part of an MSc thesis at Ankara University on the quality of software requirements.\n\nData collected: a pseudonymous session ID (a one-way hash computed in your browser from browser settings and a random value), your scores and notes, the time spent on each requirement, and your answer to one background question. The tool does not ask for your name or e-mail address.\n\nUse: The data will be used only for this thesis and publications resulting from it.\n\nParticipation is voluntary. You may stop at any time by closing this page.",
+      "checkbox": "I have read this notice and agree to participate.",
+      "agree_button": "Continue",
+      "decline_button": "I do not wish to participate",
+      "declined_title": "Thank you",
+      "declined_body": "You have chosen not to participate. No data has been recorded. You may close this page."
+    },
+    "tr": {
+      "title": "Bilgilendirme ve Onam",
+      "body": "Bu çalışma, Ankara Üniversitesi'nde yürütülen ve yazılım gereksinimlerinin kalitesini konu alan bir yüksek lisans tezinin parçasıdır.\n\nToplanan veriler: tarayıcınızda, tarayıcı ayarlarından ve rastgele bir değerden tek yönlü olarak hesaplanan takma adlı bir oturum kimliği; verdiğiniz puanlar ve notlar; her gereksinim için harcanan süre; bir arka plan sorusuna verdiğiniz yanıt. Araç adınızı veya e-posta adresinizi sormaz.\n\nKullanım: Veriler yalnızca bu tez ve tezden üretilecek yayınlar için kullanılacaktır.\n\nKatılım gönüllüdür. Bu sayfayı kapatarak istediğiniz zaman ayrılabilirsiniz.",
+      "checkbox": "Bu bilgilendirmeyi okudum ve çalışmaya katılmayı kabul ediyorum.",
+      "agree_button": "Devam Et",
+      "decline_button": "Katılmak istemiyorum",
+      "declined_title": "Teşekkür ederiz",
+      "declined_body": "Katılmamayı seçtiniz. Hiçbir veri kaydedilmedi. Bu sayfayı kapatabilirsiniz."
     }
   },
   "background": {
@@ -87,6 +107,16 @@
       "comment_label": "Değerlendirme deneyiminize ilişkin yorumlarınızı aşağıya bırakabilirsiniz (isteğe bağlı).",
       "comment_placeholder": "Değerlendirme deneyiminize ilişkin isteğe bağlı yorumlarınız...",
       "button": "Gönder ve Bitir"
+    }
+  },
+  "common": {
+    "en": {
+      "save_error": "Your answer could not be saved. Please check your connection and try again.",
+      "saving": "Saving…"
+    },
+    "tr": {
+      "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
+      "saving": "Kaydediliyor…"
     }
   }
 }

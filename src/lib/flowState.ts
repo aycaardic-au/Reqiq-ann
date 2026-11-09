@@ -2,9 +2,9 @@ import type { LanguagePref } from './config'
 
 /**
  * Onboarding progress kept in localStorage (FR-LNG-003).
- * The session row is created later, at consent (insert sets language_pref once; FR-SES-008).
+ * The session row is created at consent (D-20); see session.ts.
  */
-export type Step = 'language' | 'welcome' | 'consent'
+export type Step = 'language' | 'welcome' | 'consent' | 'background' | 'calibration'
 
 export interface FlowState {
   language: LanguagePref | null
@@ -12,6 +12,7 @@ export interface FlowState {
 }
 
 const KEY = 'reqiq_ann_flow'
+const STEPS: Step[] = ['language', 'welcome', 'consent', 'background', 'calibration']
 const INITIAL: FlowState = { language: null, step: 'language' }
 
 export function readFlow(): FlowState {
@@ -19,7 +20,7 @@ export function readFlow(): FlowState {
     const raw = localStorage.getItem(KEY)
     if (!raw) return INITIAL
     const s = JSON.parse(raw) as FlowState
-    if (s.language && ['EN', 'TR', 'BOTH'].includes(s.language)) return s
+    if (s.language && ['EN', 'TR', 'BOTH'].includes(s.language) && STEPS.includes(s.step)) return s
   } catch {
     /* storage unavailable or corrupt: start again */
   }

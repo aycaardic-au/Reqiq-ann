@@ -19,10 +19,40 @@ export interface WelcomeTexts {
   button: string
 }
 
+export interface ConsentTexts {
+  title: string
+  body: string
+  checkbox: string
+  agree_button: string
+  decline_button: string
+  declined_title: string
+  declined_body: string
+}
+
+export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
+
+export interface BackgroundTexts {
+  title: string
+  question: string
+  options: Record<AnnotatorType, string>
+  other_label: string
+  other_warning: string
+  button: string
+}
+
+export interface CommonTexts {
+  save_error: string
+  saving: string
+}
+
 export interface RubricContent {
+  ui_texts_version: string
   app_name: Record<UiLang, string>
   language_select: LanguageSelectTexts
   welcome: Record<UiLang, WelcomeTexts>
+  consent: Record<UiLang, ConsentTexts>
+  background: Record<UiLang, BackgroundTexts>
+  common: Record<UiLang, CommonTexts>
   [key: string]: unknown
 }
 
@@ -33,7 +63,10 @@ export function uiLangFor(pref: LanguagePref): UiLang {
 
 function isValid(c: unknown): c is RubricContent {
   const x = c as RubricContent | null
-  return Boolean(x?.app_name?.en && x?.language_select?.option_en && x?.welcome?.en?.title && x?.welcome?.tr?.title)
+  return Boolean(
+    x?.app_name?.en && x?.language_select?.option_en && x?.welcome?.tr?.title &&
+      x?.consent?.tr?.title && x?.background?.tr?.title && x?.common?.tr?.save_error,
+  )
 }
 
 /** EXT-CFG-001: load the active rubric configuration at startup. */
@@ -53,6 +86,6 @@ export async function loadActiveConfig(): Promise<RubricContent> {
     .limit(1)
     .single()
   if (error) throw error
-  if (!isValid(data?.content)) throw new Error('Active rubric_config has no UI texts (run migration 0006)')
+  if (!isValid(data?.content)) throw new Error('Active rubric_config has no UI texts (run migrations 0006 and 0009)')
   return data.content
 }

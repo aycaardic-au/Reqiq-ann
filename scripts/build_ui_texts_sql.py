@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "config" / "ui_texts.json"
 DEFAULT_OUT = ROOT / "supabase" / "migrations" / "0006_ui_texts.sql"
-REQUIRED = ["app_name", "language_select", "welcome", "background", "batch_complete", "thankyou"]
+REQUIRED = ["app_name", "language_select", "welcome", "consent", "background", "batch_complete", "thankyou", "common"]
 
 
 def main() -> None:
@@ -27,7 +27,7 @@ def main() -> None:
     missing = [k for k in REQUIRED if k not in data]
     if missing:
         raise SystemExit(f"Missing keys in ui_texts.json: {missing}")
-    for k in ["welcome", "background", "batch_complete", "thankyou"]:
+    for k in ["welcome", "consent", "background", "batch_complete", "thankyou", "common"]:
         if set(data[k].keys()) != {"en", "tr"}:
             raise SystemExit(f"Key '{k}' must have exactly 'en' and 'tr'")
         if set(data[k]["en"].keys()) != set(data[k]["tr"].keys()):
@@ -36,7 +36,7 @@ def main() -> None:
     body = json.dumps(data, ensure_ascii=False, indent=2)
     if "$json$" in body:
         raise SystemExit("Text must not contain $json$")
-    sql = f"""-- ReqIQ-ANN: UI texts (ADD-02 v0.6 §7) -> active rubric_config row
+    sql = f"""-- ReqIQ-ANN: UI texts (ADD-02 §7) -> active rubric_config row
 -- GENERATED from config/ui_texts.json by scripts/build_ui_texts_sql.py. Do not edit by hand.
 -- Run in Supabase SQL Editor. Re-run safe: replaces only the UI text keys.
 
