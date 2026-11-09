@@ -19,7 +19,7 @@ Admin route: `/#/admin`.
 2. Push to `main` → the workflow builds and publishes `dist/` to the `gh-pages` branch.
 3. Repo **Settings → Pages**: Source = *Deploy from a branch*, Branch = `gh-pages` / `(root)`.
 
-Site URL: `https://<github-user>.github.io/reqiq-ann/`
+Site URL: `https://<github-user>.github.io/Reqiq-ann/`
 
 ## Security (NFR-SEC-001..004)
 - Only the public publishable key is used in the browser.
