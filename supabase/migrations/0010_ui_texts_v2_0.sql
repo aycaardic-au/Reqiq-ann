@@ -1,0 +1,202 @@
+-- ReqIQ-ANN migration 0010 — UI texts v2.0 (new flow: consent page, form, intro; D-24)
+-- GENERATED from config/ui_texts.json by scripts/build_ui_texts_sql.py. Do not edit by hand.
+-- Run in Supabase SQL Editor. Re-run safe: replaces only the UI text keys.
+
+BEGIN;
+
+UPDATE rubric_config
+SET content = content || $json${
+  "ui_texts_version": "2.0",
+  "app_name": {
+    "en": "Requirements Quality Metrics Evaluation Tool",
+    "tr": "Gereksinim Kalite Metrikleri Değerlendirme Aracı"
+  },
+  "consent": {
+    "tr": {
+      "title": "Gereksinim Kalite Metrikleri Değerlendirme Aracı",
+      "lede": "Bu çalışma, yazılım gereksinimlerinin kalitesini altı metrikle değerlendiren bir puanlama rubriğini insan değerlendiricilerle sınamayı amaçlıyor.",
+      "steps": [
+        "Gereksinim değerlendirme, ortalama 30–45 dk"
+      ],
+      "form_title": "Aydınlatılmış Onam Formu",
+      "form_sections": [
+        {
+          "heading": "",
+          "paragraphs": [
+            "Sayın gönüllü,",
+            "Ankara Üniversitesi Fen Bilimleri Enstitüsü, Disiplinlerarası Yapay Zekâ Teknolojileri Tezli Yüksek Lisans Programı'nda, Dr. Öğr. Üyesi Rukiye Savran Kızıltepe danışmanlığında Ayca Ardıç tarafından yürütülen \"Büyük Dil Modelleri Kullanarak Gereksinim Belirtimlerinin Otomatik Kalite Değerlendirmesi\" başlıklı tez çalışması kapsamındaki bu araştırmaya katılmaya davet ediliyorsunuz. Bu araştırmaya yalnızca 18 yaşını doldurmuş gönüllüler katılabilir.",
+            "Araştırmada yer almayı kabul etmeden önce aşağıdaki bilgileri lütfen dikkatlice okuyunuz."
+          ]
+        },
+        {
+          "heading": "Araştırmanın Amacı ve Kapsamı",
+          "paragraphs": [
+            "Bu araştırmanın amacı, yazılım ve sistem gereksinimlerinin kalitesini ölçmek için geliştirilen altı metrikli bir puanlama rubriğini insan değerlendiricilerle sınamaktır. Sizden, ekranda gösterilecek gereksinimleri altı kalite metriğine göre 0, 1 veya 2 puanla değerlendirmeniz istenecektir.",
+            "Elde edilen puanlar, rubriğin değerlendiriciler arası tutarlılığının incelenmesinde ve büyük dil modellerinin değerlendirmeleriyle karşılaştırılmasında kullanılacaktır."
+          ]
+        },
+        {
+          "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
+          "paragraphs": [
+            "Bir set 30 gereksinimden oluşur ve ortalama 30–45 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
+          ]
+        },
+        {
+          "heading": "Gönüllülük Esası",
+          "paragraphs": [
+            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanır. Katılmayı reddedebilir ya da herhangi bir anda, gerekçe göstermeden \"Oturumu sonlandır\" bağlantısını kullanarak veya sayfayı kapatarak çalışmadan ayrılabilirsiniz.",
+            "Katılımınız için sizden herhangi bir ücret istenmeyecek ve size herhangi bir ödeme yapılmayacaktır."
+          ]
+        },
+        {
+          "heading": "Toplanan Veriler ve Gizlilik",
+          "paragraphs": [
+            "Araç adınızı, e-posta adresinizi veya sizi tanımlayabilecek başka bir bilgiyi sormaz. Toplanan veriler şunlardır: tarayıcınızda tek yönlü olarak hesaplanan takma adlı bir oturum kimliği, değerlendirme dili tercihiniz, katılımcı türünüz, verdiğiniz puanlar ve notlar ile her gereksinim için harcanan süre.",
+            "Veriler yalnızca bu tez ve tezden üretilecek bilimsel yayınlar için kullanılacak, sonuçlar toplu olarak raporlanacaktır."
+          ]
+        },
+        {
+          "heading": "Olası Riskler",
+          "paragraphs": [
+            "Araştırma düşük risk kategorisindedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Ekran başında uzun süre kalmaktan kaynaklanabilecek yorgunluğu azaltmak için setler arasında ara verebilirsiniz."
+          ]
+        },
+        {
+          "heading": "Araştırmaya Dahil Olacak Toplam Gönüllü Sayısı",
+          "paragraphs": [
+            "Araştırmaya yaklaşık 60 gönüllünün katılması planlanmaktadır."
+          ]
+        },
+        {
+          "heading": "Gönüllü Katılımcı Onayı",
+          "paragraphs": [
+            "Yukarıda yer alan ve araştırmaya başlamadan önce gönüllülere verilmesi gereken bilgileri okudum ve anladım. Bu koşullar altında, araştırma kapsamında elde edilen verilerin bilimsel amaçlarla kullanılmasını kabul ediyorum."
+          ]
+        }
+      ],
+      "contact": "Sorularınız için: Dr. Öğr. Üyesi Rukiye Savran Kızıltepe (rukiyekiziltepe@ankara.edu.tr), Ayca ARDIÇ (ayca.ardic@gmail.com) veya Burak Taha YAMAN (buraktahayaman@gmail.com)",
+      "choice_title": "Onam",
+      "agree": "Bilgilendirme metnini okudum, 18 yaşını doldurdum ve araştırmaya kendi özgür irademle, gönüllü olarak katılıyorum.",
+      "decline": "Katılmıyorum.",
+      "start_button": "Başla",
+      "choice_required": "Devam etmek için bir seçenek işaretleyiniz."
+    }
+  },
+  "declined": {
+    "tr": {
+      "title": "Teşekkür ederiz",
+      "body": "Araştırmaya katılmamayı seçtiniz. Hiçbir yanıtınız kaydedilmedi.",
+      "button": "Başa dön"
+    }
+  },
+  "form": {
+    "tr": {
+      "step": "Adım 1 / 3: Bilgi formu",
+      "title": "Bilgi formu",
+      "lede": "Devam etmek için iki soruyu da yanıtlayınız.",
+      "language_question": "Hangi dildeki gereksinimleri değerlendirmek istersiniz?",
+      "language_hint": "Bu seçim oturum boyunca değiştirilemez. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları gereksinimin dilinde gösterilir.",
+      "language_options": {
+        "EN": "İngilizce",
+        "TR": "Türkçe",
+        "BOTH": "Her ikisi (İngilizce ve Türkçe)"
+      },
+      "type_question": "Aşağıdakilerden hangisi sizi en iyi tanımlar?",
+      "type_options": {
+        "student": "Öğrenci",
+        "industry": "Sektör Çalışanı",
+        "researcher": "Akademik Araştırmacı",
+        "other": "Diğer"
+      },
+      "other_label": "Lütfen kısaca belirtiniz (isteğe bağlı, en fazla 50 karakter).",
+      "other_warning": "Lütfen adınızı, kurumunuzu veya sizi tanımlayabilecek herhangi bir bilgiyi yazmayınız.",
+      "required_error": "Bu soruyu yanıtlayınız.",
+      "button": "Kaydet ve Devam et"
+    }
+  },
+  "intro": {
+    "tr": {
+      "step": "Adım 2 / 3: Yönerge",
+      "title": "Değerlendirme yönergesi",
+      "items": [
+        "Her sayfada bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
+        "Puanlar: {scale}.",
+        "Her metrikte kısa bir soru ve açıklama yer alır. \"İpucu\" düğmesi, metriğin kurallarını ve kötü/iyi örnek çiftlerini gösterir.",
+        "{general_guidance}",
+        "Gereksinim metni bir metriği değerlendirmeye gerçekten yetmiyorsa \"Değerlendirilemiyor\" seçeneğini kullanabilirsiniz. Her metriğe isteğe bağlı not ekleyebilirsiniz.",
+        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. Kaydedilen gereksinime geri dönülemez."
+      ],
+      "button": "Değerlendirmeye başla"
+    }
+  },
+  "session_bar": {
+    "tr": {
+      "end_link": "Oturumu sonlandır",
+      "end_confirm_title": "Oturumu sonlandır",
+      "end_confirm_text": "Oturumu sonlandırmak istediğinizden emin misiniz? Bu tarayıcıda kaldığınız yerden devam edemezsiniz.",
+      "end_confirm_ok": "Sonlandır",
+      "end_confirm_cancel": "Vazgeç",
+      "ended_title": "Oturumunuz sonlandırıldı",
+      "ended_body": "Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
+      "ended_button": "Başa dön"
+    }
+  },
+  "batch_complete": {
+    "en": {
+      "title": "Batch Complete!",
+      "body": "You have evaluated {batch_count} requirements in this batch. Total evaluated in this session: {total}.",
+      "question": "Would you like to continue with another set of requirements?",
+      "continue_button": "Continue with another batch",
+      "stop_button": "No, thank you — finish"
+    },
+    "tr": {
+      "title": "Set Tamamlandı!",
+      "body": "Bu sette {batch_count} gereksinim değerlendirdiniz. Bu oturumda toplam: {total}.",
+      "question": "Yeni bir gereksinim seti değerlendirmek ister misiniz?",
+      "continue_button": "Yeni set al",
+      "stop_button": "Hayır, teşekkürler — bitir"
+    }
+  },
+  "thankyou": {
+    "en": {
+      "title": "Thank you for your contribution!",
+      "body": "You have successfully completed the evaluation of {n} requirements.",
+      "session_label": "Your session ID is:",
+      "session_note": "Please note it down if you would like to reference your participation later.",
+      "comment_label": "If you have any comments about the annotation experience, you may leave them below (optional).",
+      "comment_placeholder": "Optional comments about the annotation experience...",
+      "button": "Submit and Finish"
+    },
+    "tr": {
+      "title": "Katkınız için teşekkür ederiz!",
+      "body": "{n} gereksinimi başarıyla değerlendirdiniz.",
+      "session_label": "Oturum kimliğiniz:",
+      "session_note": "Katılımınıza daha sonra başvurmanız gerekirse bu kimliği not alabilirsiniz.",
+      "comment_label": "Değerlendirme deneyiminize ilişkin yorumlarınızı aşağıya bırakabilirsiniz (isteğe bağlı).",
+      "comment_placeholder": "Değerlendirme deneyiminize ilişkin isteğe bağlı yorumlarınız...",
+      "button": "Gönder ve Bitir"
+    }
+  },
+  "common": {
+    "tr": {
+      "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
+      "saving": "Kaydediliyor…",
+      "not_ready": "Değerlendirme ekranı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz."
+    },
+    "en": {
+      "save_error": "Your answer could not be saved. Please check your connection and try again.",
+      "saving": "Saving…",
+      "not_ready": "The evaluation screen is being prepared. Please try again later."
+    }
+  }
+}$json$::jsonb
+WHERE is_active = TRUE;
+
+-- Verify: expect 1 row, ui_texts_version = 2.0
+SELECT version_label,
+       content->>'ui_texts_version'        AS ui_texts_version,
+       content->'app_name'->>'tr'          AS app_name_tr,
+       content->'consent'->'tr'->>'form_title' AS consent_title_tr
+FROM rubric_config WHERE is_active = TRUE;
+
+COMMIT;

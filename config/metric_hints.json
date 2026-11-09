@@ -1,0 +1,257 @@
+{
+  "source": "2026_Requirement_Metrics_Scorable_v6.4.17_TR_Added.xlsx / Metrics_ENG_TR",
+  "metrics": [
+    {
+      "id": "M_IND_01",
+      "name_en": "Appropriate",
+      "rules": {
+        "en": [
+          "The requirement shall specify what the system shall do, not how it is to be implemented or designed, unless there is a documented reason for limiting the available solutions.",
+          "The requirement shall not prescribe a specific implementation technology, product brand-name, or hardware component unless there is a documented justification for restricting the available solutions.",
+          "The requirement shall be stated at the proper level of abstraction for the specific system or system element addressed."
+        ],
+        "tr": [
+          "Gereksinim, alternatif çözümleri sınırlandırmak için dokümante edilmiş bir gerekçe bulunmadıkça sistemin nasıl gerçekleştirileceğini veya tasarlanacağını değil, ne yapması gerektiğini belirtmelidir.",
+          "Olası çözümleri sınırlandıran dokümante edilmiş bir gerekçe bulunmadıkça gereksinim; belirli bir gerçekleştirim teknolojisini, ürün markasını veya donanım bileşenini zorunlu tutmamalıdır.",
+          "Gereksinim, ilgili sistem veya sistem elemanı için uygun soyutlama düzeyinde ifade edilmelidir."
+        ]
+      },
+      "bad": {
+        "en": [
+          "The system shall display the operational status of each component listed in System Component List SCL-01 [1] to the operator on a dashboard using three equal-width columns, blue panel backgrounds, and horizontal and vertical scrollbars.",
+          "The combat management system shall rank detected tracks in descending order of threat score using a bubble-sort algorithm implemented in C++."
+        ],
+        "tr": [
+          "Sistem, SCL-01 Sistem Bileşen Listesi dokümanında [1] listelenen her bileşenin çalışma durumunu operatöre, eşit genişlikte üç sütun, mavi panel arka planı ve yatay ve dikey kaydırma çubukları kullanan bir gösterge paneli üzerinde göstermelidir.",
+          "Muharebe yönetim sistemi, tespit edilen izleri C++ ile geliştirilmiş kabarcık sıralama algoritmasını kullanarak tehdit puanlarına göre azalan sırada sıralamalıdır."
+        ]
+      },
+      "good": {
+        "en": [
+          "The system shall display the operational status of each component listed in System Component List SCL-01 [1] to the operator.",
+          "The combat management system shall rank detected tracks in descending order of threat score."
+        ],
+        "tr": [
+          "Sistem, SCL-01 Sistem Bileşen Listesi dokümanında [1] listelenen her bileşenin çalışma durumunu operatöre göstermelidir.",
+          "Muharebe yönetim sistemi, tespit edilen izleri tehdit puanlarına göre azalan sırada sıralamalıdır."
+        ]
+      }
+    },
+    {
+      "id": "M_IND_02",
+      "name_en": "Unambiguous",
+      "rules": {
+        "en": [
+          "The requirement shall be formulated such that it can be interpreted in only one way by all readers.",
+          "Qualitative, subjective, or vague words without clear definitions or limits (e.g., 'fast', 'user-friendly', 'easy-to-use', 'cost-effective', 'robust', 'adequate', 'suitable', 'optimal', 'minimal', 'reliable', 'higher quality', 'better than', 'flexible', 'easy', 'safe', 'usable', 'portable', 'light-weight', 'small', 'large', 'best', 'most', 'quickly', 'easily', 'clearly') shall not introduce ambiguity into the requirement in the context in which they are used. Weak quantifiers implying unspecified quantities (e.g., 'several', 'various', 'numerous', 'a number of', 'a lot of', 'nearly', 'sufficient') shall not introduce ambiguity into the requirement in the context in which they are used.",
+          "Pronouns with unclear referents ('it', 'this', 'that', 'these', 'the other') and open-ended clauses ('including but not limited to', 'provide support', 'as a minimum', 'etc.', 'and so on') shall not leave the required scope unclear.",
+          "Superfluous infinitives that make the requirement unclear (e.g., 'to be able to', 'to be capable of', 'to be designed to') should not be used.",
+          "Escape clauses that allow evasion of fulfillment (e.g., 'if possible', 'as appropriate', 'where applicable', 'to the extent possible', 'as required') should not be used.",
+          "The oblique symbol ('/') shall not be used to indicate logical alternatives.",
+          "Double negative constructions (e.g., 'shall not allow unless', 'shall not without') that make the meaning unclear are prohibited.",
+          "Universal quantifiers ('all', 'always', 'never', 'none', 'every', '100%') shall not make the requirement unclear in its context.",
+          "Temporal expressions (e.g., 'eventually', 'soon', 'before long', 'as soon as possible') shall not introduce ambiguity into the requirement in the context in which they are used.",
+          "Terms such as adverbs and adjectives (e.g., 'almost always', 'significant') and logical statements (such as 'or', 'and/or') shall not introduce ambiguity into the requirement in the context in which they are used.",
+          "Each reference shall unambiguously identify the referenced document, by name, by a reference-list label (e.g., [1]), or both, and the applicable part (e.g., section, message) when the document does not apply in full. Version, date and publisher belong in the reference list."
+        ],
+        "tr": [
+          "Gereksinim, bütün okuyucuların yalnızca tek bir şekilde anlayabileceği biçimde yazılmalıdır.",
+          "Açık tanımı veya sınırı olmayan nitel, öznel ya da belirsiz sözcükler (ör. \"hızlı\", \"kullanıcı dostu\", \"kullanımı kolay\", \"maliyet açısından verimli\", \"sağlam\", \"yeterli\", \"uygun\", \"en uygun\", \"asgari düzeyde\", \"güvenilir\", \"daha yüksek kaliteli\", \"daha iyi\", \"esnek\", \"kolay\", \"güvenli\", \"kullanılabilir\", \"taşınabilir\", \"hafif\", \"küçük\", \"büyük\", \"en iyi\", \"en çok\", \"hızlıca\", \"kolayca\", \"açıkça\") kullanıldıkları bağlamda gereksinimi belirsizleştirmemelidir. Belirsiz miktar belirten ifadeler (ör. \"birkaç\", \"çeşitli\", \"çok sayıda\", \"birtakım\", \"çok fazla\", \"neredeyse\", \"yeterince\") kullanıldıkları bağlamda gereksinimi belirsizleştirmemelidir.",
+          "Gönderme yaptığı öğe açıkça belirlenemeyen zamirler (ör. \"o\", \"bu\", \"şu\", \"bunlar\", \"diğeri\") ve açık uçlu ifadeler (ör. \"bunlarla sınırlı olmamak üzere\", \"destek sağlamak\", \"en azından\", \"vb.\", \"ve benzerleri\") gerekli kapsamı belirsiz bırakmamalıdır.",
+          "Gereksinimi belirsizleştiren gereksiz yeterlilik ifadelerinin (ör. \"yapabilecek durumda olmak\", \"yapabilme yeteneğine sahip olmak\", \"yapmak üzere tasarlanmış olmak\") kullanılmaması önerilir.",
+          "Gereksinimin yerine getirilmesinden kaçınmaya olanak veren ifadelerin (ör. \"mümkünse\", \"uygun olduğu şekilde\", \"geçerli olduğu durumlarda\", \"mümkün olduğu ölçüde\", \"gerektiğinde\") kullanılmaması önerilir.",
+          "Eğik çizgi (\"/\"), mantıksal alternatifleri göstermek için kullanılmamalıdır.",
+          "Anlamı belirsizleştiren çift olumsuzluk yapıları (ör. \"olmadıkça izin vermemelidir\", \"olmadan yapmamalıdır\") yasaktır.",
+          "Evrensel niceleyiciler (ör. \"tüm\", \"her zaman\", \"asla\", \"hiçbiri\", \"her\", \"%100\") kullanıldıkları bağlamda gereksinimi belirsizleştirmemelidir.",
+          "Zamana ilişkin ifadeler (ör. \"eninde sonunda\", \"yakında\", \"çok geçmeden\", \"mümkün olan en kısa sürede\") kullanıldıkları bağlamda gereksinimi belirsizleştirmemelidir.",
+          "Zarf ve sıfatlar (ör. \"neredeyse her zaman\", \"önemli\") ile mantıksal ifadeler (ör. \"veya\", \"ve/veya\") kullanıldıkları bağlamda gereksinimi belirsizleştirmemelidir.",
+          "Her atıf, atıf yapılan belgeyi adıyla, referans listesi etiketiyle (ör. [1]) ya da her ikisiyle açık biçimde tanımlamalı; belge tümüyle geçerli değilse geçerli kısmı (ör. bölüm, mesaj) belirtmelidir. Sürüm, tarih ve yayımlayan kuruluş referans listesinde yer alır."
+        ]
+      },
+      "bad": {
+        "en": [
+          "When the operator confirms an order, the order management system shall assign a unique identifier to the order quickly.",
+          "The tracking system shall track several targets simultaneously.",
+          "When the controller sends a status request to the gateway, it shall record the request identifier in the event log.",
+          "If the door is not open/the air temperature exceeds 40 °C, the ventilation controller shall activate the fan."
+        ],
+        "tr": [
+          "Operatör bir siparişi onayladığında sipariş yönetim sistemi, siparişe hızlıca benzersiz bir kimlik atamalıdır.",
+          "Takip sistemi, aynı anda birkaç hedefi takip etmelidir.",
+          "Kontrol birimi ağ geçidine bir durum sorgusu gönderdiğinde o, sorgu kimliğini olay günlüğüne kaydetmelidir.",
+          "Kapı açık değilse/hava sıcaklığı 40 °C’yi aşarsa havalandırma kontrol birimi fanı çalıştırmalıdır."
+        ]
+      },
+      "good": {
+        "en": [
+          "When the operator confirms an order, the order management system shall assign a unique identifier to the order within 2 seconds after the confirmation.",
+          "The tracking system shall track at least 50 targets simultaneously.",
+          "When the controller sends a status request to the gateway, the controller shall record the request identifier in the event log.",
+          "If the door is not open or the air temperature exceeds 40 °C, the ventilation controller shall activate the fan."
+        ],
+        "tr": [
+          "Operatör bir siparişi onayladığında sipariş yönetim sistemi, siparişe onaydan sonraki 2 saniye içinde benzersiz bir kimlik atamalıdır.",
+          "Takip sistemi, aynı anda en az 50 hedefi takip etmelidir.",
+          "Kontrol birimi ağ geçidine bir durum sorgusu gönderdiğinde kontrol birimi, sorgu kimliğini olay günlüğüne kaydetmelidir.",
+          "Kapı açık değilse veya hava sıcaklığı 40 °C’yi aşarsa havalandırma kontrol birimi fanı çalıştırmalıdır."
+        ]
+      }
+    },
+    {
+      "id": "M_IND_03",
+      "name_en": "Complete",
+      "rules": {
+        "en": [
+          "The requirement or referenced document shall provide the information needed for implementation, including applicable inputs, outputs, conditions, operational states, and environmental boundaries.",
+          "Each performance constraint shall specify its associated function in the requirement text or in a referenced document.",
+          "The requirement shall not contain unresolved 'To Be Determined' (TBD), 'To Be Resolved' (TBR), 'To Be Confirmed' (TBC), or equivalent placeholder markers.",
+          "Each condition or qualification and the logical relationship between multiple conditions shall be stated explicitly.",
+          "When a requirement applies to multiple system or product elements, it shall identify each covered element, either by listing the elements explicitly or by referencing a uniquely identified document or definition that specifies them.",
+          "Supporting models, diagrams, or Interface Control Documents (ICDs) shall be referenced, with their applicable scope, where necessary to describe complex behavior.",
+          "The requirement shall not rely on a heading to supply information essential to understanding the requirement statement."
+        ],
+        "tr": [
+          "Gereksinim veya atıf yapılan belge, uygulanabilir girdiler, çıktılar, koşullar, çalışma durumları ve çevresel sınırlar dâhil olmak üzere gerçekleştirim için gereken bilgileri sağlamalıdır.",
+          "Her performans kısıtı, ilişkili olduğu işlevi gereksinim metninde veya atıf yapılan bir belgede belirtmelidir.",
+          "Gereksinim, çözümlenmemiş TBD (To Be Determined, belirlenecek), TBR (To Be Resolved, çözümlenecek), TBC (To Be Confirmed, teyit edilecek) veya eşdeğer yer tutucu ifadeler içermemelidir.",
+          "Her koşul veya sınırlayıcı ifade ile birden fazla koşul arasındaki mantıksal ilişki açıkça belirtilmelidir.",
+          "Bir gereksinim birden fazla sistem veya ürün öğesi için geçerliyse, gereksinimin hangi öğeler için geçerli olduğu açıkça listelenerek veya bu öğeleri tanımlayan benzersiz biçimde tanımlanmış bir belgeye ya da tanıma atıf yapılarak belirtilmelidir.",
+          "Karmaşık davranışların açıklanması için gerekli olduğunda destekleyici modellere, diyagramlara veya Arayüz Kontrol Dokümanlarına (Interface Control Documents, ICDs), geçerli kapsamlarıyla birlikte atıf yapılmalıdır.",
+          "Gereksinim ifadesinin anlaşılması için zorunlu olan bilgiler yalnızca başlıktan sağlanmamalıdır."
+        ]
+      },
+      "bad": {
+        "en": [
+          "The system shall transmit the daily status report to the control station within TBD seconds after the operator requests report transmission.",
+          "The monitoring system shall display the connection status of applicable sensors."
+        ],
+        "tr": [
+          "Operatör raporun gönderilmesini istediğinde sistem, günlük durum raporunu DSB saniye içinde kontrol istasyonuna iletmelidir.",
+          "İzleme sistemi, ilgili sensörlerin bağlantı durumunu göstermelidir."
+        ]
+      },
+      "good": {
+        "en": [
+          "The system shall transmit the daily status report to the control station within 5 seconds after the operator requests report transmission.",
+          "The monitoring system shall display the connection status of the sensors listed in the Sensor List SL-01 document [1]."
+        ],
+        "tr": [
+          "Operatör raporun gönderilmesini istediğinde sistem, günlük durum raporunu 5 saniye içinde kontrol istasyonuna iletmelidir.",
+          "İzleme sistemi, SL-01 Sensör Listesi dokümanında [1] listelenen sensörlerin bağlantı durumunu göstermelidir."
+        ]
+      }
+    },
+    {
+      "id": "M_IND_04",
+      "name_en": "Singular",
+      "rules": {
+        "en": [
+          "The requirement shall express exactly one discrete function, capability, characteristic, or constraint. Verbs within conditions, triggers, or qualifications shall not by themselves constitute singularity defects.",
+          "Coordinating conjunctions ('and', 'or', 'and/or', 'as well as') shall not be used to join multiple distinct functional actions in one requirement; each independent action shall be stated as a separate requirement. Compound proper nouns, domain terminology, or standardized interface labels (e.g., 'Park and Ride', 'Command and Control') are recognized as nominal entities and shall not be treated as grammatical combinator defects.",
+          "Additional functionalities shall not be embedded within enumerated subclauses; each shall be stated as a separate requirement.",
+          "Parentheses and brackets shall not inject additional functionalities. Parenthetical information that adds no independent requirement is not a singularity defect."
+        ],
+        "tr": [
+          "Gereksinim, tam olarak tek bir bağımsız işlevi, yeteneği, özelliği veya kısıtı ifade etmelidir. Koşul, tetikleyici veya sınırlayıcı ifadelerdeki fiiller tek başına tekillik kusuru sayılmamalıdır.",
+          "Bağlaçlar (\"ve\", \"veya\", \"ve/veya\", \"bunun yanı sıra\") bir gereksinimde birbirinden farklı birden fazla işlevsel eylemi birleştirmek için kullanılmamalıdır. Her bağımsız eylem ayrı bir gereksinim olarak belirtilmelidir. Birleşik özel adlar, alan terimleri ve standart arayüz etiketleri (ör. \"Park Et ve Devam Et\", \"Komuta ve Kontrol\") ad öbeği olarak kabul edilir; yalnızca bağlaç içerdiği için birleştirme kusuru sayılmamalıdır.",
+          "Ek işlevler, numaralandırılmış alt maddelere yerleştirilmemeli; her biri ayrı bir gereksinim olarak yazılmalıdır.",
+          "Parantezler ve köşeli ayraçlar ek işlevler getirmemelidir. Bağımsız bir gereksinim oluşturmayan parantez içi bilgi tekillik kusuru değildir."
+        ]
+      },
+      "bad": {
+        "en": [
+          "When smoke is detected, the system shall activate the audible alarm and display the evacuation route.",
+          "The system shall display the current status of each equipment item listed in Equipment List EL-01 [1] (and generate the monthly maintenance report specified in Report Specification RS-02 [2] on the first day of each month)."
+        ],
+        "tr": [
+          "Duman algılandığında sistem, sesli alarmı etkinleştirmeli ve tahliye güzergâhını göstermelidir.",
+          "Sistem, EL-01 Ekipman Listesi dokümanında [1] listelenen her ekipman öğesinin güncel durumunu göstermelidir (ve RS-02 Rapor Spesifikasyonu dokümanında [2] tanımlanan aylık bakım raporunu her ayın ilk günü oluşturmalıdır)."
+        ]
+      },
+      "good": {
+        "en": [
+          "1.1. When smoke is detected, the system shall activate the audible alarm.\n1.2. When smoke is detected, the system shall display the evacuation route.\n\n2.1. The system shall display the current status of each equipment item listed in Equipment List EL-01 [1].\n2.2. The system shall generate the monthly maintenance report specified in Report Specification RS-02 [2] on the first day of each month."
+        ],
+        "tr": [
+          "1.1. Duman algılandığında sistem, sesli alarmı etkinleştirmelidir.\n1.2. Duman algılandığında sistem, tahliye güzergâhını göstermelidir.\n\n2.1. Sistem, EL-01 Ekipman Listesi dokümanında [1] listelenen her ekipman öğesinin güncel durumunu göstermelidir.\n2.2. Sistem, RS-02 Rapor Spesifikasyonu dokümanında [2] tanımlanan aylık bakım raporunu her ayın ilk günü oluşturmalıdır."
+        ]
+      }
+    },
+    {
+      "id": "M_IND_05",
+      "name_en": "Verifiable",
+      "rules": {
+        "en": [
+          "The requirement shall be stated so that its realization can be objectively verified by an appropriate method such as Test, Analysis, Inspection, or Demonstration.",
+          "Quantitative attributes shall be accompanied by appropriate measurement units (e.g., kg, ms, MHz, km/h).",
+          "Quantitative performance requirements shall specify applicable numerical thresholds, limits, or acceptable tolerance ranges (e.g., less than, greater than or equal to, plus or minus). Qualitative requirements shall have objective, observable acceptance criteria.",
+          "Where timing behavior is relevant to the required performance or successful operation of the system, requirements involving asynchronous operations, communication, or data transfer shall specify appropriate and bounded timing constraints (e.g., maximum latency, response timeout, or retry limits)."
+        ],
+        "tr": [
+          "Gereksinim, karşılanıp karşılanmadığı Test, Analiz, Muayene veya Gösterim gibi uygun bir yöntemle nesnel olarak doğrulanabilecek biçimde ifade edilmelidir.",
+          "Nicel özellikler uygun ölçü birimleriyle (ör. kg, ms, MHz, km/h) birlikte verilmelidir.",
+          "Nicel performans gereksinimleri, uygulanabilir sayısal eşikleri, sınırları veya kabul edilebilir tolerans aralıklarını (ör. küçüktür, büyük veya eşittir, artı veya eksi) belirtmelidir. Nitel gereksinimlerin nesnel ve gözlemlenebilir kabul ölçütleri olmalıdır.",
+          "Zamanlama davranışının sistemin gerekli performansı veya başarılı çalışması açısından önemli olduğu durumlarda, eş zamansız işlemleri, haberleşmeyi veya veri aktarımını içeren gereksinimler uygun ve sınırları belirlenmiş zaman kısıtlarını (ör. en yüksek gecikme süresi, yanıt zaman aşımı veya yeniden deneme sınırları) belirtmelidir."
+        ]
+      },
+      "bad": {
+        "en": [
+          "The alarm panel shall make active alarms easy to distinguish.",
+          "If no acknowledgement is received within 100 ms after transmitting a command, the controller shall retransmit the command until an acknowledgement is received."
+        ],
+        "tr": [
+          "Alarm paneli, etkin alarmların kolay ayırt edilmesini sağlamalıdır.",
+          "Komutun gönderilmesinden sonraki 100 ms içinde onay alınmazsa kontrol birimi, onay alınana kadar komutu yeniden göndermelidir."
+        ]
+      },
+      "good": {
+        "en": [
+          "The alarm panel shall display the status label 'ACTIVE' for each active alarm.\n2.1. If no acknowledgement is received within 100 ms after transmitting a command, the controller shall retransmit the command up to three times, waiting up to 100 ms for an acknowledgement after each retransmission.\n2.2. If no acknowledgement is received within 100 ms after the third retransmission, the controller shall report a communication fault to the operator."
+        ],
+        "tr": [
+          "Alarm paneli, her etkin alarm için \"AKTİF\" durum etiketini göstermelidir.\n2.1. Komutun gönderilmesinden sonraki 100 ms içinde onay alınmazsa kontrol birimi, her yeniden gönderimden sonra onay için en fazla 100 ms bekleyerek komutu en fazla üç kez yeniden göndermelidir.\n2.2. Üçüncü yeniden gönderimden sonraki 100 ms içinde onay alınmazsa kontrol birimi, operatöre haberleşme arızası bildirmelidir."
+        ]
+      }
+    },
+    {
+      "id": "M_IND_06",
+      "name_en": "Conforming",
+      "rules": {
+        "en": [
+          "The requirement shall be a complete sentence with a subject, ‘shall’, and a predicate specifying the required behavior or property. Conditions, objects, and constraints shall be included only where needed; condition clauses shall clearly identify the applicable event, state, or fault.",
+          "Active voice is mandatory. The responsible system, subsystem, software, hardware, or other system element shall be the grammatical subject of the main clause.",
+          "Positive statements are recommended. Negative requirement statements shall be explicit and logically clear.",
+          "The statement shall be free of spelling, grammar, punctuation, and capitalization errors.",
+          "The requirement statement shall not include its purpose or rationale. It may be recorded in a separate Rationale attribute."
+        ],
+        "tr": [
+          "Gereksinim, açıkça belirtilmiş bir sorumlu özne, zorunluluk bildiren \"-malıdır/-melidir\" kipi ve gerekli davranışı veya özelliği belirten bir yüklem içeren tam bir cümle olmalıdır. Koşullar, nesneler ve kısıtlar yalnızca gerekli olduklarında eklenmeli; koşul yan cümleleri geçerli olayı, durumu veya arızayı açıkça tanımlamalıdır.",
+          "Etken çatı zorunludur. Sorumlu sistem, alt sistem, yazılım, donanım veya diğer sistem öğesi ana cümlenin açık dil bilgisel öznesi olmalıdır. \"-il\", \"-ıl\", \"-ul\", \"-ül\", \"-in\", \"-ın\", \"-un\", \"-ün\" ekleri edilgen yapı açısından değerlendirilir; ancak ekin bulunması tek başına edilgenlik kanıtı değildir. Anlama göre değerlendirilir.",
+          "Olumlu ifadelerin kullanılması önerilir. Olumsuz gereksinimler açık ve mantıksal açıdan anlaşılır olmalıdır.",
+          "Gereksinim metni yazım, dil bilgisi, noktalama ve büyük-küçük harf hataları içermemelidir.",
+          "Gereksinim ifadesi amacını veya gerekçesini içermemelidir. Amaç veya gerekçe ayrı bir gerekçe özniteliğinde kaydedilebilir."
+        ]
+      },
+      "bad": {
+        "en": [
+          "When the user selects Logout, the system must terminate the active session.",
+          "Each detected fault shall be recorded in the event log by the controller."
+        ],
+        "tr": [
+          "Kullanıcı Oturumu Kapat seçeneğini belirlediğinde sistem, etkin oturumu sonlandırmak zorundadır.",
+          "Tespit edilen her arıza, kontrol birimi tarafından olay günlüğüne kaydedilmelidir."
+        ]
+      },
+      "good": {
+        "en": [
+          "When the user selects Logout, the system shall terminate the active session.",
+          "The controller shall record each detected fault in the event log."
+        ],
+        "tr": [
+          "Kullanıcı Oturumu Kapat seçeneğini belirlediğinde sistem, etkin oturumu sonlandırmalıdır.",
+          "Kontrol birimi, tespit edilen her arızayı olay günlüğüne kaydetmelidir."
+        ]
+      }
+    }
+  ]
+}

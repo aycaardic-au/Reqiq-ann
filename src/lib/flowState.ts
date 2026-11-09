@@ -1,30 +1,31 @@
 import type { LanguagePref } from './config'
 
 /**
- * Onboarding progress kept in localStorage (FR-LNG-003).
- * The session row is created at consent (D-20); see session.ts.
+ * Flow progress kept in localStorage (D-24):
+ * consent (K1) → form (K3) → intro (K4) → annotate (K5) → …
+ * The session row is created when the form is submitted (D-24); see session.ts.
  */
-export type Step = 'language' | 'welcome' | 'consent' | 'background' | 'calibration'
+export type Step = 'consent' | 'form' | 'intro' | 'annotate'
 
 export interface FlowState {
-  language: LanguagePref | null
   step: Step
+  language: LanguagePref | null
 }
 
 const KEY = 'reqiq_ann_flow'
-const STEPS: Step[] = ['language', 'welcome', 'consent', 'background', 'calibration']
-const INITIAL: FlowState = { language: null, step: 'language' }
+const STEPS: Step[] = ['consent', 'form', 'intro', 'annotate']
+export const INITIAL_FLOW: FlowState = { step: 'consent', language: null }
 
 export function readFlow(): FlowState {
   try {
     const raw = localStorage.getItem(KEY)
-    if (!raw) return INITIAL
+    if (!raw) return INITIAL_FLOW
     const s = JSON.parse(raw) as FlowState
-    if (s.language && ['EN', 'TR', 'BOTH'].includes(s.language) && STEPS.includes(s.step)) return s
+    if (STEPS.includes(s.step)) return s
   } catch {
     /* storage unavailable or corrupt: start again */
   }
-  return INITIAL
+  return INITIAL_FLOW // also covers states saved by the earlier flow (v1.x)
 }
 
 export function writeFlow(s: FlowState): void {
@@ -32,5 +33,14 @@ export function writeFlow(s: FlowState): void {
     localStorage.setItem(KEY, JSON.stringify(s))
   } catch {
     /* storage unavailable: flow still works for this page load */
+  }
+}
+
+export function clearLocal(): void {
+  try {
+    localStorage.removeItem(KEY)
+    localStorage.removeItem('reqiq_ann_session')
+  } catch {
+    /* nothing to clear */
   }
 }

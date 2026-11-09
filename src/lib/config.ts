@@ -1,71 +1,95 @@
 import { supabase } from './supabase'
 
-/** Annotator-facing texts (ADD-02 v0.6 §7). Source: config/ui_texts.json → rubric_config. */
+/** Annotator-facing texts (ADD-02 §7). Source: config/ui_texts.json → rubric_config. */
 export type UiLang = 'en' | 'tr'
 export type LanguagePref = 'EN' | 'TR' | 'BOTH'
-
-export interface LanguageSelectTexts {
-  page_title_en: string
-  page_title_tr: string
-  option_en: string
-  option_tr: string
-  option_both_en: string
-  option_both_tr: string
-}
-
-export interface WelcomeTexts {
-  title: string
-  body: string
-  button: string
-}
+export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
 
 export interface ConsentTexts {
   title: string
-  body: string
-  checkbox: string
-  agree_button: string
-  decline_button: string
-  declined_title: string
-  declined_body: string
+  lede: string
+  steps: string[]
+  form_title: string
+  form_sections: { heading: string; paragraphs: string[] }[]
+  contact: string
+  choice_title: string
+  agree: string
+  decline: string
+  start_button: string
+  choice_required: string
 }
 
-export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
+export interface DeclinedTexts { title: string; body: string; button: string }
 
-export interface BackgroundTexts {
+export interface FormTexts {
+  step: string
   title: string
-  question: string
-  options: Record<AnnotatorType, string>
+  lede: string
+  language_question: string
+  language_hint: string
+  language_options: Record<LanguagePref, string>
+  type_question: string
+  type_options: Record<AnnotatorType, string>
   other_label: string
   other_warning: string
+  required_error: string
   button: string
 }
 
-export interface CommonTexts {
-  save_error: string
-  saving: string
+export interface IntroTexts { step: string; title: string; items: string[]; button: string }
+
+export interface SessionBarTexts {
+  end_link: string
+  end_confirm_title: string
+  end_confirm_text: string
+  end_confirm_ok: string
+  end_confirm_cancel: string
+  ended_title: string
+  ended_body: string
+  ended_button: string
+}
+
+export interface CommonTexts { save_error: string; saving: string; not_ready: string }
+
+export interface RubricMetric {
+  id: string
+  name_en: string
+  name_tr: string
+  question: Record<UiLang, string>
+  guidance: Record<UiLang, string>
 }
 
 export interface RubricContent {
   ui_texts_version: string
   app_name: Record<UiLang, string>
-  language_select: LanguageSelectTexts
-  welcome: Record<UiLang, WelcomeTexts>
-  consent: Record<UiLang, ConsentTexts>
-  background: Record<UiLang, BackgroundTexts>
-  common: Record<UiLang, CommonTexts>
+  consent: { tr: ConsentTexts }
+  declined: { tr: DeclinedTexts }
+  form: { tr: FormTexts }
+  intro: { tr: IntroTexts }
+  session_bar: { tr: SessionBarTexts }
+  common: { tr: CommonTexts }
+  scale: Record<'0' | '1' | '2', { label: Record<UiLang, string> }>
+  general_guidance: Record<UiLang, string>
+  metrics: RubricMetric[]
   [key: string]: unknown
 }
 
-/** D-16: BOTH sessions use the Turkish interface. */
-export function uiLangFor(pref: LanguagePref): UiLang {
-  return pref === 'EN' ? 'en' : 'tr'
+/**
+ * D-23: screen texts are Turkish for every session (EN, TR, BOTH).
+ * The rubric (metric guidance, examples, score labels) follows each requirement's language.
+ */
+export const UI_LANG: UiLang = 'tr'
+
+/** Rubric language for one requirement (D-23): EN requirement → EN rubric, TR → TR. */
+export function rubricLangFor(languageTag: 'EN' | 'TR'): UiLang {
+  return languageTag === 'EN' ? 'en' : 'tr'
 }
 
 function isValid(c: unknown): c is RubricContent {
   const x = c as RubricContent | null
   return Boolean(
-    x?.app_name?.en && x?.language_select?.option_en && x?.welcome?.tr?.title &&
-      x?.consent?.tr?.title && x?.background?.tr?.title && x?.common?.tr?.save_error,
+    x?.consent?.tr?.form_sections && x?.declined?.tr && x?.form?.tr?.language_options &&
+      x?.intro?.tr?.items && x?.session_bar?.tr && x?.common?.tr?.not_ready && x?.metrics?.length,
   )
 }
 
@@ -73,9 +97,12 @@ function isValid(c: unknown): c is RubricContent {
 export async function loadActiveConfig(): Promise<RubricContent> {
   if (!supabase) {
     if (import.meta.env.DEV) {
-      // Local development without Supabase credentials: use the source file.
-      const local = await import('../../config/ui_texts.json')
-      return local.default as unknown as RubricContent
+      // Local development without Supabase credentials: use the source files.
+      const [ui, rubric] = await Promise.all([
+        import('../../config/ui_texts.json'),
+        import('../../config/rubric_v1.4.json'),
+      ])
+      return { ...(rubric.default as object), ...(ui.default as object) } as unknown as RubricContent
     }
     throw new Error('Supabase is not configured')
   }
@@ -86,6 +113,11 @@ export async function loadActiveConfig(): Promise<RubricContent> {
     .limit(1)
     .single()
   if (error) throw error
-  if (!isValid(data?.content)) throw new Error('Active rubric_config has no UI texts (run migrations 0006 and 0009)')
+  if (!isValid(data?.content)) throw new Error('Active rubric_config lacks UI texts v2.0 (run migration 0010)')
   return data.content
+}
+
+/** Replaces {name} placeholders. */
+export function fill(text: string, vars: Record<string, string>): string {
+  return text.replace(/\{(\w+)\}/g, (m, k: string) => vars[k] ?? m)
 }
