@@ -80,3 +80,92 @@ export async function createSession(language: LanguagePref, consentVersion: stri
 export async function saveBackground(sessionId: string, type: string, other: string | null): Promise<void> {
   await rpc('set_background', { p_session_id: sessionId, p_type: type, p_other: other })
 }
+
+/* ---------- K5 / K6 / thank-you (migration 0013) ---------- */
+
+export interface MetricScore {
+  metric_id: string
+  score: number | null
+  cannot_assess: boolean
+  note: string | null
+}
+
+export interface BatchItem {
+  batch_item_id: number
+  position: number
+  language_tag: 'EN' | 'TR'
+  text: string
+  scores: MetricScore[]
+}
+
+export type BatchResult =
+  | { status: 'ok'; batch_id: string; batch_number: number; items: BatchItem[] }
+  | { status: 'exhausted' | 'max_reached' }
+
+export interface CompleteResult {
+  batch_count: number
+  total: number
+  batches_completed: number
+  can_continue: boolean
+}
+
+async function rpcData<T>(fn: string, args: Record<string, unknown>): Promise<T> {
+  if (!supabase) {
+    if (import.meta.env.DEV) return devRpc(fn, args) as T
+    throw new Error('Supabase is not configured')
+  }
+  let lastError: unknown
+  for (let attempt = 0; attempt <= 3; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)))
+    const { data, error } = await supabase.rpc(fn, args)
+    if (!error) return data as T
+    lastError = error
+  }
+  throw lastError
+}
+
+export const assignBatch = (sessionId: string) => rpcData<BatchResult>('assign_batch', { p_session_id: sessionId })
+
+export const saveScores = (sessionId: string, itemId: number, scores: MetricScore[], seconds: number) =>
+  rpcData<null>('save_scores', { p_session_id: sessionId, p_batch_item_id: itemId, p_scores: scores, p_time_seconds: seconds })
+
+export const completeBatch = (sessionId: string, batchId: string) =>
+  rpcData<CompleteResult>('complete_batch', { p_session_id: sessionId, p_batch_id: batchId })
+
+export const saveComment = (sessionId: string, comment: string) =>
+  rpcData<null>('set_comment', { p_session_id: sessionId, p_comment: comment })
+
+/* Local development without Supabase: a small in-memory stand-in for the RPCs. */
+let devBatch: BatchResult | null = null
+let devDone = 0
+function devRpc(fn: string, args: Record<string, unknown>): unknown {
+  console.info('[dev] rpc', fn)
+  if (fn === 'assign_batch') {
+    if (devDone >= 2) return { status: 'max_reached' }
+    if (!devBatch) {
+      const items: BatchItem[] = Array.from({ length: 6 }, (_, i) => ({
+        batch_item_id: devDone * 100 + i + 1,
+        position: i + 1,
+        language_tag: i % 2 ? 'TR' : 'EN',
+        text: i % 2
+          ? 'Sistem, kullanıcı oturum açtığında son 30 günün işlem özetini 2 saniye içinde göstermelidir.'
+          : 'The system shall display the operational status of each component to the operator.',
+        scores: [],
+      }))
+      devBatch = { status: 'ok', batch_id: `dev-${devDone + 1}`, batch_number: devDone + 1, items }
+    }
+    return devBatch
+  }
+  if (fn === 'save_scores' && devBatch && devBatch.status === 'ok') {
+    const it = devBatch.items.find((x) => x.batch_item_id === args.p_batch_item_id)
+    if (it) it.scores = args.p_scores as MetricScore[]
+    return null
+  }
+  if (fn === 'complete_batch') {
+    devDone += 1
+    const n = devBatch && devBatch.status === 'ok' ? devBatch.items.length : 0
+    devBatch = null
+    return { batch_count: n, total: n * devDone, batches_completed: devDone, can_continue: devDone < 2 }
+  }
+  return null
+}

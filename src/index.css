@@ -91,3 +91,43 @@ dialog::backdrop { background: rgba(29, 42, 48, .35); }
   .start { position: static; }
   .consent-box { max-height: 300px; }
 }
+
+/* K5 evaluation */
+.annotate { max-width: 860px; margin: 0 auto; padding: 20px 20px 8px; }
+.req { position: sticky; top: 0; z-index: 5; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(29, 42, 48, .08); }
+.req-label { color: var(--muted); font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.req-text { font-size: 1.12rem; margin: 6px 0 0; }
+.metric { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
+.metric.missing { border-color: var(--err); }
+.metric legend { font-weight: 700; font-size: 1.05rem; float: left; width: 100%; margin-bottom: 4px; }
+.metric legend + * { clear: both; }
+.partial { background: #fff6e0; border: 1px solid #ecd9a8; border-radius: 8px; padding: 6px 10px; font-size: .9rem; margin: 4px 0 8px; }
+.question { font-weight: 700; margin: 4px 0 4px; }
+.guidance { color: var(--muted); font-size: .94rem; margin: 0 0 12px; }
+.scores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, .8fr); gap: 8px; }
+.score { display: flex; flex-direction: column; gap: 4px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+.score input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.score:focus-within { outline: 3px solid var(--accent); outline-offset: 1px; }
+.score.on { border-color: var(--primary); box-shadow: inset 0 0 0 2px var(--primary); background: #fff; }
+.score-head { font-weight: 700; }
+.score-head b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .8rem; margin-right: 4px; }
+.score.ca { justify-content: center; color: var(--muted); }
+.anchor { font-size: .84rem; color: var(--muted); }
+.metric-tools { display: flex; gap: 18px; margin-top: 8px; }
+.hint-panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; margin-top: 8px; font-size: .92rem; }
+.hint-panel h4 { margin: 8px 0 4px; font-size: .92rem; }
+.hint-panel ol { margin: 0 0 6px; padding-left: 20px; }
+.hint-panel li { margin-bottom: 4px; white-space: pre-line; }
+.samples.bad li::marker { color: var(--err); }
+.samples.good li::marker { color: var(--accent); }
+.note { width: 100%; margin-top: 8px; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; resize: vertical; }
+.navrow { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0 0; }
+.progress { display: flex; align-items: center; gap: 10px; font-size: .95rem; font-weight: 700; }
+.progress .bar { width: 140px; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.progress .bar span { display: block; height: 100%; background: var(--accent); }
+.dlg-actions.spread { justify-content: space-between; flex-wrap: wrap; }
+.sid { font-size: .8rem; word-break: break-all; background: var(--card); padding: 2px 6px; border-radius: 6px; }
+@media (max-width: 720px) {
+  .scores { grid-template-columns: 1fr 1fr; }
+  .progress .bar { width: 80px; }
+}

@@ -51,12 +51,60 @@ export interface SessionBarTexts {
 
 export interface CommonTexts { save_error: string; saving: string; not_ready: string }
 
+export interface AnnotateTexts {
+  step: string
+  progress: string
+  requirement_label: string
+  requirement_label_lang: string
+  lang_names: Record<'EN' | 'TR', string>
+  hint_button: string
+  hint_hide: string
+  hint_rules: string
+  hint_bad: string
+  hint_good: string
+  note_toggle: string
+  note_placeholder: string
+  prev: string
+  next: string
+  finish: string
+  incomplete: string
+  loading: string
+  exhausted: string
+  max_reached: string
+  to_thankyou: string
+}
+
+export interface AnnotateRubricTexts { cannot_assess: string; partial_note: string }
+
+export interface BatchCompleteTexts { title: string; body: string; question: string; continue_button: string; stop_button: string }
+
+export interface ThankYouTexts {
+  title: string
+  body: string
+  session_label: string
+  session_note: string
+  comment_label: string
+  comment_placeholder: string
+  comment_max: string
+  button: string
+  closed: string
+}
+
 export interface RubricMetric {
   id: string
   name_en: string
   name_tr: string
+  partial_scope_note?: boolean
   question: Record<UiLang, string>
   guidance: Record<UiLang, string>
+  anchors: Record<'0' | '1' | '2', Record<UiLang, string>>
+}
+
+export interface HintMetric {
+  id: string
+  rules: Record<UiLang, string[]>
+  bad: Record<UiLang, string[]>
+  good: Record<UiLang, string[]>
 }
 
 export interface RubricContent {
@@ -66,6 +114,11 @@ export interface RubricContent {
   declined: { tr: DeclinedTexts }
   form: { tr: FormTexts }
   intro: { tr: IntroTexts }
+  annotate: { tr: AnnotateTexts }
+  annotate_rubric: Record<UiLang, AnnotateRubricTexts>
+  batch_complete: { tr: BatchCompleteTexts }
+  thankyou: { tr: ThankYouTexts }
+  hints: { source: string; metrics: HintMetric[] }
   session_bar: { tr: SessionBarTexts }
   common: { tr: CommonTexts }
   scale: Record<'0' | '1' | '2', { label: Record<UiLang, string> }>
@@ -89,7 +142,8 @@ function isValid(c: unknown): c is RubricContent {
   const x = c as RubricContent | null
   return Boolean(
     x?.consent?.tr?.form_sections && x?.declined?.tr && x?.form?.tr?.language_options &&
-      x?.intro?.tr?.items && x?.session_bar?.tr && x?.common?.tr?.not_ready && x?.metrics?.length,
+      x?.intro?.tr?.items && x?.annotate?.tr?.step && x?.annotate_rubric?.en && x?.thankyou?.tr?.closed &&
+      x?.session_bar?.tr && x?.common?.tr?.not_ready && x?.metrics?.length && x?.hints?.metrics?.length,
   )
 }
 
@@ -98,11 +152,12 @@ export async function loadActiveConfig(): Promise<RubricContent> {
   if (!supabase) {
     if (import.meta.env.DEV) {
       // Local development without Supabase credentials: use the source files.
-      const [ui, rubric] = await Promise.all([
+      const [ui, rubric, hints] = await Promise.all([
         import('../../config/ui_texts.json'),
         import('../../config/rubric_v1.4.json'),
+        import('../../config/metric_hints.json'),
       ])
-      return { ...(rubric.default as object), ...(ui.default as object) } as unknown as RubricContent
+      return { ...(rubric.default as object), ...(ui.default as object), hints: hints.default } as unknown as RubricContent
     }
     throw new Error('Supabase is not configured')
   }
@@ -113,7 +168,7 @@ export async function loadActiveConfig(): Promise<RubricContent> {
     .limit(1)
     .single()
   if (error) throw error
-  if (!isValid(data?.content)) throw new Error('Active rubric_config lacks UI texts v2.0 (run migration 0010)')
+  if (!isValid(data?.content)) throw new Error('Active rubric_config lacks UI texts v2.2 or hints (run migrations 0010–0012)')
   return data.content
 }
 

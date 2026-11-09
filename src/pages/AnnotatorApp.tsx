@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react'
-import { loadActiveConfig, UI_LANG, type RubricContent } from '../lib/config'
+import { useCallback, useEffect, useState } from 'react'
+import { fill, loadActiveConfig, UI_LANG, type RubricContent } from '../lib/config'
 import { clearLocal, INITIAL_FLOW, readFlow, writeFlow, type FlowState } from '../lib/flowState'
-import { createSession, readSession, saveBackground } from '../lib/session'
+import { createSession, readSession, saveBackground, saveComment } from '../lib/session'
 import ConsentPage from '../screens/ConsentPage'
 import InfoForm from '../screens/InfoForm'
 import Intro from '../screens/Intro'
+import AnnotateStep from '../screens/AnnotateStep'
+import { BatchComplete, ThankYou } from '../screens/BatchEnd'
 import { Ended, EndSession, TopBar } from '../screens/SessionChrome'
 
 /**
  * Annotator flow (D-24):
  * K1 Giriş + Onam → K3 Bilgi formu → K4 Yönerge → K5 Değerlendirme → K6 Set tamamlandı → Teşekkürler
- * Implemented: K1–K4. Screen texts Turkish (D-23), all from rubric_config (FR-CFG-TXT-001).
+ * Implemented: K1–K6 and Teşekkürler. Screen texts Turkish (D-23), all from rubric_config (FR-CFG-TXT-001).
  */
 export default function AnnotatorApp() {
   const [config, setConfig] = useState<RubricContent | null>(null)
@@ -19,8 +21,10 @@ export default function AnnotatorApp() {
   const [flow, setFlow] = useState<FlowState>(() => {
     const f = readFlow()
     // Steps after the form need the stored session; without it, start again (FR-SES-004).
-    return (f.step === 'intro' || f.step === 'annotate') && !readSession() ? INITIAL_FLOW : f
+    return f.step !== 'consent' && f.step !== 'form' && !readSession() ? INITIAL_FLOW : f
   })
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null)
+  const onProgress = useCallback((done: number, total: number) => setProgress({ done, total }), [])
 
   useEffect(() => {
     loadActiveConfig().then(setConfig).catch((e) => {
@@ -87,13 +91,51 @@ export default function AnnotatorApp() {
           <EndSession t={bar} onEnd={endSession} />
         </>
       )
-    case 'annotate':
+    case 'annotate': {
+      const t = config.annotate.tr
       return (
         <>
-          <TopBar appName={appName} step="" />
-          <main className="narrow"><section className="panel"><p className="lede">{config.common.tr.not_ready}</p></section></main>
+          <TopBar appName={appName} step={t.step}
+            right={progress && (
+              <span className="progress" aria-live="polite">
+                <span className="bar"><span style={{ width: `${(100 * progress.done) / Math.max(1, progress.total)}%` }} /></span>
+                {fill(t.progress, { done: String(progress.done), total: String(progress.total) })}
+              </span>
+            )} />
+          <AnnotateStep
+            config={config}
+            sessionId={readSession()!.session_id}
+            onProgress={onProgress}
+            onBatchDone={(r) => update({ ...flow, step: 'batch_complete',
+              summary: { batchCount: r.batch_count, total: r.total, canContinue: r.can_continue } })}
+            onNoMore={() => update({ ...flow, step: 'thankyou' })}
+          />
           <EndSession t={bar} onEnd={endSession} />
         </>
       )
+    }
+    case 'batch_complete':
+      return (
+        <BatchComplete
+          t={config.batch_complete.tr}
+          batchCount={flow.summary?.batchCount ?? 0}
+          total={flow.summary?.total ?? 0}
+          canContinue={flow.summary?.canContinue ?? false}
+          onContinue={() => { setProgress(null); update({ ...flow, step: 'annotate' }) }}
+          onStop={() => update({ ...flow, step: 'thankyou' })}
+        />
+      )
+    case 'thankyou': {
+      const sid = readSession()!.session_id
+      return (
+        <ThankYou
+          t={config.thankyou.tr}
+          c={config.common.tr}
+          total={flow.summary?.total ?? 0}
+          sessionId={sid}
+          onSubmit={async (comment) => { await saveComment(sid, comment); clearLocal() }}
+        />
+      )
+    }
   }
 }

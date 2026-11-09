@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "config" / "ui_texts.json"
 DEFAULT_OUT = ROOT / "supabase" / "migrations" / "0006_ui_texts.sql"
-REQUIRED = ["app_name", "consent", "declined", "form", "intro", "session_bar", "batch_complete", "thankyou", "common"]
+REQUIRED = ["app_name", "consent", "declined", "form", "intro", "annotate", "annotate_rubric", "session_bar", "batch_complete", "thankyou", "common"]
 
 
 def main() -> None:
