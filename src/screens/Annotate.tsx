@@ -119,7 +119,7 @@ export default function Annotate({
 function Bulb() {
   return (
     <svg className="bulb" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2a7 7 0 0 0-4.2 12.6c.7.6 1.2 1.4 1.2 2.4v.5h6V17c0-1 .5-1.8 1.2-2.4A7 7 0 0 0 12 2z" fill="#f5c518" stroke="#8a6d00" strokeWidth="1.2" />
+      <path d="M12 2a7 7 0 0 0-4.2 12.6c.7.6 1.2 1.4 1.2 2.4v.5h6V17c0-1 .5-1.8 1.2-2.4A7 7 0 0 0 12 2z" fill="#f7d65a" stroke="#a07d10" strokeWidth="1.2" />
       <rect x="9" y="18.5" width="6" height="1.8" rx=".9" fill="#8a6d00" />
       <rect x="10" y="21" width="4" height="1.6" rx=".8" fill="#8a6d00" />
     </svg>
