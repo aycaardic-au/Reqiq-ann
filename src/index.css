@@ -131,3 +131,40 @@ dialog::backdrop { background: rgba(29, 42, 48, .35); }
   .scores { grid-template-columns: 1fr 1fr; }
   .progress .bar { width: 80px; }
 }
+
+/* Admin */
+.top-in.wide { max-width: 1200px; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tab { background: none; border: 1px solid transparent; border-radius: 8px; padding: 6px 12px; color: var(--muted); font-weight: 700; }
+.tab.on { background: var(--card); border-color: var(--line); color: var(--fg); }
+.row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.admin { max-width: 1200px; margin: 0 auto; padding: 24px 20px 40px; }
+.muted { color: var(--muted); font-size: .92rem; }
+.ok { color: var(--accent); font-weight: 700; }
+.mt { margin-top: 18px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; }
+.tile-val { font-size: 1.6rem; font-weight: 700; }
+.tile-label { color: var(--muted); font-size: .88rem; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+.hbars { display: flex; flex-direction: column; gap: 6px; }
+.hbar { display: grid; grid-template-columns: 150px 1fr 56px; gap: 10px; align-items: center; font-size: .9rem; }
+.hbar-label { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbar-track { height: 14px; }
+.hbar-fill { display: block; height: 100%; background: #3987e5; border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbar-val { text-align: right; font-variant-numeric: tabular-nums; }
+.stack { display: flex; height: 16px; gap: 2px; }
+.seg { display: block; height: 100%; }
+.seg:first-child { border-radius: 4px 0 0 4px; }
+.seg:last-child { border-radius: 0 4px 4px 0; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.params { max-width: 760px; display: flex; flex-direction: column; gap: 14px; }
+.param { display: flex; flex-direction: column; gap: 4px; }
+.param-label { font-weight: 700; }
+.param input, .param select, .row select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; max-width: 320px; }
+.login { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; }
+.tbl { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: .92rem; }
+.tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.submitrow.left { justify-content: flex-start; margin-top: 14px; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } .hbar { grid-template-columns: 100px 1fr 44px; } }
