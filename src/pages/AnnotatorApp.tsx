@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fill, loadActiveConfig, UI_LANG, type RubricContent } from '../lib/config'
 import { clearLocal, INITIAL_FLOW, readFlow, writeFlow, type FlowState } from '../lib/flowState'
-import { createSession, readSession, saveBackground, saveComment } from '../lib/session'
+import { createSession, endSession, readSession, saveBackground, saveComment, withdrawSession } from '../lib/session'
 import ConsentPage from '../screens/ConsentPage'
 import InfoForm from '../screens/InfoForm'
 import Intro from '../screens/Intro'
 import AnnotateStep from '../screens/AnnotateStep'
 import { BatchComplete, ThankYou } from '../screens/BatchEnd'
-import { Ended, EndSession, TopBar } from '../screens/SessionChrome'
+import { Ended, EndSession, TopBar, type EndChoice } from '../screens/SessionChrome'
 
 /**
  * Annotator flow (D-24):
@@ -17,7 +17,7 @@ import { Ended, EndSession, TopBar } from '../screens/SessionChrome'
 export default function AnnotatorApp() {
   const [config, setConfig] = useState<RubricContent | null>(null)
   const [failed, setFailed] = useState(false)
-  const [ended, setEnded] = useState(false)
+  const [ended, setEnded] = useState<EndChoice | null>(null)
   const [flow, setFlow] = useState<FlowState>(() => {
     const f = readFlow()
     // Steps after the form need the stored session; without it, start again (FR-SES-004).
@@ -60,9 +60,19 @@ export default function AnnotatorApp() {
 
   const bar = config.session_bar.tr
   const appName = config.app_name[UI_LANG]
-  const endSession = () => { clearLocal(); setFlow(INITIAL_FLOW); setEnded(true) }
+  const choose = async (choice: EndChoice) => {
+    const sid = readSession()?.session_id
+    if (choice === 'pause') { setEnded('pause'); return }
+    if (sid) await (choice === 'withdraw' ? withdrawSession(sid) : endSession(sid))
+    clearLocal(); setFlow(INITIAL_FLOW); setEnded(choice)
+  }
+  const end = <EndSession t={bar} c={config.common.tr} hasSession={Boolean(readSession())} onChoose={choose} />
 
-  if (ended) return <Ended t={bar} onRestart={() => setEnded(false)} />
+  if (ended === 'pause') return <Ended title={bar.paused_title} body={bar.paused_body} button={bar.paused_button} onRestart={() => setEnded(null)} />
+  if (ended) {
+    return <Ended title={bar.ended_title} body={ended === 'withdraw' ? bar.withdrawn_body : bar.ended_body}
+      button={bar.ended_button} onRestart={() => setEnded(null)} />
+  }
 
   switch (flow.step) {
     case 'consent':
@@ -80,7 +90,7 @@ export default function AnnotatorApp() {
               update({ step: 'intro', language: lang })
             }}
           />
-          <EndSession t={bar} onEnd={endSession} />
+          {end}
         </>
       )
     case 'intro':
@@ -88,7 +98,7 @@ export default function AnnotatorApp() {
         <>
           <TopBar appName={appName} step={config.intro.tr.step} />
           <Intro t={config.intro.tr} config={config} onStart={() => update({ ...flow, step: 'annotate' })} />
-          <EndSession t={bar} onEnd={endSession} />
+          {end}
         </>
       )
     case 'annotate': {
@@ -109,8 +119,9 @@ export default function AnnotatorApp() {
             onBatchDone={(r) => update({ ...flow, step: 'batch_complete',
               summary: { batchCount: r.batch_count, total: r.total, canContinue: r.can_continue } })}
             onNoMore={() => update({ ...flow, step: 'thankyou' })}
+            onEnded={() => { clearLocal(); setFlow(INITIAL_FLOW); setEnded('end') }}
           />
-          <EndSession t={bar} onEnd={endSession} />
+          {end}
         </>
       )
     }

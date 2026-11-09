@@ -83,7 +83,8 @@ export default function Annotate({
     <main className="annotate">
       <section className="req" aria-labelledby="req-label">
         <div id="req-label" className="req-label">
-          {fill(t.requirement_label_lang, { lang: t.lang_names[item.language_tag] })} · {idx + 1}/{items.length}
+          <span>{t.requirement_title}</span>
+          <span className="req-meta">{t.lang_names[item.language_tag]} · {idx + 1}/{items.length}</span>
         </div>
         <p className="req-text" lang={lang}>{item.text}</p>
       </section>
@@ -115,6 +116,16 @@ export default function Annotate({
   )
 }
 
+function Bulb() {
+  return (
+    <svg className="bulb" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2a7 7 0 0 0-4.2 12.6c.7.6 1.2 1.4 1.2 2.4v.5h6V17c0-1 .5-1.8 1.2-2.4A7 7 0 0 0 12 2z" fill="#f5c518" stroke="#8a6d00" strokeWidth="1.2" />
+      <rect x="9" y="18.5" width="6" height="1.8" rx=".9" fill="#8a6d00" />
+      <rect x="10" y="21" width="4" height="1.6" rx=".8" fill="#8a6d00" />
+    </svg>
+  )
+}
+
 function MetricBlock({
   n, m, lang, config, value, showError, onChange,
 }: {
@@ -130,26 +141,27 @@ function MetricBlock({
   const rt = config.annotate_rubric[lang]
   const hint = useMemo(() => config.hints.metrics.find((h) => h.id === m.id), [config, m.id])
   const [hintOpen, setHintOpen] = useState(false)
+  const [detailsOpen, setDetailsOpen] = useState(false)
   const [noteOpen, setNoteOpen] = useState(Boolean(value?.note))
-  const name = lang === 'en' ? m.name_en : m.name_tr
   const group = `${m.id}-score`
 
   return (
     <fieldset className={`metric${showError ? ' missing' : ''}`}>
-      <legend><span className="n">{n}.</span>{name}</legend>
-      {m.partial_scope_note && <p className="partial" lang={lang}>{rt.partial_note}</p>}
+      <legend>
+        <span className="metric-no">{fill(t.metric_label, { n: String(n) })}</span>
+        <span className="metric-name">{m.name_tr} <span className="metric-en">/ {m.name_en}</span></span>
+      </legend>
       <p className="question" lang={lang}>{m.question[lang]}</p>
-      <p className="guidance" lang={lang}>{m.guidance[lang]}</p>
+      {m.partial_scope_note && <p className="partial" lang={lang}>{rt.partial_note}</p>}
 
-      <div className="scores" role="radiogroup" aria-label={name}>
+      <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
         {(['0', '1', '2'] as const).map((k) => {
           const on = !value?.cannot_assess && value?.score === Number(k)
           return (
-            <label key={k} className={`score${on ? ' on' : ''}`}>
+            <label key={k} className={`score${on ? ' on' : ''}`} title={m.anchors[k][lang]}>
               <input type="radio" name={group} checked={on}
                 onChange={() => onChange({ score: Number(k), cannot_assess: false })} />
               <span className="score-head" lang={lang}><b>{k}</b> {config.scale[k].label[lang]}</span>
-              <span className="anchor" lang={lang}>{m.anchors[k][lang]}</span>
             </label>
           )
         })}
@@ -161,11 +173,25 @@ function MetricBlock({
       </div>
 
       <div className="metric-tools">
-        <button type="button" className="link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
-          {hintOpen ? t.hint_hide : t.hint_button}
+        <button type="button" className="link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
+          {detailsOpen ? t.details_hide : t.details_button}
+        </button>
+        <button type="button" className="link hint-link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
+          <Bulb />{hintOpen ? t.hint_hide : t.hint_button}
         </button>
         {!noteOpen && <button type="button" className="link" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>}
       </div>
+
+      {detailsOpen && (
+        <div className="details-panel" lang={lang}>
+          <p>{m.guidance[lang]}</p>
+          <dl>
+            {(['0', '1', '2'] as const).map((k) => (
+              <div key={k}><dt><b>{k}</b> {config.scale[k].label[lang]}</dt><dd>{m.anchors[k][lang]}</dd></div>
+            ))}
+          </dl>
+        </div>
+      )}
 
       {hintOpen && hint && (
         <div className="hint-panel" lang={lang}>

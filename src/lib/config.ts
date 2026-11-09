@@ -42,10 +42,21 @@ export interface SessionBarTexts {
   end_link: string
   end_confirm_title: string
   end_confirm_text: string
+  opt_pause: string
+  opt_pause_hint: string
+  opt_end: string
+  opt_end_hint: string
+  opt_withdraw: string
+  opt_withdraw_hint: string
   end_confirm_ok: string
   end_confirm_cancel: string
+  end_confirm_simple: string
+  paused_title: string
+  paused_body: string
+  paused_button: string
   ended_title: string
   ended_body: string
+  withdrawn_body: string
   ended_button: string
 }
 
@@ -54,6 +65,10 @@ export interface CommonTexts { save_error: string; saving: string; not_ready: st
 export interface AnnotateTexts {
   step: string
   progress: string
+  requirement_title: string
+  metric_label: string
+  details_button: string
+  details_hide: string
   requirement_label: string
   requirement_label_lang: string
   lang_names: Record<'EN' | 'TR', string>
@@ -143,7 +158,7 @@ function isValid(c: unknown): c is RubricContent {
   return Boolean(
     x?.consent?.tr?.form_sections && x?.declined?.tr && x?.form?.tr?.language_options &&
       x?.intro?.tr?.items && x?.annotate?.tr?.step && x?.annotate_rubric?.en && x?.thankyou?.tr?.closed &&
-      x?.session_bar?.tr && x?.common?.tr?.not_ready && x?.metrics?.length && x?.hints?.metrics?.length,
+      x?.session_bar?.tr?.opt_withdraw && x?.common?.tr?.not_ready && x?.metrics?.length && x?.hints?.metrics?.length,
   )
 }
 
@@ -168,7 +183,7 @@ export async function loadActiveConfig(): Promise<RubricContent> {
     .limit(1)
     .single()
   if (error) throw error
-  if (!isValid(data?.content)) throw new Error('Active rubric_config lacks UI texts v2.2 or hints (run migrations 0010–0012)')
+  if (!isValid(data?.content)) throw new Error('Active rubric_config lacks UI texts v2.3 or hints (run migrations 0010–0017)')
   return data.content
 }
 

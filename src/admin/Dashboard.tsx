@@ -21,11 +21,13 @@ const LANGS: Record<string, string> = { EN: 'İngilizce', TR: 'Türkçe', BOTH: 
 
 export default function Dashboard({ tick }: { tick: number }) {
   const [d, setD] = useState<Dash | null>(null)
+  const [ends, setEnds] = useState<{ ended: number; withdrawn: number } | null>(null)
   const [err, setErr] = useState('')
   useEffect(() => {
     adminDb!.rpc('admin_dashboard').then(({ data, error }) => {
       if (error) setErr(error.message); else setD(data as Dash)
     })
+    adminDb!.rpc('admin_session_counts').then(({ data }) => setEnds(data as { ended: number; withdrawn: number } | null))
   }, [tick])
   if (err) return <p className="err">{A.error}{err}</p>
   if (!d) return <p className="muted">{A.loading}</p>
@@ -43,6 +45,8 @@ export default function Dashboard({ tick }: { tick: number }) {
         <Tile label="Ortanca süre / öğe" value={d.median_seconds == null ? '—' : `${Math.round(d.median_seconds)} sn`} />
         <Tile label={`Kapsama hedefine (${d.coverage_target}) ulaşan gereksinim`} value={`${d.coverage.target ?? 0} / ${reqTotal}`} />
         <Tile label="Dışlanan oturum" value={d.sessions_excluded} />
+        <Tile label="Sonlandırılan (yanıtlar saklandı)" value={ends?.ended ?? '—'} />
+        <Tile label="Yanıtlarını silen" value={ends?.withdrawn ?? '—'} />
       </div>
       <div className="grid2">
         <section className="panel">

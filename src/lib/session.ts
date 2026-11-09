@@ -100,7 +100,7 @@ export interface BatchItem {
 
 export type BatchResult =
   | { status: 'ok'; batch_id: string; batch_number: number; items: BatchItem[] }
-  | { status: 'exhausted' | 'max_reached' }
+  | { status: 'exhausted' | 'max_reached' | 'ended' }
 
 export interface CompleteResult {
   batch_count: number
@@ -131,6 +131,10 @@ export const saveScores = (sessionId: string, itemId: number, scores: MetricScor
 
 export const completeBatch = (sessionId: string, batchId: string) =>
   rpcData<CompleteResult>('complete_batch', { p_session_id: sessionId, p_batch_id: batchId })
+
+export const endSession = (sessionId: string) => rpcData<null>('end_session', { p_session_id: sessionId })
+
+export const withdrawSession = (sessionId: string) => rpcData<null>('withdraw_session', { p_session_id: sessionId })
 
 export const saveComment = (sessionId: string, comment: string) =>
   rpcData<null>('set_comment', { p_session_id: sessionId, p_comment: comment })

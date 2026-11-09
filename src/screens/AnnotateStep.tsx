@@ -5,13 +5,14 @@ import Annotate from './Annotate'
 
 /** Loads (or resumes) the session's batch, then runs K5. */
 export default function AnnotateStep({
-  config, sessionId, onProgress, onBatchDone, onNoMore,
+  config, sessionId, onProgress, onBatchDone, onNoMore, onEnded,
 }: {
   config: RubricContent
   sessionId: string
   onProgress: (done: number, total: number) => void
   onBatchDone: (r: CompleteResult) => void
   onNoMore: () => void
+  onEnded: () => void
 }) {
   const t = config.annotate.tr
   const [batch, setBatch] = useState<BatchResult | null>(null)
@@ -21,10 +22,10 @@ export default function AnnotateStep({
   useEffect(() => {
     let alive = true
     assignBatch(sessionId)
-      .then((b) => { if (alive) setBatch(b) })
+      .then((b) => { if (!alive) return; if (b.status === 'ended') onEnded(); else setBatch(b) })
       .catch((e) => { console.error(e); if (alive) setError(true) })
     return () => { alive = false }
-  }, [sessionId, attempt])
+  }, [sessionId, attempt]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (error) {
     return (

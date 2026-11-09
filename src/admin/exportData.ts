@@ -1,7 +1,7 @@
 /** Builds the export sheets from raw table rows (D-26, D-31). Pure functions; no I/O. */
 
 export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean }
-export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string }
+export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null }
 export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
 export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number | null; cannot_assess: boolean; note: string | null; annotation_language: string; round: number; created_at: string }
@@ -126,7 +126,8 @@ export function buildSheets(d: RawData): Record<string, Row[]> {
       items_assigned: sItems.length, items_scored: new Set(d.scores.filter((s) => s.session_id === se.session_id).map((s) => s.batch_item_id)).size,
       median_seconds_per_item: r3(med), speed_flag: med != null && med < speedSec,
       attention_metric_pairs: acPairs, attention_exact_match_pct: acPairs ? Math.round((100 * acSame) / acPairs) : null,
-      attention_max_abs_diff: acPairs ? acMax : null, excluded: se.excluded, comment: se.comment,
+      attention_max_abs_diff: acPairs ? acMax : null, ended_at: se.ended_at ?? null, withdrawn_at: se.withdrawn_at ?? null,
+      excluded: se.excluded, comment: se.comment,
     }
   })
 

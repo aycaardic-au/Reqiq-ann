@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.2",
+  "ui_texts_version": "2.3",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Tool",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Aracı"
@@ -38,7 +38,7 @@
         {
           "heading": "Gönüllülük Esası",
           "paragraphs": [
-            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanır. Katılmayı reddedebilir ya da herhangi bir anda, gerekçe göstermeden \"Oturumu sonlandır\" bağlantısını kullanarak veya sayfayı kapatarak çalışmadan ayrılabilirsiniz. Oturumu sonlandırdığınızda o ana kadar kaydedilen yanıtlarınız saklanır ve analizlerde kullanılır.",
+            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanır. Katılmayı reddedebilir ya da herhangi bir anda, gerekçe göstermeden \"Oturumu sonlandır\" bağlantısını kullanarak veya sayfayı kapatarak çalışmadan ayrılabilirsiniz. Ara verip daha sonra aynı tarayıcıdan kaldığınız yerden devam edebilirsiniz. Oturumu sonlandırırken o ana kadar kaydedilen yanıtlarınızın saklanmasını ya da silinmesini seçebilirsiniz.",
             "Katılımınız için sizden herhangi bir ücret istenmeyecek ve size herhangi bir ödeme yapılmayacaktır."
           ]
         },
@@ -118,7 +118,8 @@
         "Her metrikte kısa bir soru ve açıklama yer alır. \"İpucu\" düğmesi, metriğin kurallarını ve kötü/iyi örnek çiftlerini gösterir.",
         "Yalnız tekil gereksinim metnine bakarak puanlama yap. Veri setinde olmayan bilgiden dolayı puan kırma. Bir ifadeyi otomatik kusur sayma; etkisini değerlendir. İhlal sayısını mekanik olarak puana dönüştürme; tek ciddi kusur belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde değerlendir. Bağlam eksik diye değerlendirilebilir metrikleri boş bırakma.",
         "Gereksinim metni bir metriği değerlendirmeye gerçekten yetmiyorsa \"Değerlendirilemiyor\" seçeneğini kullanabilirsiniz. Her metriğe isteğe bağlı not ekleyebilirsiniz.",
-        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. Set bitene kadar önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz."
+        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. Set bitene kadar önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
+        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir ya da çıkabilirsiniz."
       ],
       "button": "Değerlendirmeye başla"
     }
@@ -147,7 +148,11 @@
       "loading": "Gereksinimler yükleniyor…",
       "exhausted": "Değerlendirebileceğiniz yeni gereksinim kalmadı. Katılımınız için teşekkür ederiz.",
       "max_reached": "Bu oturumda değerlendirilebilecek en fazla set sayısına ulaştınız. Katılımınız için teşekkür ederiz.",
-      "to_thankyou": "Devam et"
+      "to_thankyou": "Devam et",
+      "requirement_title": "Değerlendirilecek gereksinim",
+      "metric_label": "Metrik {n}",
+      "details_button": "Açıklama ve puan tanımları",
+      "details_hide": "Açıklamayı gizle"
     }
   },
   "annotate_rubric": {
@@ -162,13 +167,24 @@
   },
   "session_bar": {
     "tr": {
-      "end_link": "Oturumu sonlandır",
-      "end_confirm_title": "Oturumu sonlandır",
-      "end_confirm_text": "Oturumu sonlandırmak istediğinizden emin misiniz? Kaydedilen yanıtlarınız saklanır; bu tarayıcıda kaldığınız yerden devam edemezsiniz.",
-      "end_confirm_ok": "Sonlandır",
+      "end_link": "Ara ver / Oturumu sonlandır",
+      "end_confirm_title": "Ne yapmak istersiniz?",
+      "end_confirm_text": "Yanıtlarınız her gereksinim kaydedildiğinde veritabanına yazılır.",
+      "opt_pause": "Ara ver",
+      "opt_pause_hint": "Daha sonra bu tarayıcıdan aynı adrese girerek kaldığınız yerden devam edersiniz.",
+      "opt_end": "Oturumu sonlandır, yanıtlarım saklansın",
+      "opt_end_hint": "Bu tarayıcıda bu oturuma geri dönemezsiniz. Kaydedilen yanıtlarınız analizlerde kullanılır.",
+      "opt_withdraw": "Oturumu sonlandır ve yanıtlarımı sil",
+      "opt_withdraw_hint": "Bu oturumda kaydedilen tüm yanıtlarınız kalıcı olarak silinir. Geri alınamaz.",
+      "end_confirm_ok": "Onayla",
       "end_confirm_cancel": "Vazgeç",
+      "end_confirm_simple": "Oturumu sonlandırmak istediğinizden emin misiniz? Henüz yanıt kaydedilmedi.",
+      "paused_title": "Ara verdiniz",
+      "paused_body": "Bu tarayıcıdan aynı adrese girdiğinizde kaldığınız yerden devam edebilirsiniz. Sayfayı kapatabilirsiniz.",
+      "paused_button": "Şimdi devam et",
       "ended_title": "Oturumunuz sonlandırıldı",
-      "ended_body": "Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
+      "ended_body": "Katılımınız için teşekkür ederiz. Yanıtlarınız saklandı. Bu sayfayı kapatabilirsiniz.",
+      "withdrawn_body": "Yanıtlarınız silindi. Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
       "ended_button": "Başa dön"
     }
   },
