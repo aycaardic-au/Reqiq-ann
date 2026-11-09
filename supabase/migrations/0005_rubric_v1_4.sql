@@ -1,0 +1,382 @@
+-- ReqIQ-ANN migration 0005 — load rubric v1.4 as the active rubric
+-- Source: config/rubric_v1.4.json (Turkish verbatim; English drafts pending review)
+-- Run in Supabase SQL Editor AFTER 0004. Re-run safe: clears any earlier v1.4 row first.
+
+BEGIN;
+
+DELETE FROM rubric_config WHERE version_label = 'v1.4';
+
+INSERT INTO rubric_config (version_label, content, is_active)
+VALUES ('v1.4', $json${
+  "version_label": "v1.4",
+  "source": "Scoring_Rubric_v1.4.xlsx (Drive: Rubrick_Validasyon/Set_for_Validators)",
+  "status": "TR source verbatim. EN texts are drafts (translated) that need researcher review before launch. Sample requirement texts are Turkish only; EN samples are pending.",
+  "scale": {
+    "0": {
+      "label": {
+        "tr": "Uyumsuz",
+        "en": "Non-compliant"
+      },
+      "definition": {
+        "tr": "İlgili kalite özelliğinin karşılanmasını esaslı ölçüde engelleyen önemli bir kusur var.",
+        "en": "There is a significant defect that substantially hinders the fulfillment of the relevant quality attribute.",
+        "en_status": "from source file"
+      }
+    },
+    "1": {
+      "label": {
+        "tr": "Kısmen uyumlu",
+        "en": "Partially compliant"
+      },
+      "definition": {
+        "tr": "Söz konusu özellik önemli ölçüde sağlanır; orta veya küçük ölçekli kusur(lar) bulunmaktadır.",
+        "en": "The attribute in question is largely met; however, there are one or more defects of minor or moderate scale.",
+        "en_status": "from source file"
+      }
+    },
+    "2": {
+      "label": {
+        "tr": "Uyumlu",
+        "en": "Compliant"
+      },
+      "definition": {
+        "tr": "Sağlanan tekil metinde söz konusu özellik karşılanmıştır; kusur gözlenmemiştir.",
+        "en": "In the provided text, the relevant attribute is fully met; no defects have been observed.",
+        "en_status": "from source file"
+      }
+    }
+  },
+  "general_guidance": {
+    "tr": "Her metriği ayrı ayrı 0, 1 veya 2 puanla. Yalnız tekil gereksinim metnine dayan. Bir ifadeyi otomatik kusur sayma; etkisini değerlendir. İhlal sayısını mekanik olarak puana dönüştürme; tek ciddi kusur belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde değerlendir. Bağlam eksik diye değerlendirilebilir metrikleri boş bırakma.",
+    "en": "Score each metric separately with 0, 1 or 2. Rely only on the individual requirement text. Do not treat a phrase as a defect automatically; assess its impact. Do not convert the number of violations mechanically into a score; a single serious defect can be decisive. Assess the same defect in every metric it genuinely affects. Do not leave a metric blank merely because context is missing.",
+    "en_status": "draft (translated from TR; needs review)"
+  },
+  "metrics": [
+    {
+      "id": "M_IND_01",
+      "name_en": "Appropriate",
+      "name_tr": "Uygunluk",
+      "partial_scope_note": true,
+      "question": {
+        "tr": "Gereksinim, ihtiyaç duyulan sonucu mu tarif ediyor, yoksa bir çözüm yöntemini mi zorunlu tutuyor?",
+        "en": "Does the requirement describe the needed outcome, or does it mandate a solution method? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "İşlev veya beklenen sonucu tarif eden ifadeyi, marka/teknoloji/donanım ya da ayrıntılı tasarım dayatmasından ayır. Yalnız teknik terim geçmesi kusur değildir. Üst seviye gereksinimler ve tasarım gerekçeleri verilmediğinden bunların varlığını varsayma; belirgin çözüm dayatmasını metne göre puanla. Gerçekte gerekçesiz olduğunu iddia etme.",
+        "en": "Separate the statement describing the function or expected outcome from mandates of brand, technology or hardware, or detailed design. The mere presence of a technical term is not a defect. Do not assume higher-level requirements or design rationales that were not provided; score an evident solution mandate based on the text. Do not claim that it lacks a rationale in reality.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "Açık ürün/marka veya ayrıntılı gerçekleştirim çözümü ihtiyacın yerine geçer ya da çözüm alanını çok ciddi sınırlar.",
+          "en": "An explicit product/brand or detailed implementation solution replaces the need or severely restricts the solution space.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "İhtiyaç/sonuç anlaşılır; yanında görünür sınırlı bir gerçekleştirim tercihi dayatılır.",
+          "en": "The need or outcome is understandable; a visible, limited implementation preference is imposed alongside it.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "Metin ihtiyacı/sonucu belirtir; belirli gerçekleştirim çözümünü dayatan ifade gözlenmez.",
+          "en": "The text states the need or outcome; no expression imposing a specific implementation solution is observed.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem, olay kayıtlarını Oracle Database 23ai üzerinde, Dell PowerEdge R760 sunucularında en az 90 gün saklamalıdır.",
+          "reason_tr": "Ürün/donanım dayatması.",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, olay kayıtlarını ilişkisel bir veri tabanında en az 90 gün saklamalıdır.",
+          "reason_tr": "Sınırlı teknoloji dayatması.",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, olay kayıtlarını en az 90 gün saklamalıdır.",
+          "reason_tr": "Yalnız saklama sonucu. Gerçek tasarım gerekçesi bilinmez.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    },
+    {
+      "id": "M_IND_02",
+      "name_en": "Unambiguous",
+      "name_tr": "Tek anlamlılık",
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim yalnızca bir makul biçimde yorumlanabiliyor mu?",
+        "en": "Can the requirement be interpreted in only one reasonable way? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Belirsiz sıfat, nicelik ve zaman ifadelerini, zamir, açık uçlu ve kaçamak ifadeleri, eğik çizgi, çift olumsuzluk, koşul ve mantık bağlarını incele. Metindeki belirsizlik puanı etkiler; sağlanmamış terim sözlüğü veya referans listesi yok diye ayrıca kusur verme.",
+        "en": "Examine vague adjectives, quantities and time expressions, pronouns, open-ended and evasive expressions, slashes, double negatives, and conditional and logical connectors. Ambiguity in the text affects the score; do not assign a separate defect because no term glossary or reference list is provided.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "Ana yükümlülük veya kritik koşul birden fazla maddi yoruma açıktır.",
+          "en": "The main obligation or a critical condition is open to multiple material interpretations.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "Ana yükümlülük açık, ikincil kapsam veya koşulda sınırlı belirsizlik vardır.",
+          "en": "The main obligation is clear; there is limited ambiguity in a secondary scope or condition.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "Sağlanan metnin ilgili anlamı tek makul yoruma elverişlidir.",
+          "en": "The relevant meaning of the provided text is amenable to a single reasonable interpretation.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem, aldığı her alarmı hızlıca göstermelidir.",
+          "reason_tr": "'hızlıca' belirsiz.",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, aldığı her alarmı normal çalışma koşullarında en fazla 10 saniye içinde göstermelidir.",
+          "reason_tr": "'normal çalışma koşulları' tanımsız.",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, aldığı her alarmı alarmın alınmasından sonraki en fazla 10 saniye içinde operatör ekranında göstermelidir.",
+          "reason_tr": "Olay, süre ve gösterim yeri açık.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    },
+    {
+      "id": "M_IND_03",
+      "name_en": "Complete",
+      "name_tr": "Tamlık",
+      "partial_scope_note": true,
+      "question": {
+        "tr": "Gereksinimin ifade ettiği davranışı anlamak için gerekli bilgiler yeterli mi?",
+        "en": "Is the information needed to understand the stated behaviour sufficient? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "İfade edilen davranışın öznesini, eylemini, nesnesini, gerekli koşul ve sınırlarını incele. Çözülmemiş TBD/TBR/TBC gibi yer tutucuları değerlendir. Diğer gereksinimlerin, şemaların veya referansların içeriğini varsayma; yalnızca sağlanmamış harici doküman yüzünden puan düşürme.",
+        "en": "Examine the subject, action and object of the stated behaviour, and its necessary conditions and bounds. Evaluate unresolved placeholders such as TBD/TBR/TBC. Do not assume the content of other requirements, schemas or references; do not lower the score solely because an external document that was not provided is missing.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "İfadenin hangi davranışı talep ettiği temel unsurlar eksik olduğu için belirlenemez.",
+          "en": "The behaviour requested cannot be determined because essential elements are missing.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "Ana davranış belirtilir; ifade edilen davranışın uygulanabilir koşul/sınırlarından bir kısmı eksiktir.",
+          "en": "The main behaviour is stated; some of the applicable conditions or bounds of the expressed behaviour are missing.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "İfadenin gerektirdiği davranış ve görünür koşullar yeterince tanımlıdır.",
+          "en": "The behaviour required by the statement and its visible conditions are sufficiently defined.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem, kullanıcı hesabını kilitlemelidir.",
+          "reason_tr": "Kilitleme koşulu yok.",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, art arda beş başarısız oturum açma girişiminden sonra kullanıcı hesabını kilitlemelidir.",
+          "reason_tr": "Zaman penceresi ve kilit süresi eksik.",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, aynı kullanıcı hesabında 10 dakika içinde art arda beş başarısız oturum açma girişimi gerçekleştiğinde hesabı beşinci başarısız girişimin ardından 30 dakika boyunca kilitlemelidir.",
+          "reason_tr": "Giriş sayısı, pencere, başlangıç ve süre açık.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    },
+    {
+      "id": "M_IND_04",
+      "name_en": "Singular",
+      "name_tr": "Tekillik",
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim tam olarak tek bir bağımsız işlev, yetenek, özellik veya kısıt mı ifade ediyor?",
+        "en": "Does the requirement express exactly one independent function, capability, characteristic or constraint? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Gereksinimde birden fazla bağımsız işlev, yetenek, özellik veya kısıt bulunup bulunmadığını değerlendir. Koşul, tetikleyici veya sınırlayıcı ifadelerdeki fiiller tek başına tekillik kusuru değildir. Birden fazla fiil ya da bağlaç tek başına kusur sayılmaz. Alt maddelerin veya parantezlerin bağımsız ek işlev getirip getirmediğini kontrol et.",
+        "en": "Assess whether the requirement contains more than one independent function, capability, characteristic or constraint. Verbs in condition, trigger or limiting expressions alone are not a singularity defect. Multiple verbs or conjunctions alone are not counted as a defect. Check whether sub-items or parentheses add independent extra functions.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "Birden fazla açıkça bağımsız temel işlev, yetenek, özellik veya kısıt ifade edilir.",
+          "en": "Multiple clearly independent core functions, capabilities, characteristics or constraints are expressed.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "Bir temel işlev, yetenek, özellik veya kısıt bulunur; buna eklenmiş ayrılabilir ikincil bir işlev veya özellik de vardır.",
+          "en": "One core function, capability, characteristic or constraint is present; a separable secondary function or characteristic is also attached.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "Tam olarak tek bağımsız işlev, yetenek, özellik veya kısıt ifade edilir; koşul ve tetikleyiciler kendi başına ek işlev sayılmaz.",
+          "en": "Exactly one independent function, capability, characteristic or constraint is expressed; conditions and triggers are not additional functions in themselves.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem, aldığı her alarm olayını olay günlüğüne kaydetmeli, operatör ekranında göstermeli ve alarm sayacını bir artırmalıdır.",
+          "reason_tr": "Üç ayrı işlev.",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, aldığı her alarm olayını olay günlüğüne kaydetmeli ve alarm sayacını bir artırmalıdır.",
+          "reason_tr": "Kayda eklenmiş ayrılabilir sayaç işlevi.",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, aldığı her alarm olayını olay günlüğüne tek bir kayıt olarak kaydetmelidir.",
+          "reason_tr": "Tek kayıt işlevi. 0/1 etki sınırı pilotta kalibre edilecek.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    },
+    {
+      "id": "M_IND_05",
+      "name_en": "Verifiable",
+      "name_tr": "Doğrulanabilirlik",
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinimin gerçekleşip gerçekleşmediği nesnel bir doğrulama yöntemiyle belirlenebilir mi?",
+        "en": "Can the fulfilment of the requirement be determined by an objective verification method? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Gereksinimin Test, Analiz, Muayene veya Gösterim yöntemlerinden uygun olanıyla nesnel biçimde doğrulanabilir olup olmadığını değerlendir. Nicel değerlerin birimleri, sınırları ve toleransları açık olmalıdır. Zamanlama performans için önemliyse sınırlandırılmalıdır. Sayısal eşik bulunmaması tek başına kusur değildir; nitel kabul ölçütleri de nesnel olabilir.",
+        "en": "Assess whether the requirement can be objectively verified by the most suitable of Test, Analysis, Inspection or Demonstration. Quantitative values must have explicit units, limits and tolerances. Timing must be bounded if it matters for performance. The absence of a numeric threshold alone is not a defect; qualitative acceptance criteria can also be objective.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "Gereksinimin temel davranışı veya beklenen sonucu nesnel doğrulama yöntemiyle değerlendirilemez.",
+          "en": "The core behaviour or expected outcome cannot be assessed by an objective verification method.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "Temel davranış/sonuç nesnel doğrulanabilir; ancak ek bir doğruluk, performans, zamanlama veya kabul ölçütü yeterince tanımlanmamıştır.",
+          "en": "The core behaviour or outcome is objectively verifiable; however, an additional accuracy, performance, timing or acceptance criterion is not sufficiently defined.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "Test, Analiz, Muayene veya Gösterim ile nesnel uygunluk kararı verilebilir; gerekli nicel birimler, sınırlar veya nitel ölçütler açıktır.",
+          "en": "An objective conformity decision can be made by Test, Analysis, Inspection or Demonstration; the required quantitative units, limits or qualitative criteria are explicit.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem, sıcaklık sensörü ölçümlerini kullanıcıya güven verici biçimde göstermelidir.",
+          "reason_tr": "Ana kabul ölçütü öznel.",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, sıcaklık sensöründen aldığı her sıcaklık değerini kullanıcı arayüzünde yüksek doğrulukla °C biriminde göstermelidir.",
+          "reason_tr": "Gösterme işlevi doğrulanabilir; 'yüksek doğruluk' ölçüt değil.",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, sıcaklık sensöründen aldığı her sıcaklık değerini kullanıcı arayüzünde sensörün bildirdiği değerden en fazla 0,5 °C farkla göstermelidir.",
+          "reason_tr": "Karşılaştırma ve 0,5 °C sınırı nesnel Test ile değerlendirilebilir.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    },
+    {
+      "id": "M_IND_06",
+      "name_en": "Conforming",
+      "name_tr": "Kurallara uygunluk",
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim, uygulanabilir yazım ve dil kurallarına uyuyor mu?",
+        "en": "Does the requirement comply with the applicable writing and language rules? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Tam cümle, sorumlu özne, \"-malıdır/-melidir\" kipi, etken çatı, olumsuz ifade, yazım, dil bilgisi ve noktalama ile amaç ya da gerekçe içerip içermediğini incele. Sağlanmamış proje şablonunun ek hükümlerini varsayarak puan düşürme.",
+        "en": "Examine whether the sentence is complete, has a responsible subject, uses a shall-type modal ('-malıdır/-melidir'), active voice, avoids negation, and is free of spelling, grammar and punctuation errors, and whether it includes a purpose or rationale. Do not lower the score by assuming additional provisions of a project template that was not provided.",
+        "en_status": "draft (translated from TR; needs review)"
+      },
+      "anchors": {
+        "0": {
+          "tr": "Açık yapısal ve dilsel ihlaller cümlenin zorunluluk yapısını ciddi biçimde bozuyor.",
+          "en": "Clear structural and linguistic violations seriously disrupt the obligatory structure of the sentence.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "1": {
+          "tr": "Gereksinim yapısı korunur; bir veya daha fazla sınırlı yazım kuralı ihlali vardır.",
+          "en": "The requirement structure is preserved; one or more limited writing-rule violations exist.",
+          "en_status": "draft (translated from TR; needs review)"
+        },
+        "2": {
+          "tr": "Bu çalışmanın metin ve yazım kurallarına uyum gözlenir.",
+          "en": "Compliance with the applicable text and writing rules is observed.",
+          "en_status": "draft (translated from TR; needs review)"
+        }
+      },
+      "samples": [
+        {
+          "score": 0,
+          "text": "Sistem tarafından alınan her ağ alarmı olay günlüğüne kaydedilecektir.",
+          "reason_tr": "Edilgen ana yapı ve tanımsız kip ('-ecektir').",
+          "reason_en": null
+        },
+        {
+          "score": 1,
+          "text": "Sistem, alınan her ağ alarmını olay günlüğüne kaydetmek zorundadır.",
+          "reason_tr": "Tanımsız kip ('zorundadır').",
+          "reason_en": null
+        },
+        {
+          "score": 2,
+          "text": "Sistem, aldığı her ağ alarmını olay günlüğüne kaydetmelidir.",
+          "reason_tr": "Etken ana yapı ve '-malıdır' kipi.",
+          "reason_en": null
+        }
+      ],
+      "name_tr_status": "draft (translated from name_en; confirm)"
+    }
+  ]
+}$json$::jsonb, TRUE);
+
+COMMIT;
