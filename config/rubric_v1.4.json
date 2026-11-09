@@ -1,0 +1,194 @@
+{
+  "version_label": "v1.4",
+  "source": "Scoring_Rubric_v1.4.xlsx (Drive: Rubrick_Validasyon/Set_for_Validators)",
+  "status": "TR source verbatim. EN fields marked 'draft' or 'pending' need researcher review before launch (NFR-ETH-001 / FR-CFG-TXT-001).",
+  "scale": {
+    "0": {
+      "label": { "tr": "Uyumsuz", "en": "Non-compliant" },
+      "definition": {
+        "tr": "İlgili kalite özelliğinin karşılanmasını esaslı ölçüde engelleyen önemli bir kusur var.",
+        "en": "There is a significant defect that substantially hinders the fulfillment of the relevant quality attribute.",
+        "en_status": "from source file"
+      }
+    },
+    "1": {
+      "label": { "tr": "Kısmen uyumlu", "en": "Partially compliant" },
+      "definition": {
+        "tr": "Söz konusu özellik önemli ölçüde sağlanır; orta veya küçük ölçekli kusur(lar) bulunmaktadır.",
+        "en": "The attribute in question is largely met; however, there are one or more defects of minor or moderate scale.",
+        "en_status": "from source file"
+      }
+    },
+    "2": {
+      "label": { "tr": "Uyumlu", "en": "Compliant" },
+      "definition": {
+        "tr": "Sağlanan tekil metinde söz konusu özellik karşılanmıştır; kusur gözlenmemiştir.",
+        "en": "In the provided text, the relevant attribute is fully met; no defects have been observed.",
+        "en_status": "from source file"
+      }
+    }
+  },
+  "general_guidance": {
+    "tr": "Her metriği ayrı ayrı 0, 1 veya 2 puanla. Yalnız tekil gereksinim metnine dayan. Bir ifadeyi otomatik kusur sayma; etkisini değerlendir. İhlal sayısını mekanik olarak puana dönüştürme; tek ciddi kusur belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde değerlendir. Bağlam eksik diye değerlendirilebilir metrikleri boş bırakma.",
+    "en": null,
+    "en_status": "pending translation"
+  },
+  "metrics": [
+    {
+      "id": "M_IND_01",
+      "name_en": "Appropriate",
+      "name_tr": null,
+      "partial_scope_note": true,
+      "question": {
+        "tr": "Gereksinim, ihtiyaç duyulan sonucu mu tarif ediyor, yoksa bir çözüm yöntemini mi zorunlu tutuyor?",
+        "en": "Does the requirement describe the needed outcome, or does it mandate a solution method? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "İşlev veya beklenen sonucu tarif eden ifadeyi, marka/teknoloji/donanım ya da ayrıntılı tasarım dayatmasından ayır. Yalnız teknik terim geçmesi kusur değildir. Üst seviye gereksinimler ve tasarım gerekçeleri verilmediğinden bunların varlığını varsayma; belirgin çözüm dayatmasını metne göre puanla. Gerçekte gerekçesiz olduğunu iddia etme.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "Açık ürün/marka veya ayrıntılı gerçekleştirim çözümü ihtiyacın yerine geçer ya da çözüm alanını çok ciddi sınırlar.", "en": null },
+        "1": { "tr": "İhtiyaç/sonuç anlaşılır; yanında görünür sınırlı bir gerçekleştirim tercihi dayatılır.", "en": null },
+        "2": { "tr": "Metin ihtiyacı/sonucu belirtir; belirli gerçekleştirim çözümünü dayatan ifade gözlenmez.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem, olay kayıtlarını Oracle Database 23ai üzerinde, Dell PowerEdge R760 sunucularında en az 90 gün saklamalıdır.", "reason_tr": "Ürün/donanım dayatması." },
+        { "score": 1, "text": "Sistem, olay kayıtlarını ilişkisel bir veri tabanında en az 90 gün saklamalıdır.", "reason_tr": "Sınırlı teknoloji dayatması." },
+        { "score": 2, "text": "Sistem, olay kayıtlarını en az 90 gün saklamalıdır.", "reason_tr": "Yalnız saklama sonucu. Gerçek tasarım gerekçesi bilinmez." }
+      ]
+    },
+    {
+      "id": "M_IND_02",
+      "name_en": "Unambiguous",
+      "name_tr": null,
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim yalnızca bir makul biçimde yorumlanabiliyor mu?",
+        "en": "Can the requirement be interpreted in only one reasonable way? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Belirsiz sıfat, nicelik ve zaman ifadelerini, zamir, açık uçlu ve kaçamak ifadeleri, eğik çizgi, çift olumsuzluk, koşul ve mantık bağlarını incele. Metindeki belirsizlik puanı etkiler; sağlanmamış terim sözlüğü veya referans listesi yok diye ayrıca kusur verme.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "Ana yükümlülük veya kritik koşul birden fazla maddi yoruma açıktır.", "en": null },
+        "1": { "tr": "Ana yükümlülük açık, ikincil kapsam veya koşulda sınırlı belirsizlik vardır.", "en": null },
+        "2": { "tr": "Sağlanan metnin ilgili anlamı tek makul yoruma elverişlidir.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem, aldığı her alarmı hızlıca göstermelidir.", "reason_tr": "'hızlıca' belirsiz." },
+        { "score": 1, "text": "Sistem, aldığı her alarmı normal çalışma koşullarında en fazla 10 saniye içinde göstermelidir.", "reason_tr": "'normal çalışma koşulları' tanımsız." },
+        { "score": 2, "text": "Sistem, aldığı her alarmı alarmın alınmasından sonraki en fazla 10 saniye içinde operatör ekranında göstermelidir.", "reason_tr": "Olay, süre ve gösterim yeri açık." }
+      ]
+    },
+    {
+      "id": "M_IND_03",
+      "name_en": "Complete",
+      "name_tr": null,
+      "partial_scope_note": true,
+      "question": {
+        "tr": "Gereksinimin ifade ettiği davranışı anlamak için gerekli bilgiler yeterli mi?",
+        "en": "Is the information needed to understand the stated behaviour sufficient? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "İfade edilen davranışın öznesini, eylemini, nesnesini, gerekli koşul ve sınırlarını incele. Çözülmemiş TBD/TBR/TBC gibi yer tutucuları değerlendir. Diğer gereksinimlerin, şemaların veya referansların içeriğini varsayma; yalnızca sağlanmamış harici doküman yüzünden puan düşürme.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "İfadenin hangi davranışı talep ettiği temel unsurlar eksik olduğu için belirlenemez.", "en": null },
+        "1": { "tr": "Ana davranış belirtilir; ifade edilen davranışın uygulanabilir koşul/sınırlarından bir kısmı eksiktir.", "en": null },
+        "2": { "tr": "İfadenin gerektirdiği davranış ve görünür koşullar yeterince tanımlıdır.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem, kullanıcı hesabını kilitlemelidir.", "reason_tr": "Kilitleme koşulu yok." },
+        { "score": 1, "text": "Sistem, art arda beş başarısız oturum açma girişiminden sonra kullanıcı hesabını kilitlemelidir.", "reason_tr": "Zaman penceresi ve kilit süresi eksik." },
+        { "score": 2, "text": "Sistem, aynı kullanıcı hesabında 10 dakika içinde art arda beş başarısız oturum açma girişimi gerçekleştiğinde hesabı beşinci başarısız girişimin ardından 30 dakika boyunca kilitlemelidir.", "reason_tr": "Giriş sayısı, pencere, başlangıç ve süre açık." }
+      ]
+    },
+    {
+      "id": "M_IND_04",
+      "name_en": "Singular",
+      "name_tr": null,
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim tam olarak tek bir bağımsız işlev, yetenek, özellik veya kısıt mı ifade ediyor?",
+        "en": "Does the requirement express exactly one independent function, capability, characteristic or constraint? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Gereksinimde birden fazla bağımsız işlev, yetenek, özellik veya kısıt bulunup bulunmadığını değerlendir. Koşul, tetikleyici veya sınırlayıcı ifadelerdeki fiiller tek başına tekillik kusuru değildir. Birden fazla fiil ya da bağlaç tek başına kusur sayılmaz. Alt maddelerin veya parantezlerin bağımsız ek işlev getirip getirmediğini kontrol et.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "Birden fazla açıkça bağımsız temel işlev, yetenek, özellik veya kısıt ifade edilir.", "en": null },
+        "1": { "tr": "Bir temel işlev, yetenek, özellik veya kısıt bulunur; buna eklenmiş ayrılabilir ikincil bir işlev veya özellik de vardır.", "en": null },
+        "2": { "tr": "Tam olarak tek bağımsız işlev, yetenek, özellik veya kısıt ifade edilir; koşul ve tetikleyiciler kendi başına ek işlev sayılmaz.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem, aldığı her alarm olayını olay günlüğüne kaydetmeli, operatör ekranında göstermeli ve alarm sayacını bir artırmalıdır.", "reason_tr": "Üç ayrı işlev." },
+        { "score": 1, "text": "Sistem, aldığı her alarm olayını olay günlüğüne kaydetmeli ve alarm sayacını bir artırmalıdır.", "reason_tr": "Kayda eklenmiş ayrılabilir sayaç işlevi." },
+        { "score": 2, "text": "Sistem, aldığı her alarm olayını olay günlüğüne tek bir kayıt olarak kaydetmelidir.", "reason_tr": "Tek kayıt işlevi. 0/1 etki sınırı pilotta kalibre edilecek." }
+      ]
+    },
+    {
+      "id": "M_IND_05",
+      "name_en": "Verifiable",
+      "name_tr": null,
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinimin gerçekleşip gerçekleşmediği nesnel bir doğrulama yöntemiyle belirlenebilir mi?",
+        "en": "Can the fulfilment of the requirement be determined by an objective verification method? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Gereksinimin Test, Analiz, Muayene veya Gösterim yöntemlerinden uygun olanıyla nesnel biçimde doğrulanabilir olup olmadığını değerlendir. Nicel değerlerin birimleri, sınırları ve toleransları açık olmalıdır. Zamanlama performans için önemliyse sınırlandırılmalıdır. Sayısal eşik bulunmaması tek başına kusur değildir; nitel kabul ölçütleri de nesnel olabilir.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "Gereksinimin temel davranışı veya beklenen sonucu nesnel doğrulama yöntemiyle değerlendirilemez.", "en": null },
+        "1": { "tr": "Temel davranış/sonuç nesnel doğrulanabilir; ancak ek bir doğruluk, performans, zamanlama veya kabul ölçütü yeterince tanımlanmamıştır.", "en": null },
+        "2": { "tr": "Test, Analiz, Muayene veya Gösterim ile nesnel uygunluk kararı verilebilir; gerekli nicel birimler, sınırlar veya nitel ölçütler açıktır.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem, sıcaklık sensörü ölçümlerini kullanıcıya güven verici biçimde göstermelidir.", "reason_tr": "Ana kabul ölçütü öznel." },
+        { "score": 1, "text": "Sistem, sıcaklık sensöründen aldığı her sıcaklık değerini kullanıcı arayüzünde yüksek doğrulukla °C biriminde göstermelidir.", "reason_tr": "Gösterme işlevi doğrulanabilir; 'yüksek doğruluk' ölçüt değil." },
+        { "score": 2, "text": "Sistem, sıcaklık sensöründen aldığı her sıcaklık değerini kullanıcı arayüzünde sensörün bildirdiği değerden en fazla 0,5 °C farkla göstermelidir.", "reason_tr": "Karşılaştırma ve 0,5 °C sınırı nesnel Test ile değerlendirilebilir." }
+      ]
+    },
+    {
+      "id": "M_IND_06",
+      "name_en": "Conforming",
+      "name_tr": null,
+      "partial_scope_note": false,
+      "question": {
+        "tr": "Gereksinim, uygulanabilir yazım ve dil kurallarına uyuyor mu?",
+        "en": "Does the requirement comply with the applicable writing and language rules? (draft)",
+        "en_status": "draft"
+      },
+      "guidance": {
+        "tr": "Tam cümle, sorumlu özne, \"-malıdır/-melidir\" kipi, etken çatı, olumsuz ifade, yazım, dil bilgisi ve noktalama ile amaç ya da gerekçe içerip içermediğini incele. Sağlanmamış proje şablonunun ek hükümlerini varsayarak puan düşürme.",
+        "en": null,
+        "en_status": "pending translation"
+      },
+      "anchors": {
+        "0": { "tr": "Açık yapısal ve dilsel ihlaller cümlenin zorunluluk yapısını ciddi biçimde bozuyor.", "en": null },
+        "1": { "tr": "Gereksinim yapısı korunur; bir veya daha fazla sınırlı yazım kuralı ihlali vardır.", "en": null },
+        "2": { "tr": "Bu çalışmanın metin ve yazım kurallarına uyum gözlenir.", "en": null }
+      },
+      "samples": [
+        { "score": 0, "text": "Sistem tarafından alınan her ağ alarmı olay günlüğüne kaydedilecektir.", "reason_tr": "Edilgen ana yapı ve tanımsız kip ('-ecektir')." },
+        { "score": 1, "text": "Sistem, alınan her ağ alarmını olay günlüğüne kaydetmek zorundadır.", "reason_tr": "Tanımsız kip ('zorundadır')." },
+        { "score": 2, "text": "Sistem, aldığı her ağ alarmını olay günlüğüne kaydetmelidir.", "reason_tr": "Etken ana yapı ve '-malıdır' kipi." }
+      ]
+    }
+  ]
+}
