@@ -58,3 +58,25 @@ export default function Params() {
     </form>
   )
 }
+
+/** Deletes all participant data, e.g. after the pilot (typed confirmation, server re-checks). */
+export function ResetStudy() {
+  const [text, setText] = useState('')
+  const [msg, setMsg] = useState('')
+  const run = async () => {
+    if (!window.confirm('Tüm oturumlar, setler ve puanlar kalıcı olarak silinecek. Önce dışa aktarım aldınız mı?')) return
+    const { data, error } = await adminDb!.rpc('admin_reset_study', { p_confirm: text })
+    setMsg(error ? `Hata: ${error.message}` : `Silinen oturum: ${(data as { sessions_deleted: number }).sessions_deleted}`)
+    setText('')
+  }
+  return (
+    <section className="panel danger-zone mt params">
+      <h2>Çalışma verilerini sıfırla</h2>
+      <p className="muted">Pilot bittikten sonra gerçek çalışmaya temiz başlamak için. Tüm oturumlar, setler, puanlar ve istemci hataları silinir; gereksinimler, referans puanlar, parametreler ve yapılandırma sürümleri kalır. <b>Önce Dışa aktar sekmesinden yedek alın.</b></p>
+      <label className="param"><span className="param-label">Onay için SIFIRLA yazın</span>
+        <input type="text" value={text} onChange={(e) => setText(e.target.value)} /></label>
+      <div><button className="btn btn-danger" disabled={text !== 'SIFIRLA'} onClick={run}>Tüm katılımcı verilerini sil</button></div>
+      {msg && <p className={msg.startsWith('Hata') ? 'err' : 'ok'}>{msg}</p>}
+    </section>
+  )
+}

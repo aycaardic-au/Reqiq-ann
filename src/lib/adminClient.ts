@@ -16,7 +16,8 @@ export async function fetchAll<T>(table: string, orderBy: string): Promise<T[]> 
   if (!adminDb) throw new Error('Supabase is not configured')
   const out: T[] = []
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await adminDb.from(table).select('*').order(orderBy).range(from, from + 999)
+    const cols = table === 'rubric_config' ? 'config_id, version_label, uploaded_at, is_active, note' : '*'
+    const { data, error } = await adminDb.from(table).select(cols).order(orderBy).range(from, from + 999)
     if (error) throw error
     out.push(...(data as T[]))
     if (!data || data.length < 1000) return out

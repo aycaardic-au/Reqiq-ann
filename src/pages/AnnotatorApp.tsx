@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fill, loadActiveConfig, UI_LANG, type RubricContent } from '../lib/config'
 import { clearLocal, INITIAL_FLOW, readFlow, writeFlow, type FlowState } from '../lib/flowState'
-import { createSession, endSession, readSession, saveBackground, saveComment, withdrawSession } from '../lib/session'
+import { createSession, endSession, finishSession, readSession, saveBackground, withdrawSession } from '../lib/session'
 import ConsentPage from '../screens/ConsentPage'
 import InfoForm from '../screens/InfoForm'
 import Intro from '../screens/Intro'
@@ -17,6 +17,7 @@ import { Ended, EndSession, TopBar, type EndChoice } from '../screens/SessionChr
 export default function AnnotatorApp() {
   const [config, setConfig] = useState<RubricContent | null>(null)
   const [failed, setFailed] = useState(false)
+  const [loadTick, setLoadTick] = useState(0)
   const [ended, setEnded] = useState<EndChoice | null>(null)
   const [flow, setFlow] = useState<FlowState>(() => {
     const f = readFlow()
@@ -31,7 +32,7 @@ export default function AnnotatorApp() {
       console.error(e)
       setFailed(true)
     })
-  }, [])
+  }, [loadTick])
 
   useEffect(() => {
     if (!config) return
@@ -52,6 +53,7 @@ export default function AnnotatorApp() {
         <section className="panel" role="alert">
           <p lang="tr">Araç şu anda yüklenemiyor. Lütfen daha sonra tekrar deneyin.</p>
           <p lang="en">The tool cannot be loaded at the moment. Please try again later.</p>
+          <button type="button" className="btn btn-primary" onClick={() => { setFailed(false); setLoadTick(loadTick + 1) }}>Tekrar dene / Try again</button>
         </section>
       </main>
     )
@@ -70,7 +72,8 @@ export default function AnnotatorApp() {
 
   if (ended === 'pause') return <Ended title={bar.paused_title} body={bar.paused_body} button={bar.paused_button} onRestart={() => setEnded(null)} />
   if (ended) {
-    return <Ended title={bar.ended_title} body={ended === 'withdraw' ? bar.withdrawn_body : bar.ended_body}
+    return <Ended title={bar.ended_title}
+      body={ended === 'withdraw' ? bar.withdrawn_body : ended === 'closed' ? (config.common.tr.session_closed ?? bar.ended_body) : bar.ended_body}
       button={bar.ended_button} onRestart={() => setEnded(null)} />
   }
 
@@ -117,9 +120,9 @@ export default function AnnotatorApp() {
             sessionId={readSession()!.session_id}
             onProgress={onProgress}
             onBatchDone={(r) => update({ ...flow, step: 'batch_complete',
-              summary: { batchCount: r.batch_count, total: r.total, canContinue: r.can_continue } })}
+              summary: { batchCount: r.batch_count, batchNumber: r.batch_number, total: r.total, canContinue: r.can_continue } })}
             onNoMore={() => update({ ...flow, step: 'thankyou' })}
-            onEnded={() => { clearLocal(); setFlow(INITIAL_FLOW); setEnded('end') }}
+            onEnded={() => { clearLocal(); setFlow(INITIAL_FLOW); setEnded('closed') }}
           />
           {end}
         </>
@@ -130,6 +133,7 @@ export default function AnnotatorApp() {
         <BatchComplete
           t={config.batch_complete.tr}
           batchCount={flow.summary?.batchCount ?? 0}
+          batchNumber={flow.summary?.batchNumber}
           total={flow.summary?.total ?? 0}
           canContinue={flow.summary?.canContinue ?? false}
           onContinue={() => { setProgress(null); update({ ...flow, step: 'annotate' }) }}
@@ -144,7 +148,7 @@ export default function AnnotatorApp() {
           c={config.common.tr}
           total={flow.summary?.total ?? 0}
           sessionId={sid}
-          onSubmit={async (comment) => { await saveComment(sid, comment); clearLocal() }}
+          onSubmit={async (comment) => { await finishSession(sid, comment); clearLocal() }}
         />
       )
     }

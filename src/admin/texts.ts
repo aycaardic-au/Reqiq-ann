@@ -14,7 +14,7 @@ export const A = {
   logout: 'Çıkış',
   annotator_view: 'Katılımcı ekranı',
   refresh: 'Yenile',
-  tabs: { dashboard: 'Özet', params: 'Parametreler', export: 'Dışa aktar', import: 'İçe aktar' },
+  tabs: { dashboard: 'Özet', sessions: 'Oturumlar', requirements: 'Gereksinimler', params: 'Parametreler', export: 'Dışa aktar', import: 'İçe aktar' },
   loading: 'Yükleniyor…',
   error: 'Veriler yüklenemedi: ',
   saved: 'Kaydedildi.',

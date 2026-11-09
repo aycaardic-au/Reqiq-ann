@@ -14,7 +14,7 @@ export function TopBar({ appName, step, right }: { appName: string; step: string
   )
 }
 
-export type EndChoice = 'pause' | 'end' | 'withdraw'
+export type EndChoice = 'pause' | 'end' | 'withdraw' | 'closed'
 
 /**
  * Footer link "Ara ver / Oturumu sonlandır" (NFR-ETH-002, D-32).

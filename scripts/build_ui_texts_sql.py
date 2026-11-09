@@ -1,11 +1,11 @@
-"""Build SQL that writes config/ui_texts.json into the active rubric_config row.
+"""Build SQL that stores config/ui_texts.json as a new rubric_config version (needs migration 0018).
 
 Usage:
   python scripts/build_ui_texts_sql.py                 -> supabase/migrations/0006_ui_texts.sql
   python scripts/build_ui_texts_sql.py --out FILE.sql  -> later text updates
 
-The UI text keys are merged into rubric_config.content of the ACTIVE row
-(top-level keys replaced; metric definitions untouched). Re-run safe.
+The UI text keys replace the same top-level keys of the active content; the result becomes a new
+active version and the previous version is kept (FR-CFG-VER-001). Running it twice creates no extra version.
 """
 import argparse
 import json
@@ -37,24 +37,16 @@ def main() -> None:
     body = json.dumps(data, ensure_ascii=False, indent=2)
     if "$json$" in body:
         raise SystemExit("Text must not contain $json$")
-    sql = f"""-- ReqIQ-ANN: UI texts (ADD-02 §7) -> active rubric_config row
+    ver = data.get("ui_texts_version")
+    sql = f"""-- ReqIQ-ANN: UI texts {ver} -> NEW rubric_config version (FR-CFG-VER-001, migration 0018)
 -- GENERATED from config/ui_texts.json by scripts/build_ui_texts_sql.py. Do not edit by hand.
--- Run in Supabase SQL Editor. Re-run safe: replaces only the UI text keys.
+-- Run in Supabase SQL Editor. Creates a new active configuration version (the previous one is kept).
+-- Alternative without SQL: admin panel -> İçe aktar -> Ekran metinleri.
 
-BEGIN;
+SELECT _config_new_version($json${body}$json$::jsonb, NULL, 'ui_texts {ver}') AS new_version;
 
-UPDATE rubric_config
-SET content = content || $json${body}$json$::jsonb
-WHERE is_active = TRUE;
-
--- Verify: expect 1 row, ui_texts_version = {data.get('ui_texts_version')}
-SELECT version_label,
-       content->>'ui_texts_version'        AS ui_texts_version,
-       content->'app_name'->>'tr'          AS app_name_tr,
-       content->'consent'->'tr'->>'form_title' AS consent_title_tr
-FROM rubric_config WHERE is_active = TRUE;
-
-COMMIT;
+-- Verify: ui_texts_version = {ver}
+SELECT version_label, content->>'ui_texts_version' AS ui_texts_version FROM rubric_config WHERE is_active = TRUE;
 """
     args.out.write_text(sql, encoding="utf-8")
     print(f"Written: {args.out}")

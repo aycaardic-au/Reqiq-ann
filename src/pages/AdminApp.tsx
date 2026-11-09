@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { adminDb } from '../lib/adminClient'
 import Dashboard from '../admin/Dashboard'
-import Params from '../admin/Params'
+import Params, { ResetStudy } from '../admin/Params'
+import Sessions from '../admin/Sessions'
+import Requirements from '../admin/Requirements'
 import Export from '../admin/Export'
 import Import from '../admin/Import'
 import { A } from '../admin/texts'
@@ -64,7 +66,9 @@ export default function AdminApp() {
       </header>
       <main className="admin">
         {tab === 'dashboard' && <Dashboard tick={tick} />}
-        {tab === 'params' && <Params key={tick} />}
+        {tab === 'sessions' && <Sessions tick={tick} />}
+        {tab === 'requirements' && <Requirements tick={tick} />}
+        {tab === 'params' && <><Params key={tick} /><ResetStudy /></>}
         {tab === 'export' && <Export />}
         {tab === 'import' && <Import />}
       </main>

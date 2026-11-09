@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { adminDb } from '../lib/adminClient'
+import { useEffect, useState } from 'react'
+import { adminDb, fetchAll } from '../lib/adminClient'
+import type { Cfg } from './exportData'
 
 type Kind = 'requirements' | 'refs'
 const COLS: Record<Kind, string[]> = {
@@ -23,6 +24,7 @@ export default function Import() {
       <TableImport kind="refs" title="Referans puanlar"
         note="base_id × metric_id başına bir satır (M_IND_01…M_IND_06). llm_score 0/1/2; değerlendirilemiyorsa llm_cannot_assess = TRUE ve puan boş." />
       <JsonImport />
+      <Versions />
     </div>
   )
 }
@@ -92,6 +94,8 @@ function TableImport({ kind, title, note }: { kind: Kind; title: string; note: s
 function JsonImport() {
   const [kind, setKind] = useState<'ui' | 'hints' | 'rubric'>('ui')
   const [obj, setObj] = useState<Record<string, unknown> | null>(null)
+  const [label, setLabel] = useState('')
+  const [note, setNote] = useState('')
   const [msg, setMsg] = useState('')
 
   const read = async (f: File) => {
@@ -101,13 +105,13 @@ function JsonImport() {
   const run = async () => {
     if (!obj) return
     const patch = kind === 'hints' ? { hints: obj.hints ?? obj } : obj
-    const { data, error } = await adminDb!.rpc('admin_merge_config', { p_patch: patch })
-    setMsg(error ? `Hata: ${error.message}` : `Güncellenen anahtarlar: ${data}`)
+    const { data, error } = await adminDb!.rpc('admin_merge_config', { p_patch: patch, p_label: label || null, p_note: note || null })
+    setMsg(error ? `Hata: ${error.message}` : `Etkin sürüm: ${data}`)
   }
   return (
     <section className="panel">
       <h2>Ekran metinleri / ipuçları / rubrik</h2>
-      <p className="muted">Depodaki JSON dosyası yüklenir; etkin rubrik yapılandırmasındaki aynı adlı anahtarların yerine geçer. Yükledikten sonra katılımcı ekranını yenileyip kontrol edin.</p>
+      <p className="muted">Depodaki JSON dosyası yüklenir; etkin yapılandırmanın aynı adlı anahtarlarının yerine geçen <b>yeni bir sürüm</b> oluşturulur, önceki sürüm saklanır (geri alınabilir). Yeni setler yeni sürümle atanır. Yükledikten sonra katılımcı ekranını yenileyip kontrol edin.</p>
       <div className="row">
         <select value={kind} onChange={(e) => setKind(e.target.value as typeof kind)}>
           <option value="ui">Ekran metinleri (config/ui_texts.json)</option>
@@ -116,9 +120,44 @@ function JsonImport() {
         </select>
         <input type="file" accept=".json" onChange={(e) => e.target.files?.[0] && read(e.target.files[0])} />
       </div>
+      <div className="row"><input type="text" placeholder="Sürüm adı (isteğe bağlı)" value={label} onChange={(e) => setLabel(e.target.value)} />
+        <input type="text" placeholder="Not (isteğe bağlı)" value={note} onChange={(e) => setNote(e.target.value)} /></div>
       {obj && <p>Anahtarlar: <code>{Object.keys(obj).filter((k) => k !== '_comment').join(', ')}</code></p>}
       {obj && <button className="btn btn-primary" onClick={run}>Yükle</button>}
       {msg && <p className={msg.startsWith('Hata') ? 'err' : 'ok'}>{msg}</p>}
+    </section>
+  )
+}
+
+/** FR-CFG-VER-003: configuration history and rollback. */
+function Versions() {
+  const [rows, setRows] = useState<Cfg[] | null>(null)
+  const [msg, setMsg] = useState('')
+  const [tick, setTick] = useState(0)
+  useEffect(() => { fetchAll<Cfg>('rubric_config', 'config_id').then((x) => setRows([...x].reverse())).catch((e) => setMsg(`Hata: ${(e as Error).message}`)) }, [tick])
+  const activate = async (c: Cfg) => {
+    if (!window.confirm(`"${c.version_label}" sürümü etkin yapılsın mı? Yeni setler bu sürümle atanır.`)) return
+    const { error } = await adminDb!.rpc('admin_activate_config', { p_config_id: c.config_id })
+    setMsg(error ? `Hata: ${error.message}` : `Etkin sürüm: ${c.version_label}`); setTick(tick + 1)
+  }
+  return (
+    <section className="panel">
+      <h2>Yapılandırma sürümleri</h2>
+      <p className="muted">Rubrik, metinler ve ipuçları birlikte sürümlenir. Her set, atandığı andaki sürümle kaydedilir (dışa aktarımda <code>config_version</code>).</p>
+      {msg && <p className={msg.startsWith('Hata') ? 'err' : 'ok'}>{msg}</p>}
+      {rows && (
+        <div className="scroll">
+          <table className="tbl">
+            <thead><tr><th>Sürüm</th><th>Tarih</th><th>Not</th><th></th></tr></thead>
+            <tbody>{rows.map((c) => (
+              <tr key={c.config_id}>
+                <td>{c.version_label}</td><td>{c.uploaded_at.slice(0, 16).replace('T', ' ')}</td><td className="muted">{c.note}</td>
+                <td>{c.is_active ? <span className="badge good">etkin</span> : <button className="link" onClick={() => activate(c)}>Etkinleştir</button>}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      )}
     </section>
   )
 }

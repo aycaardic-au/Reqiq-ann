@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.3",
+  "ui_texts_version": "2.4",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Tool",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Aracı"
@@ -152,7 +152,11 @@
       "requirement_title": "Değerlendirilecek gereksinim",
       "metric_label": "Metrik {n}",
       "details_button": "Açıklama ve puan tanımları",
-      "details_hide": "Açıklamayı gizle"
+      "details_hide": "Açıklamayı gizle",
+      "shortcut_hint": "Kısayol: bir metriğin içindeyken 0, 1 veya 2 tuşu puanı, D tuşu \"Değerlendirilemiyor\" seçeneğini seçer.",
+      "draft_restored": "Bu gereksinim için kaydedilmemiş seçimleriniz geri yüklendi.",
+      "sample_label": "Örnek",
+      "unsaved_hint": "Bu gereksinimde kaydedilmemiş seçimleriniz var."
     }
   },
   "annotate_rubric": {
@@ -194,14 +198,16 @@
       "body": "You have evaluated {batch_count} requirements in this batch. Total evaluated in this session: {total}.",
       "question": "Would you like to continue with another set of requirements?",
       "continue_button": "Continue with another batch",
-      "stop_button": "No, thank you — finish"
+      "stop_button": "No, thank you — finish",
+      "title_n": "Batch {n} complete!"
     },
     "tr": {
       "title": "Set Tamamlandı!",
       "body": "Bu sette {batch_count} gereksinim değerlendirdiniz. Bu oturumda toplam: {total}.",
       "question": "Bir set daha puanlamak ister misiniz?",
       "continue_button": "Yeni set al",
-      "stop_button": "Hayır, teşekkürler — bitir"
+      "stop_button": "Hayır, teşekkürler — bitir",
+      "title_n": "{n}. set tamamlandı!"
     }
   },
   "thankyou": {
@@ -232,12 +238,16 @@
     "tr": {
       "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
       "saving": "Kaydediliyor…",
-      "not_ready": "Değerlendirme ekranı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz."
+      "not_ready": "Değerlendirme ekranı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz.",
+      "retry": "Tekrar dene",
+      "session_closed": "Bu oturum kapatılmış. Yeni bir oturum başlatabilirsiniz."
     },
     "en": {
       "save_error": "Your answer could not be saved. Please check your connection and try again.",
       "saving": "Saving…",
-      "not_ready": "The evaluation screen is being prepared. Please try again later."
+      "not_ready": "The evaluation screen is being prepared. Please try again later.",
+      "retry": "Try again",
+      "session_closed": "This session has been closed. You can start a new session."
     }
   }
 }

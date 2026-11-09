@@ -7,7 +7,7 @@ import type { LanguagePref } from './config'
  */
 export type Step = 'consent' | 'form' | 'intro' | 'annotate' | 'batch_complete' | 'thankyou'
 
-export interface BatchSummary { batchCount: number; total: number; canContinue: boolean }
+export interface BatchSummary { batchCount: number; batchNumber?: number; total: number; canContinue: boolean }
 
 export interface FlowState {
   step: Step
@@ -43,6 +43,7 @@ export function clearLocal(): void {
   try {
     localStorage.removeItem(KEY)
     localStorage.removeItem('reqiq_ann_session')
+    localStorage.removeItem('reqiq_ann_drafts')
   } catch {
     /* nothing to clear */
   }

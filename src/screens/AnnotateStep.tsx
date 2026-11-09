@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { RubricContent } from '../lib/config'
-import { assignBatch, completeBatch, saveScores, type BatchResult, type CompleteResult } from '../lib/session'
+import { assignBatch, completeBatch, isSessionClosed, saveScores, type BatchResult, type CompleteResult } from '../lib/session'
 import Annotate from './Annotate'
 
 /** Loads (or resumes) the session's batch, then runs K5. */
@@ -23,7 +23,7 @@ export default function AnnotateStep({
     let alive = true
     assignBatch(sessionId)
       .then((b) => { if (!alive) return; if (b.status === 'ended') onEnded(); else setBatch(b) })
-      .catch((e) => { console.error(e); if (alive) setError(true) })
+      .catch((e) => { console.error(e); if (!alive) return; if (isSessionClosed(e)) onEnded(); else setError(true) })
     return () => { alive = false }
   }, [sessionId, attempt]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -31,7 +31,7 @@ export default function AnnotateStep({
     return (
       <main className="narrow"><section className="panel">
         <p className="err" role="alert">{config.common.tr.save_error}</p>
-        <button type="button" className="btn btn-primary" onClick={() => { setError(false); setAttempt(attempt + 1) }}>↻</button>
+        <button type="button" className="btn btn-primary" onClick={() => { setError(false); setAttempt(attempt + 1) }}>{config.common.tr.retry ?? '↻'}</button>
       </section></main>
     )
   }
@@ -52,6 +52,7 @@ export default function AnnotateStep({
       onProgress={onProgress}
       onSave={async (item, scores, seconds) => { await saveScores(sessionId, item.batch_item_id, scores, seconds) }}
       onFinish={async () => onBatchDone(await completeBatch(sessionId, batch.batch_id))}
+      onClosed={onEnded}
     />
   )
 }

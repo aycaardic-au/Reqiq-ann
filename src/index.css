@@ -215,3 +215,20 @@ dialog::backdrop { background: rgba(51, 65, 85, .28); }
   .grid2 { grid-template-columns: 1fr; }
   .hbar { grid-template-columns: 100px 1fr 44px; }
 }
+
+/* v1.1 additions */
+.notice { background: var(--hint-bg); border: 1px solid var(--hint-line); border-radius: 10px; padding: 8px 14px; font-size: .93rem; }
+.shortcut { margin: -6px 0 12px; }
+.req:focus { outline: none; }
+.details-panel dd.sample { margin-top: 4px; font-style: italic; color: var(--fg); }
+.sample-label { font-style: normal; font-weight: 700; color: var(--muted); }
+.danger-zone { border-color: #e3b1ab; background: #fffafa; }
+.badge { display: inline-block; font-size: .78rem; font-weight: 700; border-radius: 999px; padding: 1px 8px; background: var(--surface-2); color: var(--muted); }
+.badge.warn { background: var(--note-bg); color: var(--note-fg); }
+.badge.bad { background: var(--err-soft); color: var(--err); }
+.badge.good { background: var(--primary-soft); color: var(--primary-hover); }
+.tbl tr.click { cursor: pointer; }
+.tbl tr.click:hover td { background: var(--surface-2); }
+.filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 10px 0; }
+.filters label { display: inline-flex; gap: 6px; align-items: center; }
+.scroll { max-height: 520px; overflow: auto; }

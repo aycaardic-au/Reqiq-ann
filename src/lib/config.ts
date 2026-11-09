@@ -60,7 +60,7 @@ export interface SessionBarTexts {
   ended_button: string
 }
 
-export interface CommonTexts { save_error: string; saving: string; not_ready: string }
+export interface CommonTexts { save_error: string; saving: string; not_ready: string; retry?: string; session_closed?: string }
 
 export interface AnnotateTexts {
   step: string
@@ -87,11 +87,15 @@ export interface AnnotateTexts {
   exhausted: string
   max_reached: string
   to_thankyou: string
+  shortcut_hint?: string
+  draft_restored?: string
+  sample_label?: string
+  unsaved_hint?: string
 }
 
 export interface AnnotateRubricTexts { cannot_assess: string; partial_note: string }
 
-export interface BatchCompleteTexts { title: string; body: string; question: string; continue_button: string; stop_button: string }
+export interface BatchCompleteTexts { title: string; title_n?: string; body: string; question: string; continue_button: string; stop_button: string }
 
 export interface ThankYouTexts {
   title: string
@@ -113,6 +117,7 @@ export interface RubricMetric {
   question: Record<UiLang, string>
   guidance: Record<UiLang, string>
   anchors: Record<'0' | '1' | '2', Record<UiLang, string>>
+  samples?: { score: number; text: string | null; text_en?: string | null; reason_tr: string | null; reason_en: string | null }[]
 }
 
 export interface HintMetric {

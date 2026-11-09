@@ -1,31 +1,33 @@
 import { useState } from 'react'
-import { adminDb, fetchAll } from '../lib/adminClient'
-import { buildSheets, type Bat, type Item, type Ref, type Req, type Row, type Sc, type Ses } from './exportData'
+import { loadAll } from './data'
+import { applyFilter, buildSheets, DEFAULT_FILTER, sanitizeRows, type ExportFilter, type Row } from './exportData'
 import { A } from './texts'
 
 const DESC: Record<string, string> = {
-  Bilgi: 'Dışa aktarım zamanı, rubrik sürümü, parametreler ve sütun açıklamaları.',
-  Puanlar_Ham: 'Her satır: oturum × gereksinim × metrik. Dikkat soruları ve dışlanan oturumlar dahil.',
+  Bilgi: 'Dışa aktarım zamanı, rubrik sürümü, uygulanan filtre, parametreler ve sütun açıklamaları.',
+  Puanlar_Ham: 'Her satır: oturum × gereksinim × metrik; gereksinim metni, yapılandırma sürümü, dikkat sorusu işareti dahil.',
   Gereksinim_Ozeti: 'Gereksinim × metrik: puan sayısı, ortalama, medyan, std, 0/1/2 dağılımı, referans puan ve farkı.',
-  Oturumlar_QC: 'Oturum bilgileri, süreler, hız uyarısı, dikkat sorusu tutarlılığı, yorum.',
+  Oturumlar_QC: 'Oturum bilgileri, süreler, sunucunun hesapladığı bayraklar, dikkat sorusu tutarlılığı, yorum.',
 }
 
+/** Dışa aktar (FR-ADM-007/008, D-31): filters, Excel with all sheets or CSV per sheet; cells sanitised (NFR-SEC-005). */
 export default function Export() {
   const [sheets, setSheets] = useState<Record<string, Row[]> | null>(null)
+  const [f, setF] = useState<ExportFilter>(DEFAULT_FILTER)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
+
+  const describe = (x: ExportFilter) => [
+    x.includeExcluded ? 'excluded sessions included' : 'excluded sessions removed',
+    x.includeFlagged ? 'flagged sessions included' : 'flagged sessions removed',
+    `language=${x.language}`, `round=${x.round}`, x.coverageMetOnly ? 'coverage-met requirements only' : '',
+  ].filter(Boolean).join('; ')
 
   const load = async () => {
     setBusy(true); setErr('')
     try {
-      const [reqs, sessions, batches, items, scores, refs] = await Promise.all([
-        fetchAll<Req>('requirements', 'req_id'), fetchAll<Ses>('sessions', 'created_at'),
-        fetchAll<Bat>('batches', 'created_at'), fetchAll<Item>('batch_items', 'batch_item_id'),
-        fetchAll<Sc>('scores', 'score_id'), fetchAll<Ref>('reference_labels', 'base_id'),
-      ])
-      const { data: cfg } = await adminDb!.from('app_config').select('*').eq('id', 1).single()
-      const { data: rc } = await adminDb!.from('rubric_config').select('version_label').eq('is_active', true).single()
-      setSheets(buildSheets({ reqs, sessions, batches, items, scores, refs, cfg: cfg ?? {}, rubricVersion: rc?.version_label ?? '' }))
+      const raw = await loadAll()
+      setSheets(buildSheets(applyFilter(raw, f), describe(f)))
     } catch (e) {
       setErr((e as Error).message)
     } finally {
@@ -38,22 +40,32 @@ export default function Export() {
     const XLSX = await import('xlsx')
     const wb = XLSX.utils.book_new()
     for (const [name, rows] of Object.entries(sheets!)) {
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows.length ? rows : [{ bilgi: 'Kayıt yok' }]), name.slice(0, 31))
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows.length ? sanitizeRows(rows) : [{ bilgi: 'Kayıt yok' }]), name.slice(0, 31))
     }
     XLSX.writeFile(wb, `degerlendirme_export_${stamp()}.xlsx`)
   }
   const csv = async (name: string) => {
     const XLSX = await import('xlsx')
-    const text = XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet(sheets![name]))
+    const text = XLSX.utils.sheet_to_csv(XLSX.utils.json_to_sheet(sanitizeRows(sheets![name])))
     const blob = new Blob(['﻿' + text], { type: 'text/csv;charset=utf-8' })
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${name}_${stamp()}.csv`; a.click()
     URL.revokeObjectURL(a.href)
   }
+  const set = (patch: Partial<ExportFilter>) => { setF({ ...f, ...patch }); setSheets(null) }
 
   return (
     <div className="panel">
-      <p className="muted">Veriler veritabanından okunur ve dosya tarayıcınızda oluşturulur.</p>
-      <button className="btn btn-primary" onClick={load} disabled={busy}>{busy ? A.loading : sheets ? 'Verileri yeniden oku' : 'Verileri oku'}</button>
+      <p className="muted">Veriler veritabanından okunur ve dosya tarayıcınızda oluşturulur. Filtre değişince verileri yeniden okuyun.</p>
+      <div className="filters">
+        <label><input type="checkbox" checked={f.includeExcluded} onChange={(e) => set({ includeExcluded: e.target.checked })} /> Dışlanan oturumları dahil et</label>
+        <label><input type="checkbox" checked={f.includeFlagged} onChange={(e) => set({ includeFlagged: e.target.checked })} /> Bayraklı oturumları dahil et</label>
+        <label>Dil <select value={f.language} onChange={(e) => set({ language: e.target.value as ExportFilter['language'] })}>
+          <option value="ALL">Tümü</option><option value="EN">İngilizce</option><option value="TR">Türkçe</option></select></label>
+        <label>Tur <select value={f.round} onChange={(e) => set({ round: e.target.value as ExportFilter['round'] })}>
+          <option value="ALL">Tümü</option><option value="1">1</option><option value="2">2</option><option value="3+">3+</option></select></label>
+        <label><input type="checkbox" checked={f.coverageMetOnly} onChange={(e) => set({ coverageMetOnly: e.target.checked })} /> Yalnızca kapsama hedefine ulaşan gereksinimler</label>
+      </div>
+      <button className="btn btn-primary" onClick={load} disabled={busy}>{busy ? A.loading : 'Verileri oku'}</button>
       {err && <p className="err">{A.error}{err}</p>}
       {sheets && (
         <>

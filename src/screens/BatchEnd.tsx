@@ -3,15 +3,15 @@ import { fill, type BatchCompleteTexts, type CommonTexts, type ThankYouTexts } f
 
 /** K6 Set tamamlandı (FR-BTH-001/002, ADD-02 §5). */
 export function BatchComplete({
-  t, batchCount, total, canContinue, onContinue, onStop,
+  t, batchCount, batchNumber, total, canContinue, onContinue, onStop,
 }: {
-  t: BatchCompleteTexts; batchCount: number; total: number; canContinue: boolean
+  t: BatchCompleteTexts; batchCount: number; batchNumber?: number; total: number; canContinue: boolean
   onContinue: () => void; onStop: () => void
 }) {
   return (
     <main className="narrow">
       <section className="panel">
-        <h1>{t.title}</h1>
+        <h1>{batchNumber && t.title_n ? fill(t.title_n, { n: String(batchNumber) }) : t.title}</h1>
         <p className="lede">{fill(t.body, { batch_count: String(batchCount), total: String(total) })}</p>
         {canContinue && <p>{t.question}</p>}
         <div className="dlg-actions spread">

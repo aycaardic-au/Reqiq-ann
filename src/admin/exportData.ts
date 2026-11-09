@@ -1,13 +1,50 @@
 /** Builds the export sheets from raw table rows (D-26, D-31). Pure functions; no I/O. */
 
-export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean }
-export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null }
-export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null }
+export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean; source_meta?: Record<string, unknown> }
+export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
+export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null }
+export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
 export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number | null; cannot_assess: boolean; note: string | null; annotation_language: string; round: number; created_at: string }
 export interface Ref { base_id: string; metric_id: string; llm_score: number | null; llm_cannot_assess: boolean; llm_model: string }
 
-export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string }
+export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string; configs?: Cfg[] }
+
+/** FR-ADM-008: export filters. */
+export interface ExportFilter {
+  includeExcluded: boolean
+  includeFlagged: boolean
+  language: 'ALL' | 'EN' | 'TR'
+  round: 'ALL' | '1' | '2' | '3+'
+  coverageMetOnly: boolean
+}
+export const DEFAULT_FILTER: ExportFilter = { includeExcluded: false, includeFlagged: true, language: 'ALL', round: 'ALL', coverageMetOnly: false }
+
+/** Applies the filters to the raw rows (sessions and scores); requirements stay complete for reference. */
+export function applyFilter(d: RawData, f: ExportFilter): RawData {
+  const sessions = d.sessions.filter((s) => (f.includeExcluded || !s.excluded) && (f.includeFlagged || !(s.flag_consistency || s.flag_speed)))
+  const keep = new Set(sessions.map((s) => s.session_id))
+  let scores = d.scores.filter((s) => keep.has(s.session_id))
+  if (f.language !== 'ALL') scores = scores.filter((s) => s.annotation_language === f.language)
+  if (f.round !== 'ALL') scores = scores.filter((s) => (f.round === '3+' ? s.round >= 3 : s.round === Number(f.round)))
+  if (f.coverageMetOnly) {
+    const target = Number(d.cfg.coverage_target ?? 3)
+    const items = new Map(d.items.map((i) => [i.batch_item_id, i]))
+    const raters = new Map<string, Set<string>>()
+    for (const s of d.scores) {
+      if (items.get(s.batch_item_id)?.is_attention_check || !keep.has(s.session_id)) continue
+      raters.set(s.req_id, (raters.get(s.req_id) ?? new Set()).add(s.session_id))
+    }
+    scores = scores.filter((s) => (raters.get(s.req_id)?.size ?? 0) >= target)
+  }
+  return { ...d, sessions, scores }
+}
+
+/** NFR-SEC-005: neutralise spreadsheet formulas in exported text (CSV/Excel injection). */
+export function sanitizeCell(v: Row[string]): Row[string] {
+  return typeof v === 'string' && /^[=+\-@\t\r]/.test(v) ? `'${v}` : v
+}
+export const sanitizeRows = (rows: Row[]) => rows.map((r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, sanitizeCell(v)])) as Row)
 
 export type Row = Record<string, string | number | boolean | null>
 export const METRIC_IDS = ['M_IND_01', 'M_IND_02', 'M_IND_03', 'M_IND_04', 'M_IND_05', 'M_IND_06']
@@ -24,12 +61,13 @@ const sd = (a: number[]) => {
 }
 const r3 = (v: number | null) => (v == null ? null : Math.round(v * 1000) / 1000)
 
-export function buildSheets(d: RawData): Record<string, Row[]> {
+export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> {
   const reqBy = new Map(d.reqs.map((r) => [r.req_id, r]))
   const sesBy = new Map(d.sessions.map((s) => [s.session_id, s]))
   const batBy = new Map(d.batches.map((b) => [b.batch_id, b]))
   const itemBy = new Map(d.items.map((i) => [i.batch_item_id, i]))
   const refBy = new Map(d.refs.map((r) => [`${r.base_id}|${r.metric_id}`, r]))
+  const cfgLabel = new Map((d.configs ?? []).map((c) => [c.config_id, c.version_label]))
   const target = Number(d.cfg.coverage_target ?? 3)
   const speedSec = Number(d.cfg.speed_flag_threshold_sec ?? 20)
 
@@ -52,6 +90,8 @@ export function buildSheets(d: RawData): Record<string, Row[]> {
       batch_number: it ? batchNo.get(it.batch_id) ?? null : null, position: it?.position ?? null,
       batch_item_id: s.batch_item_id, is_attention_check: it?.is_attention_check ?? null,
       req_id: s.req_id, base_id: r?.base_id ?? null, project_id: r?.project_id ?? null, language_tag: s.annotation_language,
+      requirement_text: (s.annotation_language === 'EN' ? r?.text_en : r?.text_tr) ?? null, text_en: r?.text_en ?? null, text_tr: r?.text_tr ?? null,
+      config_version: it ? cfgLabel.get(batBy.get(it.batch_id)?.config_id ?? -1) ?? null : null,
       metric_id: s.metric_id, score: s.score, cannot_assess: s.cannot_assess, note: s.note,
       round: s.round, time_seconds_item: it?.time_seconds ?? null, created_at: s.created_at,
     }
@@ -126,7 +166,8 @@ export function buildSheets(d: RawData): Record<string, Row[]> {
       items_assigned: sItems.length, items_scored: new Set(d.scores.filter((s) => s.session_id === se.session_id).map((s) => s.batch_item_id)).size,
       median_seconds_per_item: r3(med), speed_flag: med != null && med < speedSec,
       attention_metric_pairs: acPairs, attention_exact_match_pct: acPairs ? Math.round((100 * acSame) / acPairs) : null,
-      attention_max_abs_diff: acPairs ? acMax : null, ended_at: se.ended_at ?? null, withdrawn_at: se.withdrawn_at ?? null,
+      attention_max_abs_diff: acPairs ? acMax : null,
+      flag_consistency: se.flag_consistency ?? null, flag_speed: se.flag_speed ?? null, ended_at: se.ended_at ?? null, withdrawn_at: se.withdrawn_at ?? null,
       excluded: se.excluded, comment: se.comment,
     }
   })
@@ -134,8 +175,11 @@ export function buildSheets(d: RawData): Record<string, Row[]> {
   const info: Row[] = [
     { key: 'exported_at', value: new Date().toISOString() },
     { key: 'rubric_version', value: d.rubricVersion },
+    { key: 'filter', value: filterNote || 'none' },
     { key: 'analysis_rows', value: 'Matris_* and Gereksinim_Ozeti exclude attention-check duplicates and excluded sessions; Puanlar_Ham includes everything.' },
     { key: 'matrix_cells', value: '0/1/2 = score, CA = cannot assess, empty = not scored by that rater.' },
+    { key: 'flags', value: 'flag_consistency / flag_speed are computed by the server at batch completion (FR-QC-003/004).' },
+    { key: 'config_version', value: 'Configuration (rubric + texts) version active when the batch was assigned (FR-CFG-VER-002).' },
     ...Object.entries(d.cfg).map(([k, v]) => ({ key: `app_config.${k}`, value: typeof v === 'object' ? JSON.stringify(v) : (v as string | number) })),
   ]
 

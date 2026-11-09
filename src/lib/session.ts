@@ -2,7 +2,7 @@ import { supabase } from './supabase'
 import type { LanguagePref } from './config'
 
 /**
- * Pseudonymous session (FR-SES-002..004, NFR-SEC-001).
+ * Pseudonymous session (FR-SES-002..004, NFR-SEC-001) and all annotator RPCs (EXT-DB-002).
  * session_id = SHA-256(user-agent | screen | timezone offset | language | UUID salt).
  * Only the hash leaves the browser. Hash and salt are kept in localStorage.
  */
@@ -31,13 +31,7 @@ async function sha256Hex(text: string): Promise<string> {
 
 export async function newSessionId(): Promise<StoredSession> {
   const salt = crypto.randomUUID()
-  const parts = [
-    navigator.userAgent,
-    `${screen.width}x${screen.height}`,
-    String(new Date().getTimezoneOffset()),
-    navigator.language,
-    salt,
-  ]
+  const parts = [navigator.userAgent, `${screen.width}x${screen.height}`, String(new Date().getTimezoneOffset()), navigator.language, salt]
   return { session_id: await sha256Hex(parts.join('|')), salt }
 }
 
@@ -49,39 +43,52 @@ function storeSession(s: StoredSession): void {
   }
 }
 
-/** NFR-REL-001: up to 3 retries with exponential back-off (0.5 s, 1 s, 2 s). */
-async function rpc(fn: string, args: Record<string, unknown>): Promise<void> {
+/** A server-side rule rejected the call (RAISE EXCEPTION): retrying will not help. */
+export class ServerRuleError extends Error {
+  constructor(message: string) { super(message); this.name = 'ServerRuleError' }
+}
+
+/** The session was ended or withdrawn (FR-SES-009). */
+export const isSessionClosed = (e: unknown) => e instanceof ServerRuleError && /session ended|unknown session/i.test(e.message)
+
+/**
+ * NFR-REL-001: network/transport failures are retried up to 3 times with exponential back-off
+ * (0.5 s, 1 s, 2 s); server rule violations (PostgreSQL P0001) are not retried.
+ */
+async function rpcData<T>(fn: string, args: Record<string, unknown>): Promise<T> {
   if (!supabase) {
-    if (import.meta.env.DEV) {
-      console.info('[dev] rpc skipped (no Supabase):', fn, args)
-      return
-    }
+    if (import.meta.env.DEV) return devRpc(fn, args) as T
     throw new Error('Supabase is not configured')
   }
   let lastError: unknown
   for (let attempt = 0; attempt <= 3; attempt++) {
     if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)))
-    const { error } = await supabase.rpc(fn, args)
-    if (!error) return
-    lastError = error
+    try {
+      const { data, error } = await supabase.rpc(fn, args)
+      if (!error) return data as T
+      if (error.code === 'P0001' || error.code === '22023' || error.code === '23514') throw new ServerRuleError(error.message)
+      lastError = error
+    } catch (e) {
+      if (e instanceof ServerRuleError) throw e
+      lastError = e
+    }
   }
-  throw lastError
+  throw lastError instanceof Error ? lastError : new Error(JSON.stringify(lastError))
 }
 
-/** [3] Consent given: create the session row (D-20, D-21). Idempotent server-side. */
+/** K3 submit: create the session row (D-20, D-21). Idempotent server-side. */
 export async function createSession(language: LanguagePref, consentVersion: string): Promise<StoredSession> {
   const s = readSession() ?? (await newSessionId())
   storeSession(s)
-  await rpc('create_session', { p_session_id: s.session_id, p_language: language, p_consent_version: consentVersion })
+  await rpcData<null>('create_session', { p_session_id: s.session_id, p_language: language, p_consent_version: consentVersion })
   return s
 }
 
-/** [4] Background answer (FR-ONB-003). */
 export async function saveBackground(sessionId: string, type: string, other: string | null): Promise<void> {
-  await rpc('set_background', { p_session_id: sessionId, p_type: type, p_other: other })
+  await rpcData<null>('set_background', { p_session_id: sessionId, p_type: type, p_other: other })
 }
 
-/* ---------- K5 / K6 / thank-you (migration 0013) ---------- */
+/* ---------- K5 / K6 / thank-you ---------- */
 
 export interface MetricScore {
   metric_id: string
@@ -104,24 +111,10 @@ export type BatchResult =
 
 export interface CompleteResult {
   batch_count: number
+  batch_number?: number
   total: number
   batches_completed: number
   can_continue: boolean
-}
-
-async function rpcData<T>(fn: string, args: Record<string, unknown>): Promise<T> {
-  if (!supabase) {
-    if (import.meta.env.DEV) return devRpc(fn, args) as T
-    throw new Error('Supabase is not configured')
-  }
-  let lastError: unknown
-  for (let attempt = 0; attempt <= 3; attempt++) {
-    if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * 2 ** (attempt - 1)))
-    const { data, error } = await supabase.rpc(fn, args)
-    if (!error) return data as T
-    lastError = error
-  }
-  throw lastError
 }
 
 export const assignBatch = (sessionId: string) => rpcData<BatchResult>('assign_batch', { p_session_id: sessionId })
@@ -136,8 +129,18 @@ export const endSession = (sessionId: string) => rpcData<null>('end_session', { 
 
 export const withdrawSession = (sessionId: string) => rpcData<null>('withdraw_session', { p_session_id: sessionId })
 
-export const saveComment = (sessionId: string, comment: string) =>
-  rpcData<null>('set_comment', { p_session_id: sessionId, p_comment: comment })
+/** Thank-you: saves the optional comment and closes the session (ADD-02 §6). */
+export const finishSession = (sessionId: string, comment: string) =>
+  rpcData<null>('finish_session', { p_session_id: sessionId, p_comment: comment })
+
+/** NFR-REL-004: best-effort client error report; never throws. */
+export function logClientError(location: string, message: string): void {
+  if (!supabase) { if (import.meta.env.DEV) console.warn('[dev] client error', location, message); return }
+  supabase.rpc('log_client_error', {
+    p_session_id: readSession()?.session_id ?? null, p_location: location,
+    p_message: message.slice(0, 2000), p_user_agent: navigator.userAgent.slice(0, 300),
+  }).then(() => undefined, () => undefined)
+}
 
 /* Local development without Supabase: a small in-memory stand-in for the RPCs. */
 let devBatch: BatchResult | null = null
@@ -169,7 +172,7 @@ function devRpc(fn: string, args: Record<string, unknown>): unknown {
     devDone += 1
     const n = devBatch && devBatch.status === 'ok' ? devBatch.items.length : 0
     devBatch = null
-    return { batch_count: n, total: n * devDone, batches_completed: devDone, can_continue: devDone < 2 }
+    return { batch_count: n, batch_number: devDone, total: n * devDone, batches_completed: devDone, can_continue: devDone < 2 }
   }
   return null
 }
