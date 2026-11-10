@@ -1,16 +1,16 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.4",
+  "ui_texts_version": "2.5",
   "app_name": {
-    "en": "Requirements Quality Metrics Evaluation Tool",
-    "tr": "Gereksinim Kalite Metrikleri Değerlendirme Aracı"
+    "en": "Requirements Quality Metrics Evaluation Survey",
+    "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
   },
   "consent": {
     "tr": {
-      "title": "Gereksinim Kalite Metrikleri Değerlendirme Aracı",
-      "lede": "Bu çalışma, yazılım gereksinimlerinin kalitesini altı metrikle değerlendiren bir puanlama rubriğini insan değerlendiricilerle sınamayı amaçlıyor.",
+      "title": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması",
+      "lede": "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirmeyi amaçlamaktadır.",
       "steps": [
-        "Gereksinim değerlendirme, ortalama 30–45 dk"
+        "Bir set gereksinim değerlendirme süresi, ortalama 30–40 dk"
       ],
       "form_title": "Aydınlatılmış Onam Formu",
       "form_sections": [
@@ -25,14 +25,14 @@
         {
           "heading": "Araştırmanın Amacı ve Kapsamı",
           "paragraphs": [
-            "Bu araştırmanın amacı, yazılım ve sistem gereksinimlerinin kalitesini ölçmek için geliştirilen altı metrikli bir puanlama rubriğini insan değerlendiricilerle sınamaktır. Sizden, ekranda gösterilecek gereksinimleri altı kalite metriğine göre 0, 1 veya 2 puanla değerlendirmeniz istenecektir.",
-            "Elde edilen puanlar, rubriğin değerlendiriciler arası tutarlılığının incelenmesinde ve büyük dil modellerinin değerlendirmeleriyle karşılaştırılmasında kullanılacaktır."
+            "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirerek, yazılım ve sistem gereksinimlerinin kalitesini ölçmeyi amaçlamaktadır.",
+            "Sizden, ekranda gösterilecek gereksinimleri altı kalite metriğine göre 0, 1 veya 2 puanla değerlendirmeniz istenecektir. Gerekli değerlendirme kriterleri ilerleyen sayfalarda yer almaktadır."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
           "paragraphs": [
-            "Bir set 30 gereksinimden oluşur ve ortalama 30–45 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
+            "Bir set 30 gereksinimden oluşur ve ortalama 30–40 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
           ]
         },
         {
@@ -45,7 +45,7 @@
         {
           "heading": "Toplanan Veriler ve Gizlilik",
           "paragraphs": [
-            "Araç adınızı, e-posta adresinizi veya sizi tanımlayabilecek başka bir bilgiyi sormaz. Toplanan veriler şunlardır: tarayıcınızda tek yönlü olarak hesaplanan takma adlı bir oturum kimliği, değerlendirme dili tercihiniz, katılımcı türünüz, verdiğiniz puanlar ve notlar ile her gereksinim için harcanan süre.",
+            "Araştırma sırasında, adınız, e-posta adresiniz veya sizi tanımlayabilecek başka bir bilgi sorulmayacaktır. Araştırma kapsamında toplanan veriler şunlardır: tarayıcınızda tek yönlü olarak hesaplanan takma adlı bir oturum kimliği, değerlendirme dili tercihiniz, katılımcı türünüz, verdiğiniz puanlar ve notlar ile her gereksinim için harcanan süre.",
             "Veriler yalnızca bu tez ve tezden üretilecek bilimsel yayınlar için kullanılacak, sonuçlar toplu olarak raporlanacaktır."
           ]
         },
@@ -71,7 +71,7 @@
       "contact": "Sorularınız için: Ayca ARDIÇ (ayca.ardic@gmail.com), Burak Taha YAMAN (buraktahayaman@gmail.com) veya Dr. Öğr. Üyesi Rukiye Savran Kızıltepe (rukiyekiziltepe@ankara.edu.tr)",
       "choice_title": "Onam",
       "agree": "Bilgilendirme metnini okudum, 18 yaşını doldurdum ve araştırmaya kendi özgür irademle, gönüllü olarak katılıyorum.",
-      "decline": "Katılmıyorum.",
+      "decline": "Katılmak istemiyorum.",
       "start_button": "Başla",
       "choice_required": "Devam etmek için bir seçenek işaretleyiniz."
     }
@@ -87,9 +87,9 @@
     "tr": {
       "step": "Adım 1 / 3: Bilgi formu",
       "title": "Bilgi formu",
-      "lede": "Devam etmek için iki soruyu da yanıtlayınız.",
-      "language_question": "Hangi dildeki gereksinimleri değerlendirmek istersiniz?",
-      "language_hint": "Bu seçim oturum boyunca değiştirilemez. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları gereksinimin dilinde gösterilir.",
+      "lede": "Devam etmek için lütfen her iki soruyu da yanıtlayınız.",
+      "language_question": "Hangi dilde yazılmış gereksinimleri değerlendirmek istersiniz?",
+      "language_hint": "Bu seçim oturum boyunca değiştirilemeyecektir. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları seçilen dilde gösterilecektir.",
       "language_options": {
         "EN": "İngilizce",
         "TR": "Türkçe",
@@ -98,13 +98,13 @@
       "type_question": "Aşağıdakilerden hangisi sizi en iyi tanımlar?",
       "type_options": {
         "student": "Öğrenci",
-        "industry": "Sektör Çalışanı",
+        "industry": "Çalışan",
         "researcher": "Akademik Araştırmacı",
         "other": "Diğer"
       },
       "other_label": "Lütfen kısaca belirtiniz (isteğe bağlı, en fazla 50 karakter).",
       "other_warning": "Lütfen adınızı, kurumunuzu veya sizi tanımlayabilecek herhangi bir bilgiyi yazmayınız.",
-      "required_error": "Bu soruyu yanıtlayınız.",
+      "required_error": "Lütfen soruyu yanıtlayınız.",
       "button": "Kaydet ve Devam et"
     }
   },
@@ -113,13 +113,13 @@
       "step": "Adım 2 / 3: Yönerge",
       "title": "Değerlendirme yönergesi",
       "items": [
-        "Her sayfada bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
+        "Her sayfada "açık kaynaklardan edinilmiş" bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
         "Puanlar: {scale}.",
-        "Her metrikte kısa bir soru ve açıklama yer alır. \"İpucu\" düğmesi, metriğin kurallarını ve kötü/iyi örnek çiftlerini gösterir.",
-        "Yalnız tekil gereksinim metnine bakarak puanlama yap. Veri setinde olmayan bilgiden dolayı puan kırma. Bir ifadeyi otomatik kusur sayma; etkisini değerlendir. İhlal sayısını mekanik olarak puana dönüştürme; tek ciddi kusur belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde değerlendir. Bağlam eksik diye değerlendirilebilir metrikleri boş bırakma.",
-        "Gereksinim metni bir metriği değerlendirmeye gerçekten yetmiyorsa \"Değerlendirilemiyor\" seçeneğini kullanabilirsiniz. Her metriğe isteğe bağlı not ekleyebilirsiniz.",
-        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. Set bitene kadar önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
-        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir ya da çıkabilirsiniz."
+        "Her metrikte kısa bir soru ve açıklama yer alır. \"Metrik Kurallar\" düğmesi, metriğin kurallarını ve kötü/iyi yazılmış örnek gereksinimleri gösterir.",
+        "Yalnız ilgili gereksinim metnine bakarak puanlama yapınız. Veri setinde sunulmayan bilgiden dolayı puan kırmayınız. Bir kusura yol açma potansiyeli olan ifadeyi (örneğin "hızlı", "kolay") otomatik kusur saymayınız; etkisini değerlendiriniz. Kusur sayısını mekanik olarak puana dönüştürmeyiniz; tek ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde bağımsız değerlendiriniz. Bağlam eksik veya üst seviye gereksinim eksik diye değerlendirilebilir metrikleri boş bırakmayınız.",
+        "Gereksinim metni bir metriği değerlendirmeye gerçekten yetmiyorsa \"Değerlendirilemiyor\" seçeneğini kullanabilirsiniz. Her metriğe isteğe bağlı not ekleyerek, neden o puanı verdiğinizi açıklayabilirsiniz.",
+        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
+        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir ya da uygulamadan çıkabilirsiniz."
       ],
       "button": "Değerlendirmeye başla"
     }
@@ -134,8 +134,8 @@
         "EN": "İngilizce",
         "TR": "Türkçe"
       },
-      "hint_button": "İpucu",
-      "hint_hide": "İpucunu gizle",
+      "hint_button": "Metrik Kurallar",
+      "hint_hide": "Metrik kuralları gizle",
       "hint_rules": "Kurallar",
       "hint_bad": "Kötü örnekler",
       "hint_good": "İyi örnekler",
@@ -144,14 +144,14 @@
       "prev": "Önceki",
       "next": "Kaydet ve sonraki",
       "finish": "Kaydet ve seti bitir",
-      "incomplete": "Devam etmek için altı metriğin hepsini puanlayınız.",
+      "incomplete": "Devam etmek için lütfen altı metriğin hepsini puanlayınız.",
       "loading": "Gereksinimler yükleniyor…",
-      "exhausted": "Değerlendirebileceğiniz yeni gereksinim kalmadı. Katılımınız için teşekkür ederiz.",
+      "exhausted": "Bu sette değerlendirebileceğiniz yeni gereksinim kalmadı. Katılımınız için teşekkür ederiz.",
       "max_reached": "Bu oturumda değerlendirilebilecek en fazla set sayısına ulaştınız. Katılımınız için teşekkür ederiz.",
       "to_thankyou": "Devam et",
       "requirement_title": "Değerlendirilecek gereksinim",
       "metric_label": "Metrik {n}",
-      "details_button": "Açıklama ve puan tanımları",
+      "details_button": "Puanlama açıklamaları",
       "details_hide": "Açıklamayı gizle",
       "shortcut_hint": "Kısayol: bir metriğin içindeyken 0, 1 veya 2 tuşu puanı, D tuşu \"Değerlendirilemiyor\" seçeneğini seçer.",
       "draft_restored": "Bu gereksinim için kaydedilmemiş seçimleriniz geri yüklendi.",
@@ -162,11 +162,11 @@
   "annotate_rubric": {
     "en": {
       "cannot_assess": "Cannot assess",
-      "partial_note": "Partial scope — score only what is observable in the statement. Missing context is not automatically a defect."
+      "partial_note": "Score only what is observable in the statement. Missing context is not automatically a defect."
     },
     "tr": {
       "cannot_assess": "Değerlendirilemiyor",
-      "partial_note": "Kısmi kapsam — yalnızca ifadede gözlenebileni puanlayın. Eksik bağlam kendiliğinden kusur sayılmaz."
+      "partial_note": "Yalnızca gereksinimde gözlenebilen verileri puanlayınız. Eksik bağlamı kusur saymayınız."
     }
   },
   "session_bar": {
@@ -175,7 +175,7 @@
       "end_confirm_title": "Ne yapmak istersiniz?",
       "end_confirm_text": "Yanıtlarınız her gereksinim kaydedildiğinde veritabanına yazılır.",
       "opt_pause": "Ara ver",
-      "opt_pause_hint": "Daha sonra bu tarayıcıdan aynı adrese girerek kaldığınız yerden devam edersiniz.",
+      "opt_pause_hint": "Daha sonra bu tarayıcıdan aynı adrese girerek kaldığınız yerden devam edebilirsiniz.",
       "opt_end": "Oturumu sonlandır, yanıtlarım saklansın",
       "opt_end_hint": "Bu tarayıcıda bu oturuma geri dönemezsiniz. Kaydedilen yanıtlarınız analizlerde kullanılır.",
       "opt_withdraw": "Oturumu sonlandır ve yanıtlarımı sil",
@@ -198,21 +198,21 @@
       "body": "You have evaluated {batch_count} requirements in this batch. Total evaluated in this session: {total}.",
       "question": "Would you like to continue with another set of requirements?",
       "continue_button": "Continue with another batch",
-      "stop_button": "No, thank you — finish",
+      "stop_button": "No, thank you - finish",
       "title_n": "Batch {n} complete!"
     },
     "tr": {
       "title": "Set Tamamlandı!",
       "body": "Bu sette {batch_count} gereksinim değerlendirdiniz. Bu oturumda toplam: {total}.",
       "question": "Bir set daha puanlamak ister misiniz?",
-      "continue_button": "Yeni set al",
-      "stop_button": "Hayır, teşekkürler — bitir",
+      "continue_button": "Yeni set ile devam et",
+      "stop_button": "Hayır, teşekkürler - bitir",
       "title_n": "{n}. set tamamlandı!"
     }
   },
   "thankyou": {
     "en": {
-      "title": "Thank you for your contribution!",
+      "title": "Thank you very much for your contribution!",
       "body": "You have successfully completed the evaluation of {n} requirements.",
       "session_label": "Your session ID is:",
       "session_note": "Please note it down if you would like to reference your participation later.",
@@ -223,7 +223,7 @@
       "comment_max": "Max 500 characters"
     },
     "tr": {
-      "title": "Katkınız için teşekkür ederiz!",
+      "title": "Katkınız için çok teşekkür ederiz!",
       "body": "{n} gereksinimi başarıyla değerlendirdiniz.",
       "session_label": "Oturum kimliğiniz:",
       "session_note": "Katılımınıza daha sonra başvurmanız gerekirse bu kimliği not alabilirsiniz.",
@@ -236,15 +236,15 @@
   },
   "common": {
     "tr": {
-      "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
-      "saving": "Kaydediliyor…",
+      "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.",
+      "saving": "Kaydediliyor...",
       "not_ready": "Değerlendirme ekranı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz.",
       "retry": "Tekrar dene",
       "session_closed": "Bu oturum kapatılmış. Yeni bir oturum başlatabilirsiniz."
     },
     "en": {
       "save_error": "Your answer could not be saved. Please check your connection and try again.",
-      "saving": "Saving…",
+      "saving": "Saving...",
       "not_ready": "The evaluation screen is being prepared. Please try again later.",
       "retry": "Try again",
       "session_closed": "This session has been closed. You can start a new session."
