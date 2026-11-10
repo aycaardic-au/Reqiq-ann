@@ -41,7 +41,7 @@
     {
       "id": "M_IND_01",
       "name_en": "Appropriate",
-      "name_tr": "Uygunluk",
+      "name_tr": "Amaca uygunluk",
       "partial_scope_note": true,
       "question": {
         "tr": "Gereksinim, ihtiyaç duyulan sonucu mu tarif ediyor, yoksa bir çözüm yöntemini mi zorunlu tutuyor?",
@@ -90,12 +90,12 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     },
     {
       "id": "M_IND_02",
       "name_en": "Unambiguous",
-      "name_tr": "Tek anlamlılık",
+      "name_tr": "Belirsizlikten Arınmışlık",
       "partial_scope_note": false,
       "question": {
         "tr": "Gereksinim yalnızca bir makul biçimde yorumlanabiliyor mu?",
@@ -144,7 +144,7 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     },
     {
       "id": "M_IND_03",
@@ -157,8 +157,8 @@
         "en_status": "draft"
       },
       "guidance": {
-        "tr": "İfade edilen davranışın öznesini, eylemini, nesnesini, gerekli koşul ve sınırlarını incele. Çözülmemiş TBD/TBR/TBC gibi yer tutucuları değerlendir. Diğer gereksinimlerin, şemaların veya referansların içeriğini varsayma; yalnızca sağlanmamış harici doküman yüzünden puan düşürme.",
-        "en": "Examine the subject, action and object of the stated behaviour, and its necessary conditions and bounds. Evaluate unresolved placeholders such as TBD/TBR/TBC. Do not assume the content of other requirements, schemas or references; do not lower the score solely because an external document that was not provided is missing.",
+        "tr": "İfade edilen davranışın öznesini, eylemini, nesnesini, gerekli koşul ve sınırlarını incele. Çözülmemiş TBD/TBR/TBC gibi yer tutucuları değerlendir. Diğer gereksinimlerin, şemaların veya referansların içeriğini varsayma. Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayın; bağlam veya üst seviye gereksinim gibi harici dokümanlarla doğrulanabilecek konular için puan kırmayınız.",
+        "en": "Examine the subject, action and object of the stated behaviour, and its necessary conditions and bounds. Evaluate unresolved placeholders such as TBD/TBR/TBC. Do not assume the content of other requirements, schemas or references. Score only the information that can be observed within the requirement itself; do not deduct points for matters that could be verified through external documents, such as context or higher-level requirements.",
         "en_status": "draft (translated from TR; needs review)"
       },
       "anchors": {
@@ -198,7 +198,7 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     },
     {
       "id": "M_IND_04",
@@ -252,7 +252,7 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     },
     {
       "id": "M_IND_05",
@@ -306,12 +306,12 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     },
     {
       "id": "M_IND_06",
       "name_en": "Conforming",
-      "name_tr": "Kurallara uygunluk",
+      "name_tr": "Yazım standartlarına uygunluk",
       "partial_scope_note": false,
       "question": {
         "tr": "Gereksinim, uygulanabilir yazım ve dil kurallarına uyuyor mu?",
@@ -360,7 +360,7 @@
           "reason_en": null
         }
       ],
-      "name_tr_status": "draft (translated from name_en; confirm)"
+      "name_tr_status": "confirmed (user decision, 11 Nov 2026)"
     }
   ]
 }
