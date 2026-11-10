@@ -37,11 +37,6 @@
       }
     }
   },
-  "general_guidance": {
-    "tr": "Her metriği ayrı ayrı 0, 1 veya 2 puanla. Yalnız tekil gereksinim metnine dayan. Bir ifadeyi otomatik kusur sayma; etkisini değerlendir. İhlal sayısını mekanik olarak puana dönüştürme; tek ciddi kusur belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde değerlendir. Bağlam eksik diye değerlendirilebilir metrikleri boş bırakma.",
-    "en": "Score each metric separately with 0, 1 or 2. Rely only on the individual requirement text. Do not treat a phrase as a defect automatically; assess its impact. Do not convert the number of violations mechanically into a score; a single serious defect can be decisive. Assess the same defect in every metric it genuinely affects. Do not leave a metric blank merely because context is missing.",
-    "en_status": "draft (translated from TR; needs review)"
-  },
   "metrics": [
     {
       "id": "M_IND_01",

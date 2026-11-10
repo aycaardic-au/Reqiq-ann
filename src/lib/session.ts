@@ -93,7 +93,6 @@ export async function saveBackground(sessionId: string, type: string, other: str
 export interface MetricScore {
   metric_id: string
   score: number | null
-  cannot_assess: boolean
   note: string | null
 }
 

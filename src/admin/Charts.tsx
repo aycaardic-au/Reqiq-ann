@@ -1,7 +1,6 @@
 /** Small, dependency-free charts for the admin dashboard (dataviz skill: thin marks, one hue, legend, tooltip). */
 
 const ORD = ['#86b6ef', '#3987e5', '#184f95'] // ordinal blue: 0, 1, 2 (validated, light surface)
-const CA_COLOR = '#b9b7b1'
 
 export function Bars({ rows, unit = '' }: { rows: { label: string; value: number }[]; unit?: string }) {
   const max = Math.max(1, ...rows.map((r) => r.value))
@@ -20,8 +19,8 @@ export function Bars({ rows, unit = '' }: { rows: { label: string; value: number
 }
 
 export function Stacked({ rows }: { rows: { label: string; parts: number[] }[] }) {
-  const names = ['0', '1', '2', 'Değerlendirilemiyor']
-  const colors = [...ORD, CA_COLOR]
+  const names = ['0', '1', '2']
+  const colors = ORD
   if (!rows.length) return <p className="muted">Henüz veri yok.</p>
   return (
     <div>

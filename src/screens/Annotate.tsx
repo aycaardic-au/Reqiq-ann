@@ -6,7 +6,7 @@ type Draft = Record<string, MetricScore>
 
 const DRAFT_KEY = 'reqiq_ann_drafts'
 const toDraft = (scores: MetricScore[]): Draft => Object.fromEntries(scores.map((s) => [s.metric_id, { ...s }]))
-const filled = (d: Draft | undefined) => (d ? Object.values(d).filter((s) => s.cannot_assess || s.score !== null).length : 0)
+const filled = (d: Draft | undefined) => (d ? Object.values(d).filter((s) => s.score !== null).length : 0)
 const sameDraft = (a: Draft | undefined, b: Draft | undefined) => JSON.stringify(a ?? {}) === JSON.stringify(b ?? {})
 
 /** NFR-REL-005: unsaved selections survive a reload or crash (kept per batch item in localStorage). */
@@ -87,7 +87,7 @@ export default function Annotate({
 
   const setMetric = useCallback((id: string, patch: Partial<MetricScore>) => {
     setDrafts((d) => {
-      const cur = d[item.batch_item_id]?.[id] ?? { metric_id: id, score: null, cannot_assess: false, note: null }
+      const cur = d[item.batch_item_id]?.[id] ?? { metric_id: id, score: null, note: null }
       return { ...d, [item.batch_item_id]: { ...d[item.batch_item_id], [id]: { ...cur, ...patch } } }
     })
   }, [item.batch_item_id])
@@ -148,7 +148,7 @@ export default function Annotate({
           lang={lang}
           config={config}
           value={draft[m.id]}
-          showError={tried && !(draft[m.id]?.cannot_assess || (draft[m.id]?.score ?? null) !== null)}
+          showError={tried && (draft[m.id]?.score ?? null) === null}
           onChange={(p) => setMetric(m.id, p)}
         />
       ))}
@@ -198,11 +198,10 @@ function MetricBlock({
   const sampleText = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.text_en ?? null : s.text)
   const sampleReason = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.reason_en : s.reason_tr)
 
-  // UI-004: 0/1/2 select a score, D selects "cannot assess", while focus is inside this metric
+  // UI-004: 0/1/2 select a score, while focus is inside this metric
   const onKey = (e: React.KeyboardEvent) => {
     if ((e.target as HTMLElement).tagName === 'TEXTAREA' || e.ctrlKey || e.metaKey || e.altKey) return
-    if (['0', '1', '2'].includes(e.key)) { onChange({ score: Number(e.key), cannot_assess: false }); e.preventDefault() }
-    else if (e.key.toLowerCase() === 'd') { onChange({ score: null, cannot_assess: true }); e.preventDefault() }
+    if (['0', '1', '2'].includes(e.key)) { onChange({ score: Number(e.key) }); e.preventDefault() }
   }
 
   return (
@@ -216,20 +215,15 @@ function MetricBlock({
 
       <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
         {(['0', '1', '2'] as const).map((k) => {
-          const on = !value?.cannot_assess && value?.score === Number(k)
+          const on = value?.score === Number(k)
           return (
             <label key={k} className={`score${on ? ' on' : ''}`} title={m.anchors[k][lang]}>
               <input type="radio" name={group} checked={on}
-                onChange={() => onChange({ score: Number(k), cannot_assess: false })} />
+                onChange={() => onChange({ score: Number(k) })} />
               <span className="score-head" lang={lang}><b>{k}</b> {config.scale[k].label[lang]}</span>
             </label>
           )
         })}
-        <label className={`score ca${value?.cannot_assess ? ' on' : ''}`}>
-          <input type="radio" name={group} checked={Boolean(value?.cannot_assess)}
-            onChange={() => onChange({ score: null, cannot_assess: true })} />
-          <span className="score-head" lang={lang}>{rt.cannot_assess}</span>
-        </label>
       </div>
 
       <div className="metric-tools">

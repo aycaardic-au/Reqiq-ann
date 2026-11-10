@@ -93,7 +93,7 @@ export interface AnnotateTexts {
   unsaved_hint?: string
 }
 
-export interface AnnotateRubricTexts { cannot_assess: string; partial_note: string }
+export interface AnnotateRubricTexts { partial_note: string }
 
 export interface BatchCompleteTexts { title: string; title_n?: string; body: string; question: string; continue_button: string; stop_button: string }
 
@@ -142,7 +142,6 @@ export interface RubricContent {
   session_bar: { tr: SessionBarTexts }
   common: { tr: CommonTexts }
   scale: Record<'0' | '1' | '2', { label: Record<UiLang, string> }>
-  general_guidance: Record<UiLang, string>
   metrics: RubricMetric[]
   [key: string]: unknown
 }

@@ -5,7 +5,6 @@ export default function Intro({ t, config, onStart }: { t: IntroTexts; config: R
   const vars = {
     metrics: config.metrics.map((m) => m.name_tr).join(', '),
     scale: (['0', '1', '2'] as const).map((k) => `${k} — ${config.scale[k].label.tr}`).join(', '),
-    general_guidance: config.general_guidance.tr,
   }
   return (
     <main className="intro">

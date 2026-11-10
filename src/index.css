@@ -143,7 +143,6 @@ input[type=text], input[type=email], input[type=password], input[type=number], s
 .score-head { font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
 .score-head b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #dfe8e7; color: var(--primary-hover); font-size: .82rem; margin-right: 6px; }
 .score.on .score-head b { background: var(--primary); color: #fff; }
-.score.ca .score-head { color: var(--muted); font-weight: 600; }
 .metric-tools { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
 .hint-link { display: inline-flex; align-items: center; gap: 5px; }
 .bulb { flex: none; }

@@ -74,7 +74,7 @@ export default function Requirements({ tick }: { tick: number }) {
               <table className="tbl">
                 <thead><tr><th>Kod</th><th>Tur</th><th>Metrik</th><th>Puan</th><th>Not</th><th>Süre (sn)</th><th>Dikkat sorusu</th></tr></thead>
                 <tbody>{detail.map((d, i) => (
-                  <tr key={i}><td>{d.rater_code}</td><td>{d.round}</td><td>{d.metric_id}</td><td>{d.cannot_assess ? 'CA' : d.score}</td>
+                  <tr key={i}><td>{d.rater_code}</td><td>{d.round}</td><td>{d.metric_id}</td><td>{d.score}</td>
                     <td className="muted">{d.note}</td><td>{d.time_seconds_item}</td><td>{d.is_attention_check ? 'evet' : ''}</td></tr>
                 ))}</tbody>
               </table>

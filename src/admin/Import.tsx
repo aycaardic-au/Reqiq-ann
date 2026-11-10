@@ -5,7 +5,7 @@ import type { Cfg } from './exportData'
 type Kind = 'requirements' | 'refs'
 const COLS: Record<Kind, string[]> = {
   requirements: ['req_id', 'base_id', 'language_tag', 'project_id', 'text_en', 'text_tr', 'eligible', 'req_type'],
-  refs: ['base_id', 'metric_id', 'llm_score', 'llm_cannot_assess', 'llm_model'],
+  refs: ['base_id', 'metric_id', 'llm_score', 'llm_model'],
 }
 const REQUIRED: Record<Kind, string[]> = {
   requirements: ['req_id', 'language_tag', 'project_id'],
@@ -22,7 +22,7 @@ export default function Import() {
       <TableImport kind="requirements" title="Gereksinim havuzu"
         note="Var olan req_id satırları güncellenir, yenileri eklenir. language_tag: EN veya TR; req_id biçimi EN_<no> / TR_<no>; base_id iki dilde aynı numara." />
       <TableImport kind="refs" title="Referans puanlar"
-        note="base_id × metric_id başına bir satır (M_IND_01…M_IND_06). llm_score 0/1/2; değerlendirilemiyorsa llm_cannot_assess = TRUE ve puan boş." />
+        note="base_id × metric_id başına bir satır (M_IND_01…M_IND_06). llm_score zorunlu, 0/1/2." />
       <JsonImport />
       <Versions />
     </div>

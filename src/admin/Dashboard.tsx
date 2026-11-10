@@ -8,7 +8,7 @@ interface Dash {
   by_language: Record<string, number>; by_type: Record<string, number>
   batches: number; batches_done: number; items_scored: number; score_rows: number
   requirements: Record<string, number>; coverage_target: number; coverage: Record<string, number>
-  score_dist: Record<string, { '0': number; '1': number; '2': number; ca: number }>
+  score_dist: Record<string, { '0': number; '1': number; '2': number }>
   daily: { day: string; n: number }[]; median_seconds: number | null
 }
 
@@ -62,8 +62,8 @@ export default function Dashboard({ tick }: { tick: number }) {
         <section className="panel">
           <h2>Metrik başına puan dağılımı</h2>
           <Stacked rows={METRICS.map(([id, name]) => {
-            const s = d.score_dist[id] ?? { '0': 0, '1': 0, '2': 0, ca: 0 }
-            return { label: name, parts: [s['0'], s['1'], s['2'], s.ca] }
+            const s = d.score_dist[id] ?? { '0': 0, '1': 0, '2': 0 }
+            return { label: name, parts: [s['0'], s['1'], s['2']] }
           })} />
         </section>
         <section className="panel">

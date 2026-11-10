@@ -5,8 +5,8 @@ export interface Ses { session_id: string; annotator_type: string | null; annota
 export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null }
 export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
-export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number | null; cannot_assess: boolean; note: string | null; annotation_language: string; round: number; created_at: string }
-export interface Ref { base_id: string; metric_id: string; llm_score: number | null; llm_cannot_assess: boolean; llm_model: string }
+export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number; note: string | null; annotation_language: string; round: number; created_at: string }
+export interface Ref { base_id: string; metric_id: string; llm_score: number; llm_model: string }
 
 export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string; configs?: Cfg[] }
 
@@ -92,7 +92,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
       req_id: s.req_id, base_id: r?.base_id ?? null, project_id: r?.project_id ?? null, language_tag: s.annotation_language,
       requirement_text: (s.annotation_language === 'EN' ? r?.text_en : r?.text_tr) ?? null, text_en: r?.text_en ?? null, text_tr: r?.text_tr ?? null,
       config_version: it ? cfgLabel.get(batBy.get(it.batch_id)?.config_id ?? -1) ?? null : null,
-      metric_id: s.metric_id, score: s.score, cannot_assess: s.cannot_assess, note: s.note,
+      metric_id: s.metric_id, score: s.score, note: s.note,
       round: s.round, time_seconds_item: it?.time_seconds ?? null, created_at: s.created_at,
     }
   }).sort((a, b) => String(a.rater_code).localeCompare(String(b.rater_code)) || Number(a.batch_number) - Number(b.batch_number)
@@ -101,14 +101,14 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
   // Analysis rows: no attention-check duplicates, no excluded sessions
   const valid = d.scores.filter((s) => !itemBy.get(s.batch_item_id)?.is_attention_check && !sesBy.get(s.session_id)?.excluded)
 
-  // 2. Wide matrices per metric: rows = requirement, columns = rater (score; blank = not scored or cannot assess)
+  // 2. Wide matrices per metric: rows = requirement, columns = rater (score; blank = not scored by that rater)
   const raters = sesSorted.filter((s) => !s.excluded).map((s) => s.session_id)
   const matrices: Record<string, Row[]> = {}
   for (const m of METRIC_IDS) {
     const cell = new Map<string, number | string>()
     const reqIds = new Set<string>()
     for (const s of valid.filter((x) => x.metric_id === m)) {
-      reqIds.add(s.req_id); cell.set(`${s.req_id}|${s.session_id}`, s.cannot_assess ? 'CA' : (s.score as number))
+      reqIds.add(s.req_id); cell.set(`${s.req_id}|${s.session_id}`, s.score)
     }
     matrices[`Matris_${m}`] = [...reqIds].sort().map((rid) => {
       const r = reqBy.get(rid)
@@ -124,17 +124,17 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     const nSes = new Set(valid.filter((s) => s.req_id === r.req_id).map((s) => s.session_id)).size
     for (const m of METRIC_IDS) {
       const rows = valid.filter((s) => s.req_id === r.req_id && s.metric_id === m)
-      const vals = rows.filter((s) => !s.cannot_assess).map((s) => s.score as number)
+      const vals = rows.map((s) => s.score)
       const ref = refBy.get(`${r.base_id ?? r.req_id}|${m}`)
       const mu = mean(vals)
       summary.push({
         req_id: r.req_id, base_id: r.base_id, language_tag: r.language_tag, project_id: r.project_id, eligible: r.eligible,
-        metric_id: m, n_raters: nSes, n_scores: vals.length, n_cannot_assess: rows.length - vals.length,
+        metric_id: m, n_raters: nSes, n_scores: vals.length,
         n0: vals.filter((v) => v === 0).length, n1: vals.filter((v) => v === 1).length, n2: vals.filter((v) => v === 2).length,
         mean: r3(mu), median: median(vals), sd: r3(sd(vals)),
-        reference_score: ref ? (ref.llm_cannot_assess ? 'CA' : ref.llm_score) : null,
+        reference_score: ref ? ref.llm_score : null,
         reference_model: ref?.llm_model ?? null,
-        mean_minus_reference: ref && !ref.llm_cannot_assess && mu != null ? r3(mu - (ref.llm_score as number)) : null,
+        mean_minus_reference: ref && mu != null ? r3(mu - ref.llm_score) : null,
         coverage_met: nSes >= target,
       })
     }
@@ -154,8 +154,8 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
         const x = a.get(m), y = o.get(m)
         if (!x || !y) continue
         acPairs++
-        if (x.cannot_assess === y.cannot_assess && x.score === y.score) acSame++
-        if (!x.cannot_assess && !y.cannot_assess) acMax = Math.max(acMax, Math.abs((x.score as number) - (y.score as number)))
+        if (x.score === y.score) acSame++
+        acMax = Math.max(acMax, Math.abs(x.score - y.score))
       }
     }
     const med = median(times)
@@ -177,7 +177,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'rubric_version', value: d.rubricVersion },
     { key: 'filter', value: filterNote || 'none' },
     { key: 'analysis_rows', value: 'Matris_* and Gereksinim_Ozeti exclude attention-check duplicates and excluded sessions; Puanlar_Ham includes everything.' },
-    { key: 'matrix_cells', value: '0/1/2 = score, CA = cannot assess, empty = not scored by that rater.' },
+    { key: 'matrix_cells', value: '0/1/2 = score, empty = not scored by that rater.' },
     { key: 'flags', value: 'flag_consistency / flag_speed are computed by the server at batch completion (FR-QC-003/004).' },
     { key: 'config_version', value: 'Configuration (rubric + texts) version active when the batch was assigned (FR-CFG-VER-002).' },
     ...Object.entries(d.cfg).map(([k, v]) => ({ key: `app_config.${k}`, value: typeof v === 'object' ? JSON.stringify(v) : (v as string | number) })),
