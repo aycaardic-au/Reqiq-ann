@@ -113,10 +113,10 @@
       "step": "Adım 2 / 3: Yönerge",
       "title": "Değerlendirme yönergesi",
       "items": [
-        "Her sayfada "açık kaynaklardan edinilmiş" bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
+        "Her sayfada \"açık kaynaklardan edinilmiş\" bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
         "Puanlar: {scale}.",
         "Her metrikte kısa bir soru ve açıklama yer alır. \"Metrik Kurallar\" düğmesi, her bir metrik için gereksinimin sahip olması gereken özellikleri ve kötü/iyi yazılmış örnek gereksinimleri gösterir.",
-        "Yalnız ilgili gereksinim metnine bakarak puanlama yapınız. Veri setinde sunulmayan bilgiden dolayı puan kırmayınız. Bir kusura yol açma potansiyeli olan ifadeyi (örneğin "hızlı", "kolay") otomatik kusur saymayınız; etkisini değerlendiriniz. Kusur sayısını mekanik olarak puana dönüştürmeyiniz; tek ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde bağımsız değerlendiriniz. Bağlam eksik veya üst seviye gereksinim eksik diye değerlendirilebilir metrikleri boş bırakmayınız.",
+        "Yalnız ilgili gereksinim metnine bakarak puanlama yapınız. Veri setinde sunulmayan bilgiden dolayı puan kırmayınız. Bir kusura yol açma potansiyeli olan ifadeyi (örneğin \"hızlı\", \"kolay\") otomatik kusur saymayınız; etkisini değerlendiriniz. Kusur sayısını mekanik olarak puana dönüştürmeyiniz; tek ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde bağımsız değerlendiriniz. Bağlam eksik veya üst seviye gereksinim eksik diye değerlendirilebilir metrikleri boş bırakmayınız.",
         "Gereksinim metni bir metriği değerlendirmeye gerçekten yetmiyorsa \"Değerlendirilemiyor\" seçeneğini kullanabilirsiniz. Her metriğe isteğe bağlı not ekleyerek, neden o puanı verdiğinizi açıklayabilirsiniz.",
         "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
         "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir ya da uygulamadan çıkabilirsiniz."
