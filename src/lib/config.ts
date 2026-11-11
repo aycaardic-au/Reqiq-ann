@@ -76,7 +76,9 @@ export interface AnnotateTexts {
   hint_hide: string
   hint_rules: string
   hint_bad: string
+  hint_partial?: string
   hint_good: string
+  hint_rationale?: string
   note_toggle: string
   note_placeholder: string
   prev: string
@@ -124,7 +126,11 @@ export interface HintMetric {
   id: string
   rules: Record<UiLang, string[]>
   bad: Record<UiLang, string[]>
+  /** Score-1 samples (catalogue v6.4.18+); optional for older hint versions. */
+  partial?: Record<UiLang, string[]>
   good: Record<UiLang, string[]>
+  /** Rationale for the 0 and 1 samples, one item per topic; optional. */
+  rationale?: Record<UiLang, string[]>
 }
 
 export interface RubricContent {

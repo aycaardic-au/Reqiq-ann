@@ -1,11 +1,18 @@
-"""Build config/metric_hints.json and its SQL from the metric workbook (sheet Metrics_ENG_TR).
+"""Build config/metric_hints.json (and optional SQL) from the metric workbook (sheet Metrics_ENG_TR).
 
 Usage:
-  python scripts/build_hints.py <workbook.xlsx> [--out supabase/migrations/0011_metric_hints.sql]
+  python scripts/build_hints.py <workbook.xlsx> [--out hints.sql]
 
-Takes the six scored metrics (ids in config/rubric_v1.4.json) and, per metric, the numbered
-items of: Rules, Bad Samples, Good Samples, Kurallar (TR), Bad (TR), Good (TR).
-The SQL stores them under key "hints" as a new rubric_config version (needs migration 0018).
+Takes the six scored metrics (ids in config/rubric_v1.4.json). Per metric, EN and TR:
+  rules     - Rules / Kurallar (TR)
+  bad       - score 0 samples
+  partial   - score 1 samples
+  good      - score 2 samples
+  rationale - rationale for the 0 and 1 scores, one item per topic
+Samples are grouped per topic ("1.", "2."). Sub-numbered lines ("1.1.", "1.2.") stay in the
+item of their topic, one per line (the hint panel renders line breaks).
+The current hint panel shows rules, bad and good; partial and rationale are extra keys.
+Import the JSON through Admin -> İçe aktar -> İpuçları (creates a new configuration version).
 """
 import argparse
 import json
@@ -15,26 +22,72 @@ from pathlib import Path
 import openpyxl
 
 ROOT = Path(__file__).resolve().parent.parent
-COLS = {"rules": ("Rules", "Kurallar (TR)"), "bad": ("Bad Samples", "Bad (TR)"), "good": ("Good Samples", "Good (TR)")}
+COLS = {
+    "rules": ("Rules", "Kurallar (TR)"),
+    "bad": ("Non-Compliant Sample Requirements (Score=0)", "Uyumsuz Gereksinim Örnekleri (Score=0) (TR)"),
+    "partial": ("Partially Compliant Sample Requirements (Score=1)", "Kısmen Uyumlu Gereksinim Örnekleri (Score=1) (TR)"),
+    "good": ("Compliant Sample Requirements (Score=2)", "Uyumlu Gereksinim Örnekleri (Score=2) (TR)"),
+    "rationale": ("Rationale for 0 and 1 scores", "Gerekçe (0 ve 1 puanları) (TR)"),
+}
+TOP = re.compile(r"^\s*(\d+)\.\s+(.*)$")
+SUB = re.compile(r"^\s*(\d+)\.\d+\.\s+")
+TOPIC = re.compile(r"^\s*(Topic|Konu)\s+\d+\b")
 
 
 def items(text):
+    """Numbered items; sub-numbered lines are kept (with their numbers) inside their topic."""
     if not text:
         return []
-    parts = re.split(r"(?m)^\s*\d+\.\s+", str(text).strip())
-    parts = [p.strip() for p in parts if p.strip()]
-    return parts
+    out, groups = [], {}
+    for line in str(text).strip().splitlines():
+        if not line.strip():
+            continue
+        sub = SUB.match(line)
+        top = TOP.match(line)
+        if sub:
+            key = sub.group(1)
+            if key not in groups:
+                groups[key] = len(out)
+                out.append(line.strip())
+            else:
+                out[groups[key]] += "\n" + line.strip()
+        elif top:
+            groups[top.group(1)] = len(out)
+            out.append(top.group(2).strip())
+        elif out:
+            out[-1] += "\n" + line.strip()
+        else:
+            out.append(line.strip())
+    return out
+
+
+def topics(text):
+    """Rationale cells: one item per 'Topic n' / 'Konu n' block."""
+    if not text:
+        return []
+    out = []
+    for line in str(text).strip().splitlines():
+        if not line.strip():
+            continue
+        if TOPIC.match(line) or not out:
+            out.append(line.strip())
+        else:
+            out[-1] += "\n" + line.strip()
+    return out
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("workbook", type=Path)
-    ap.add_argument("--out", type=Path, default=ROOT / "supabase" / "migrations" / "0011_metric_hints.sql")
+    ap.add_argument("--out", type=Path, default=None, help="optional SQL file (new configuration version)")
     args = ap.parse_args()
 
     scored = [m["id"] for m in json.loads((ROOT / "config" / "rubric_v1.4.json").read_text(encoding="utf-8"))["metrics"]]
     ws = openpyxl.load_workbook(args.workbook, data_only=True)["Metrics_ENG_TR"]
     hdr = [c.value for c in ws[1]]
+    missing = [h for pair in COLS.values() for h in pair if h not in hdr]
+    if missing:
+        raise SystemExit(f"Columns not found in Metrics_ENG_TR: {missing}")
     col = {h: i for i, h in enumerate(hdr)}
     metrics = []
     for r in ws.iter_rows(min_row=2, values_only=True):
@@ -42,28 +95,33 @@ def main() -> None:
             continue
         m = {"id": r[0], "name_en": r[1]}
         for key, (en, tr) in COLS.items():
-            m[key] = {"en": items(r[col[en]]), "tr": items(r[col[tr]])}
+            split = topics if key == "rationale" else items
+            m[key] = {"en": split(r[col[en]]), "tr": split(r[col[tr]])}
             if len(m[key]["en"]) != len(m[key]["tr"]):
                 raise SystemExit(f"{r[0]} {key}: EN/TR item counts differ")
+        n = {len(m[k]["en"]) for k in ("bad", "partial", "good")}
+        if len(n) != 1:
+            raise SystemExit(f"{r[0]}: different number of topics in bad/partial/good: {n}")
         metrics.append(m)
     if [m["id"] for m in metrics] != scored:
         raise SystemExit(f"Metric ids found {[m['id'] for m in metrics]} != rubric {scored}")
 
     hints = {"source": f"{args.workbook.name} / Metrics_ENG_TR", "metrics": metrics}
     (ROOT / "config" / "metric_hints.json").write_text(json.dumps(hints, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    body = json.dumps({"hints": hints}, ensure_ascii=False, indent=2)
-    if "$json$" in body:
-        raise SystemExit("Text must not contain $json$")
-    args.out.write_text(f"""-- ReqIQ-ANN: metric hints (rules + Bad/Good samples) -> active rubric_config row
+    print("Written: config/metric_hints.json")
+    if args.out:
+        body = json.dumps({"hints": hints}, ensure_ascii=False, indent=2)
+        if "$json$" in body:
+            raise SystemExit("Text must not contain $json$")
+        args.out.write_text(f"""-- ReqIQ-ANN: metric hints -> new rubric_config version (previous one kept)
 -- GENERATED by scripts/build_hints.py from {args.workbook.name}. Do not edit by hand.
--- Run in Supabase SQL Editor. Creates a new configuration version (previous one kept).
 
 SELECT _config_new_version($json${body}$json$::jsonb, NULL, 'hints {args.workbook.name}') AS new_version;
 
 -- Verify: expect 6
 SELECT jsonb_array_length(content->'hints'->'metrics') AS hint_metrics FROM rubric_config WHERE is_active = TRUE;
 """, encoding="utf-8")
-    print("Written:", args.out, "and config/metric_hints.json")
+        print("Written:", args.out)
 
 
 if __name__ == "__main__":
