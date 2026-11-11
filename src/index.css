@@ -82,6 +82,7 @@ code { font-size: .88em; background: var(--surface-2); padding: 1px 6px; border-
 .progress { display: flex; align-items: center; gap: 10px; font-size: .95rem; font-weight: 700; color: var(--fg); }
 .progress .bar { width: 150px; height: 8px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
 .progress .bar span { display: block; height: 100%; background: #7fb3ad; border-radius: 999px; }
+.top-in > .progress { margin-left: auto; }
 
 /* K1 welcome + consent */
 .welcome { max-width: 1120px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 36px; align-items: start; }
