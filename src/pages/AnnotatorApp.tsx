@@ -5,6 +5,7 @@ import { createSession, endSession, finishSession, readSession, saveBackground, 
 import ConsentPage from '../screens/ConsentPage'
 import InfoForm from '../screens/InfoForm'
 import Intro from '../screens/Intro'
+import Briefing from '../screens/Briefing'
 import AnnotateStep from '../screens/AnnotateStep'
 import { BatchComplete, ThankYou } from '../screens/BatchEnd'
 import { Ended, EndSession, TopBar, type EndChoice } from '../screens/SessionChrome'
@@ -100,7 +101,16 @@ export default function AnnotatorApp() {
       return (
         <>
           <TopBar appName={appName} step={config.intro.tr.step} />
-          <Intro t={config.intro.tr} config={config} onStart={() => update({ ...flow, step: 'annotate' })} />
+          <Intro t={config.intro.tr} config={config} onStart={() => update({ ...flow, step: 'briefing' })} />
+          {end}
+        </>
+      )
+    case 'briefing':
+      // K4b (SRS FR-BRF): shown before the first item of every batch
+      return (
+        <>
+          <TopBar appName={appName} step={(config.briefing?.tr.step) ?? 'Adım 3 / 4: Metrik bilgilendirmesi'} />
+          <Briefing config={config} sessionId={readSession()!.session_id} language={flow.language} onDone={() => update({ ...flow, step: 'annotate' })} />
           {end}
         </>
       )
@@ -136,7 +146,7 @@ export default function AnnotatorApp() {
           batchNumber={flow.summary?.batchNumber}
           total={flow.summary?.total ?? 0}
           canContinue={flow.summary?.canContinue ?? false}
-          onContinue={() => { setProgress(null); update({ ...flow, step: 'annotate' }) }}
+          onContinue={() => { setProgress(null); update({ ...flow, step: 'briefing' }) }}
           onStop={() => update({ ...flow, step: 'thankyou' })}
         />
       )

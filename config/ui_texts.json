@@ -85,7 +85,7 @@
   },
   "form": {
     "tr": {
-      "step": "Adım 1 / 3: Bilgi formu",
+      "step": "Adım 1 / 4: Bilgi formu",
       "title": "Bilgi formu",
       "lede": "Devam etmek için lütfen her iki soruyu da yanıtlayınız.",
       "language_question": "Hangi dilde yazılmış gereksinimleri değerlendirmek istersiniz?",
@@ -110,7 +110,7 @@
   },
   "intro": {
     "tr": {
-      "step": "Adım 2 / 3: Yönerge",
+      "step": "Adım 2 / 4: Yönerge",
       "title": "Değerlendirme yönergesi",
       "items": [
         "Bu değerlendirme kapsamında kullanılan gereksinimler açık kaynaklardaki veri setlerinden edinilmiştir. Her sayfada bir gereksinim ve altında değerlendirmesi yapılacak 6 metrik göreceksiniz.",
@@ -124,12 +124,28 @@
         "Her sette yer alan gereksinim sayısı ve tamamladığınız gereksinim sayısı sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
         "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz."
       ],
-      "button": "Değerlendirmeye başla"
+      "button": "Devam"
+    }
+  },
+  "briefing": {
+    "tr": {
+      "step": "Adım 3 / 4: Metrik bilgilendirmesi",
+      "title": "Metrik bilgilendirmesi",
+      "lede": "Değerlendirmeye başlamadan önce her metriğin açıklamalarını ve örneklerini inceleyiniz. Her sayfa için \"Sonraki\" düğmesi, kısa bir okuma süresinden sonra etkinleşir.",
+      "progress": "Metrik {n} / {total}",
+      "guidance_heading": "Açıklama ve puan tanımları",
+      "hints_heading": "İpucu: kurallar ve örnekler",
+      "block_tr": "Türkçe",
+      "block_en": "English",
+      "wait": "Sonraki {seconds} saniye sonra etkinleşir",
+      "prev_button": "← Önceki",
+      "next_button": "Sonraki",
+      "start_button": "Değerlendirmeye başla"
     }
   },
   "annotate": {
     "tr": {
-      "step": "Adım 3 / 3: Değerlendirme",
+      "step": "Adım 4 / 4: Değerlendirme",
       "progress": "{done}/{total} değerlendirilen gereksinim",
       "requirement_label": "Gereksinim",
       "requirement_label_lang": "Gereksinim ({lang})",

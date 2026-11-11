@@ -97,6 +97,23 @@ export interface AnnotateTexts {
 
 export interface AnnotateRubricTexts { partial_note: string }
 
+/** Briefing K4b (SRS v1.4 FR-BRF). Stop-gap: min_seconds is read from texts until app_config (migration 0023) exists. */
+export interface BriefingTexts {
+  step: string
+  title: string
+  lede: string
+  progress: string
+  guidance_heading: string
+  hints_heading: string
+  block_tr: string
+  block_en: string
+  wait: string
+  prev_button: string
+  next_button: string
+  start_button: string
+  min_seconds?: number
+}
+
 export interface BatchCompleteTexts { title: string; title_n?: string; body: string; question: string; continue_button: string; stop_button: string }
 
 export interface ThankYouTexts {
@@ -142,6 +159,7 @@ export interface RubricContent {
   intro: { tr: IntroTexts }
   annotate: { tr: AnnotateTexts }
   annotate_rubric: Record<UiLang, AnnotateRubricTexts>
+  briefing?: { tr: BriefingTexts }
   batch_complete: { tr: BatchCompleteTexts }
   thankyou: { tr: ThankYouTexts }
   hints: { source: string; metrics: HintMetric[] }

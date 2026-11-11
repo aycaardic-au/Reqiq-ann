@@ -8,7 +8,7 @@ export function TopBar({ appName, step, right }: { appName: string; step: string
       <div className="top-in">
         <span className="appname">{appName}</span>
         <span className="stepnow">{step}</span>
-        {right}
+        {right && <div className="top-end">{right}</div>}
       </div>
     </header>
   )

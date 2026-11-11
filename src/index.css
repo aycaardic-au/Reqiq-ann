@@ -83,6 +83,7 @@ code { font-size: .88em; background: var(--surface-2); padding: 1px 6px; border-
 .progress .bar { width: 150px; height: 8px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
 .progress .bar span { display: block; height: 100%; background: #7fb3ad; border-radius: 999px; }
 .top-in > .progress { margin-left: auto; }
+.top-end { margin-left: auto; display: flex; align-items: center; }
 
 /* K1 welcome + consent */
 .welcome { max-width: 1120px; margin: 0 auto; padding: 40px 20px; display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 36px; align-items: start; }
@@ -234,3 +235,18 @@ dialog::backdrop { background: rgba(51, 65, 85, .28); }
 .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 10px 0; }
 .filters label { display: inline-flex; gap: 6px; align-items: center; }
 .scroll { max-height: 520px; overflow: auto; }
+
+/* Briefing K4b (SRS v1.4 FR-BRF) */
+.bf-progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-weight: 700; margin-top: 8px; }
+.bf-bar { display: inline-flex; gap: 6px; }
+.bf-bar span { width: 26px; height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.bf-bar span.on { background: #7fb3ad; }
+.bf-title { margin: 14px 0 6px; }
+.bf-page { margin-top: 14px; }
+.bf-metric { margin: 0 0 8px; }
+.bf-block + .bf-block { margin-top: 22px; border-top: 1px dashed var(--line); padding-top: 18px; }
+.bf-lang { font-size: .85rem; font-weight: 700; color: var(--muted); margin: 0 0 4px; text-transform: uppercase; letter-spacing: .04em; }
+.bf-h { font-size: 1rem; margin: 0 0 6px; }
+.bf-nav { align-items: center; margin-top: 16px; }
+.bf-next { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.bf-next .muted { margin: 0; font-size: .92rem; }

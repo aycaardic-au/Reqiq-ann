@@ -175,3 +175,28 @@ function devRpc(fn: string, args: Record<string, unknown>): unknown {
   }
   return null
 }
+
+/* ---------- K4b Briefing (SRS v1.4 FR-BRF, migration 0023) ---------- */
+
+/** FR-BRF-004: minimum visible seconds per briefing page (admin parameter). Falls back to 10 s. */
+export async function fetchBriefingMinSeconds(): Promise<number> {
+  if (!supabase) return 10
+  try {
+    const { data, error } = await supabase.from('app_config').select('briefing_min_seconds').eq('id', 1).single()
+    if (error || typeof data?.briefing_min_seconds !== 'number') return 10
+    return data.briefing_min_seconds
+  } catch {
+    return 10
+  }
+}
+
+/** FR-BRF-006: metric ids whose briefing page was completed in this batch. */
+export const getBriefingProgress = (sessionId: string, batchId: string) =>
+  rpcData<string[] | null>('get_briefing_progress', { p_session_id: sessionId, p_batch_id: batchId })
+
+/** FR-BRF-006: store one page visit when the annotator moves forward from it. */
+export const saveBriefingView = (sessionId: string, batchId: string, metricId: string, language: LanguagePref, seconds: number, completed: boolean) =>
+  rpcData<null>('save_briefing_view', {
+    p_session_id: sessionId, p_batch_id: batchId, p_metric_id: metricId,
+    p_language: language, p_visible_seconds: seconds, p_completed: completed,
+  })
