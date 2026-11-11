@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.6",
+  "ui_texts_version": "2.8",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -32,7 +32,7 @@
         {
           "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
           "paragraphs": [
-            "Bir set 30 gereksinimden oluşur ve ortalama 30–40 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
+            "Bir set birden fazla gereksinimden oluşur ve ortalama 30–40 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
           ]
         },
         {
@@ -113,13 +113,16 @@
       "step": "Adım 2 / 3: Yönerge",
       "title": "Değerlendirme yönergesi",
       "items": [
-        "Her sayfada \"açık kaynaklardan edinilmiş\" bir gereksinim ve altı kalite metriği göreceksiniz: {metrics}.",
-        "Puanlar: {scale}.",
-        "Her metrikte kısa bir soru ve açıklama yer alır. \"Metrik Kurallar\" düğmesi, her bir metrik için gereksinimin sahip olması gereken özellikleri ve kötü/iyi yazılmış örnek gereksinimleri gösterir.",
-        "Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayın. Bağlam veya üst seviye gereksinim gibi harici dokümanlarla doğrulanabilecek konular için puan kırmayınız. Bir kusura yol açma potansiyeli olan ifadeyi (örneğin \"hızlı\", \"kolay\") otomatik kusur saymayınız; etkisini değerlendiriniz. Kusur sayısını mekanik olarak puana dönüştürmeyiniz; tek ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir. Aynı kusur farklı metrikleri gerçekten etkiliyorsa her birinde bağımsız değerlendiriniz. Bağlam eksik veya üst seviye gereksinim eksik diye değerlendirilebilir metrikleri boş bırakmayınız.",
+        "Bu değerlendirme kapsamında kullanılan gereksinimler açık kaynaklardaki veri setlerinden edinilmiştir. Her sayfada bir gereksinim ve altında değerlendirmesi yapılacak 6 metrik göreceksiniz.",
+        "Her metrik için puanlama yapmanız beklenmektedir. Puanlar: {scale}.",
+        "Her metrik için kısa bir soru ve açıklama yer alır. \"Puanlama açıklamaları\" düğmesi, her puanın (0, 1 ve 2) ne anlama geldiğini ve örnekleri gösterir. \"Metrik Detayları\" düğmesi ise gereksinimin sahip olması gereken özellikleri ve kötü/iyi örnek gereksinimleri gösterir.",
+        "Yalnızca gereksinimde yazılı olan bilgiyi puanlayınız. Görülmeyen doküman, sözlük, bağlam, üst gereksinim veya gerekçenin varlığını ya da yokluğunu varsaymayınız. Gereksinimin bağlamı eksik olsa bile her metriği puanlayınız.",
+        "\"Hızlı\", \"kolay\" gibi belirsizliğe yol açabilecek ifadeleri kendiliğinden kusur saymayınız; gereksinimde belirsizlik yaratıp yaratmadıklarını değerlendiriniz.",
+        "Kusur sayısını otomatik olarak puana dönüştürmeyiniz. Tek bir ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir. Küçük kusurlar, ancak birlikte metriğin temel unsurunu etkiliyorsa 0 puana yol açar.",
+        "Aynı kusur birden fazla metriği etkiliyorsa her metrikte ayrı ayrı değerlendiriniz.",
         "Her metriğe isteğe bağlı not ekleyerek, puanınızın gerekçesini açıklayabilirsiniz.",
-        "Bir set 30 gereksinimden oluşur; ilerlemeniz sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
-        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir ya da uygulamadan çıkabilirsiniz."
+        "Her sette yer alan gereksinim sayısı ve tamamladığınız gereksinim sayısı sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
+        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz."
       ],
       "button": "Değerlendirmeye başla"
     }
@@ -127,15 +130,15 @@
   "annotate": {
     "tr": {
       "step": "Adım 3 / 3: Değerlendirme",
-      "progress": "{done}/{total} gereksinim",
+      "progress": "{done}/{total} değerlendirilen gereksinim",
       "requirement_label": "Gereksinim",
       "requirement_label_lang": "Gereksinim ({lang})",
       "lang_names": {
         "EN": "İngilizce",
         "TR": "Türkçe"
       },
-      "hint_button": "Metrik Kurallar",
-      "hint_hide": "Metrik kuralları gizle",
+      "hint_button": "Metrik Detayları",
+      "hint_hide": "Metrik detaylarını gizle",
       "hint_rules": "Kurallar",
       "hint_bad": "Kötü örnekler",
       "hint_good": "İyi örnekler",
@@ -161,10 +164,10 @@
   },
   "annotate_rubric": {
     "en": {
-      "partial_note": "Score only the information that can be observed within the requirement itself. Do not deduct points for matters that could be verified through external documents, such as context or higher-level requirements."
+      "partial_note": "Score only the information that can be observed within the requirement itself."
     },
     "tr": {
-      "partial_note": "Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayın. Bağlam veya üst seviye gereksinim gibi harici dokümanlarla doğrulanabilecek konular için puan kırmayınız."
+      "partial_note": "Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayın."
     }
   },
   "session_bar": {

@@ -132,7 +132,7 @@ export default function Annotate({
       <section className="req" aria-labelledby="req-label" ref={reqRef} tabIndex={-1}>
         <div id="req-label" className="req-label">
           <span>{t.requirement_title}</span>
-          <span className="req-meta">{t.lang_names[item.language_tag]} · {idx + 1}/{items.length}</span>
+          <span className="req-meta">{t.lang_names[item.language_tag]}</span>
         </div>
         <p className="req-text" lang={lang}>{item.text}</p>
       </section>
