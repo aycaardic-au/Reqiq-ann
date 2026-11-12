@@ -167,12 +167,20 @@ export default function Annotate({
   )
 }
 
+/** Lit yellow bulb (light rays included), shown on both K5 links. */
 function Bulb() {
   return (
-    <svg className="bulb" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2a7 7 0 0 0-4.2 12.6c.7.6 1.2 1.4 1.2 2.4v.5h6V17c0-1 .5-1.8 1.2-2.4A7 7 0 0 0 12 2z" fill="#f7d65a" stroke="#a07d10" strokeWidth="1.2" />
-      <rect x="9" y="18.5" width="6" height="1.8" rx=".9" fill="#a07d10" />
-      <rect x="10" y="21" width="4" height="1.6" rx=".8" fill="#a07d10" />
+    <svg className="bulb" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <g stroke="#f5b400" strokeWidth="1.6" strokeLinecap="round">
+        <line x1="12" y1="0.8" x2="12" y2="2.6" />
+        <line x1="2.6" y1="4.4" x2="3.9" y2="5.7" />
+        <line x1="21.4" y1="4.4" x2="20.1" y2="5.7" />
+        <line x1="0.8" y1="12" x2="2.4" y2="12" />
+        <line x1="23.2" y1="12" x2="21.6" y2="12" />
+      </g>
+      <path d="M12 3a6.5 6.5 0 0 0-3.9 11.7c.7.6 1.1 1.3 1.1 2.2v.6h5.6v-.6c0-.9.4-1.6 1.1-2.2A6.5 6.5 0 0 0 12 3z" fill="#ffd93b" stroke="#c99a06" strokeWidth="1.1" />
+      <rect x="9" y="18.4" width="6" height="1.8" rx=".9" fill="#c99a06" />
+      <rect x="10" y="21" width="4" height="1.6" rx=".8" fill="#c99a06" />
     </svg>
   )
 }
@@ -227,15 +235,17 @@ function MetricBlock({
       </div>
 
       <div className="metric-tools">
-        <button type="button" className="link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
-          {detailsOpen ? t.details_hide : t.details_button}
-        </button>
-        {hint && (
+        {hint ? (
           <button type="button" className="link hint-link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
             <Bulb />{hintOpen ? t.hint_hide : t.hint_button}
           </button>
-        )}
-        {!noteOpen && <button type="button" className="link" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>}
+        ) : <span />}
+        <div className="metric-tools-end">
+          <button type="button" className="link hint-link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
+            <Bulb />{detailsOpen ? t.details_hide : t.details_button}
+          </button>
+          {!noteOpen && <button type="button" className="link" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>}
+        </div>
       </div>
 
       {detailsOpen && (

@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.11",
+  "ui_texts_version": "2.12",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -153,8 +153,8 @@
         "EN": "İngilizce",
         "TR": "Türkçe"
       },
-      "hint_button": "Metrik Detayları",
-      "hint_hide": "Metrik detaylarını gizle",
+      "hint_button": "Metrik açıklamaları",
+      "hint_hide": "Metrik açıklamalarını gizle",
       "hint_rules": "Kurallar",
       "hint_bad": "Kötü örnekler",
       "hint_partial": "Kısmen uyumlu örnekler",
@@ -173,7 +173,7 @@
       "requirement_title": "Değerlendirilecek gereksinim",
       "metric_label": "Metrik {n}",
       "details_button": "Puanlama açıklamaları",
-      "details_hide": "Açıklamayı gizle",
+      "details_hide": "Puanlama açıklamalarını gizle",
       "shortcut_hint": "Kısayol: bir metriğin içindeyken 0, 1 veya 2 tuşu puanı seçer.",
       "draft_restored": "Bu gereksinim için kaydedilmemiş seçimleriniz geri yüklendi.",
       "sample_label": "Örnek",
