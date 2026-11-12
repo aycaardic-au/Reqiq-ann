@@ -241,6 +241,11 @@ function MetricBlock({
       )}
       </div>
 
+      {noteOpen && (
+        <textarea className="note" maxLength={500} rows={2} placeholder={t.note_placeholder} aria-label={`${t.note_placeholder} — ${m.name_tr}`}
+          value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
+      )}
+
       <div className="metric-tools">
         {hint && (
           <button type="button" className="link hint-link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
@@ -300,10 +305,6 @@ function MetricBlock({
         </div>
       )}
 
-      {noteOpen && (
-        <textarea className="note" maxLength={500} rows={2} placeholder={t.note_placeholder} aria-label={`${t.note_placeholder} — ${m.name_tr}`}
-          value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
-      )}
     </fieldset>
   )
 }
