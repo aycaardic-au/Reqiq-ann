@@ -15,8 +15,8 @@ const DEFAULTS = {
   title: 'Metrik bilgilendirmesi',
   lede: 'Değerlendirmeye başlamadan önce her metriğin açıklamalarını ve örneklerini inceleyiniz.',
   progress: 'Metrik {n} / {total}',
-  guidance_heading: 'Açıklama ve puan tanımları',
-  hints_heading: 'İpucu: kurallar ve örnekler',
+  guidance_heading: 'Puanlama Açıklamaları ve Örnek Gereksinimler',
+  hints_heading: 'Metriğe ait kurallar ve örnek gereksinimler',
   block_tr: 'Türkçe',
   block_en: 'English',
   wait: 'Sonraki {seconds} saniye sonra etkinleşir',
@@ -155,6 +155,30 @@ export default function Briefing({ config, sessionId, language, onDone }: {
             <p className="question">{m.question[lang]}</p>
             {m.partial_scope_note && <p className="partial">{config.annotate_rubric[lang].partial_note}</p>}
 
+            {hint && (
+              <div className="hint-panel">
+                <h3 className="bf-h">{t.hints_heading}</h3>
+                <h4>{lang === 'tr' ? 'Kurallar' : 'Rules'}</h4>
+                <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+                <h4>{lang === 'tr' ? 'Kötü örnekler' : 'Bad examples'}</h4>
+                <ol>{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+                {hint.partial?.[lang]?.length ? (
+                  <>
+                    <h4>{lang === 'tr' ? 'Kısmen uyumlu örnekler' : 'Partially compliant examples'}</h4>
+                    <ol>{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+                  </>
+                ) : null}
+                <h4>{lang === 'tr' ? 'İyi örnekler' : 'Good examples'}</h4>
+                <ol>{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+                {hint.rationale?.[lang]?.length ? (
+                  <>
+                    <h4>{lang === 'tr' ? 'Puan gerekçeleri (0 ve 1)' : 'Score rationales (0 and 1)'}</h4>
+                    <ol className="rationale">{hint.rationale[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+                  </>
+                ) : null}
+              </div>
+            )}
+
             <div className="details-panel">
               <h3 className="bf-h">{t.guidance_heading}</h3>
               <p>{m.guidance[lang]}</p>
@@ -175,30 +199,6 @@ export default function Briefing({ config, sessionId, language, onDone }: {
                 })}
               </dl>
             </div>
-
-            {hint && (
-              <div className="hint-panel">
-                <h3 className="bf-h">{t.hints_heading}</h3>
-                <h4>{lang === 'tr' ? 'Kurallar' : 'Rules'}</h4>
-                <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                <h4>{lang === 'tr' ? 'Kötü örnekler' : 'Bad examples'}</h4>
-                <ol className="samples bad">{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                {hint.partial?.[lang]?.length ? (
-                  <>
-                    <h4>{lang === 'tr' ? 'Kısmen uyumlu örnekler' : 'Partially compliant examples'}</h4>
-                    <ol className="samples mid">{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                  </>
-                ) : null}
-                <h4>{lang === 'tr' ? 'İyi örnekler' : 'Good examples'}</h4>
-                <ol className="samples good">{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                {hint.rationale?.[lang]?.length ? (
-                  <>
-                    <h4>{lang === 'tr' ? 'Puan gerekçeleri (0 ve 1)' : 'Score rationales (0 and 1)'}</h4>
-                    <ol className="rationale">{hint.rationale[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                  </>
-                ) : null}
-              </div>
-            )}
           </div>
         ))}
       </section>
