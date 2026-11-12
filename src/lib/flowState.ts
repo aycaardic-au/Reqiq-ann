@@ -5,7 +5,7 @@ import type { LanguagePref } from './config'
  * consent (K1) → form (K3) → intro (K4) → annotate (K5) → batch_complete (K6) → thankyou
  * The session row is created when the form is submitted (D-24); see session.ts.
  */
-export type Step = 'consent' | 'form' | 'intro' | 'annotate' | 'batch_complete' | 'thankyou'
+export type Step = 'consent' | 'form' | 'intro' | 'briefing' | 'annotate' | 'batch_complete' | 'thankyou'
 
 export interface BatchSummary { batchCount: number; batchNumber?: number; total: number; canContinue: boolean }
 
@@ -16,7 +16,7 @@ export interface FlowState {
 }
 
 const KEY = 'reqiq_ann_flow'
-const STEPS: Step[] = ['consent', 'form', 'intro', 'annotate', 'batch_complete', 'thankyou']
+const STEPS: Step[] = ['consent', 'form', 'intro', 'briefing', 'annotate', 'batch_complete', 'thankyou']
 export const INITIAL_FLOW: FlowState = { step: 'consent', language: null }
 
 export function readFlow(): FlowState {
