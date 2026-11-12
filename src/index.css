@@ -136,7 +136,14 @@ input[type=text], input[type=email], input[type=password], input[type=number], s
 .metric-en { font-weight: 600; color: var(--muted); }
 .question { margin: 2px 0 10px; }
 .partial { background: var(--note-bg); border: 1px solid var(--note-line); color: var(--note-fg); border-radius: 10px; padding: 6px 12px; font-size: .9rem; margin: 0 0 10px; }
-.scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.scores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.score-row { display: flex; gap: 8px; align-items: stretch; }
+.score-row .scores { flex: 1 1 auto; min-width: 0; }
+.score-note { flex: 0 0 150px; justify-content: center; align-items: center; text-align: center; border-style: dashed; color: var(--primary); font: inherit; font-weight: 600; }
+@media (max-width: 640px) {
+  .score-row { flex-wrap: wrap; }
+  .score-note { flex-basis: 100%; min-height: 44px; }
+}
 .score { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 52px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; padding: 8px 12px; cursor: pointer; transition: background .15s, border-color .15s; }
 .score:hover { background: var(--surface-2); }
 .score input { position: absolute; opacity: 0; width: 1px; height: 1px; }

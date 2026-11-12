@@ -221,6 +221,7 @@ function MetricBlock({
       <p className="question" lang={lang}>{m.question[lang]}</p>
       {m.partial_scope_note && <p className="partial" lang={lang}>{rt.partial_note}</p>}
 
+      <div className="score-row">
       <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
         {(['0', '1', '2'] as const).map((k) => {
           const on = value?.score === Number(k)
@@ -233,6 +234,10 @@ function MetricBlock({
           )
         })}
       </div>
+      {!noteOpen && (
+        <button type="button" className="score score-note" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>
+      )}
+      </div>
 
       <div className="metric-tools">
         {hint ? (
@@ -244,7 +249,6 @@ function MetricBlock({
           <button type="button" className="link hint-link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
             <Bulb />{detailsOpen ? t.details_hide : t.details_button}
           </button>
-          {!noteOpen && <button type="button" className="link" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>}
         </div>
       </div>
 
