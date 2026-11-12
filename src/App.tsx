@@ -1,6 +1,7 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AnnotatorApp from './pages/AnnotatorApp'
 import AdminApp from './pages/AdminApp'
+import Reset from './pages/Reset'
 
 /**
  * HashRouter is used because GitHub Pages has no server-side routing:
@@ -12,6 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<AnnotatorApp />} />
         <Route path="/admin" element={<AdminApp />} />
+        <Route path="/reset" element={<Reset />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

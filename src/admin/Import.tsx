@@ -105,8 +105,14 @@ function JsonImport() {
   const run = async () => {
     if (!obj) return
     const patch = kind === 'hints' ? { hints: obj.hints ?? obj } : obj
-    const { data, error } = await adminDb!.rpc('admin_merge_config', { p_patch: patch, p_label: label || null, p_note: note || null })
-    setMsg(error ? `Hata: ${error.message}` : `Etkin sürüm: ${data}`)
+    // Sürüm adı: elle girilmediyse dosyanın kendi sürüm bilgisi (ör. ui_texts_version 2.14, rubrik version_label).
+    // Veritabanı önceki sürümün etiketinden türetmesin diye istemci tarafında verilir.
+    const fileVersion = typeof obj.ui_texts_version === 'string' ? obj.ui_texts_version
+      : typeof obj.version_label === 'string' ? obj.version_label : null
+    const { data, error } = await adminDb!.rpc('admin_merge_config', { p_patch: patch, p_label: label.trim() || fileVersion, p_note: note || null })
+    if (error) { setMsg(`Hata: ${error.message}`); return }
+    const unchanged = String(data).endsWith('(unchanged)')
+    setMsg(unchanged ? `Değişiklik yok; mevcut etkin sürüm: ${String(data).replace(' (unchanged)', '')}` : `Yeni etkin sürüm: ${data}`)
   }
   return (
     <section className="panel">
