@@ -22,6 +22,7 @@ const DEFAULTS = {
   hint_partial: 'Kısmen Uyumlu Gereksinim Örnekleri (Score=1)',
   hint_good: 'Uyumlu Gereksinim Örnekleri (Score=2)',
   hint_rationale: 'Gerekçe (0 ve 1 puanları)',
+  sample_label: 'Örnek',
   block_tr: 'Türkçe',
   block_en: 'English',
   wait: '{seconds} saniye sonra yeni sayfaya geçebilirsiniz',
@@ -39,6 +40,7 @@ const DEFAULTS_EN = {
   hint_good: 'Compliant Sample Requirements (Score=2)',
   hint_rationale: 'Rationale for 0 and 1 scores',
   guidance_heading: 'Scoring Guidance',
+  sample_label: 'Example',
 }
 
 export default function Briefing({ config, sessionId, language, onDone }: {
@@ -208,7 +210,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
                       <dt><b>{k}</b> {config.scale[k].label[lang]}</dt>
                       <dd>{m.anchors[k][lang]}</dd>
                       {sampleText && (
-                        <dd className="sample">“{sampleText}”{reason && <span className="muted"> — {reason}</span>}</dd>
+                        <dd className="sample"><span className="sample-label">{lang === 'en' ? te.sample_label : t.sample_label}:</span> “{sampleText}”{reason && <span className="muted"> — {reason}</span>}</dd>
                       )}
                     </div>
                   )

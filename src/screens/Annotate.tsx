@@ -20,7 +20,7 @@ function storeDrafts(d: Record<number, Draft>): void {
 /**
  * K5 Değerlendirme (FR-ANN-001..011, D-26, D-28, D-33).
  * One requirement per page; six metrics; details and hint panels; back navigation within the open batch;
- * keyboard shortcuts (UI-004); visible-time measurement (FR-QC-001); draft persistence (NFR-REL-005).
+ * visible-time measurement (FR-QC-001); draft persistence (NFR-REL-005).
  */
 export default function Annotate({
   config, items, sessionLang, onSave, onFinish, onProgress, onClosed,
@@ -144,7 +144,6 @@ export default function Annotate({
       </section>
 
       {restored && ui.draft_restored && <p className="notice" role="status">{ui.draft_restored}</p>}
-      {ui.shortcut_hint && idx === 0 && <p className="muted shortcut">{ui.shortcut_hint}</p>}
 
       {metrics.map((m, i) => (
         <MetricBlock
@@ -218,14 +217,8 @@ function MetricBlock({
   const sampleText = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.text_en ?? null : s.text)
   const sampleReason = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.reason_en : s.reason_tr)
 
-  // UI-004: 0/1/2 select a score, while focus is inside this metric
-  const onKey = (e: React.KeyboardEvent) => {
-    if ((e.target as HTMLElement).tagName === 'TEXTAREA' || e.ctrlKey || e.metaKey || e.altKey) return
-    if (['0', '1', '2'].includes(e.key)) { onChange({ score: Number(e.key) }); e.preventDefault() }
-  }
-
   return (
-    <fieldset className={`metric${showError ? ' missing' : ''}`} onKeyDown={onKey}>
+    <fieldset className={`metric${showError ? ' missing' : ''}`}>
       <legend>
         <span className="metric-no">{fill(st.metric_label, { n: String(n) })}</span>
         <span className="metric-name">{m.name_tr} <span className="metric-en">/ {m.name_en}</span></span>

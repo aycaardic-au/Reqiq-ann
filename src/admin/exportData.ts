@@ -7,8 +7,10 @@ export interface Cfg { config_id: number; version_label: string; uploaded_at: st
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
 export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number; note: string | null; annotation_language: string; round: number; created_at: string }
 export interface Ref { base_id: string; metric_id: string; llm_score: number; llm_model: string }
+/** FR-BRF-006 / FR-BRF-009: one briefing page record per session × batch × metric (migration 0023; read by 0026). */
+export interface Brf { session_id: string; batch_id: string; metric_id: string; language_shown: string; visible_seconds: number; completed_at: string | null; created_at: string; config_id: number | null }
 
-export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string; configs?: Cfg[] }
+export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string; configs?: Cfg[]; briefing?: Brf[] }
 
 /** FR-ADM-008: export filters. */
 export interface ExportFilter {
@@ -37,7 +39,8 @@ export function applyFilter(d: RawData, f: ExportFilter): RawData {
     }
     scores = scores.filter((s) => (raters.get(s.req_id)?.size ?? 0) >= target)
   }
-  return { ...d, sessions, scores }
+  const briefing = (d.briefing ?? []).filter((b) => keep.has(b.session_id))
+  return { ...d, sessions, scores, briefing }
 }
 
 /** NFR-SEC-005: neutralise spreadsheet formulas in exported text (CSV/Excel injection). */
@@ -183,5 +186,15 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     ...Object.entries(d.cfg).map(([k, v]) => ({ key: `app_config.${k}`, value: typeof v === 'object' ? JSON.stringify(v) : (v as string | number) })),
   ]
 
-  return { Bilgi: info, Puanlar_Ham: raw, ...matrices, Gereksinim_Ozeti: summary, Oturumlar_QC: sessions }
+  // 5. Briefing (FR-BRF-009): one row per session × batch × metric. Briefing time is never added to item time (FR-BRF-007).
+  const briefing: Row[] = (d.briefing ?? []).map((b) => ({
+    rater_code: code.get(b.session_id) ?? null, session_id: b.session_id,
+    batch_number: batchNo.get(b.batch_id) ?? null, batch_id: b.batch_id, metric_id: b.metric_id,
+    language_shown: b.language_shown, visible_seconds: r3(b.visible_seconds), completed_at: b.completed_at,
+    created_at: b.created_at, config_version: cfgLabel.get(b.config_id ?? -1) ?? null,
+    session_excluded: sesBy.get(b.session_id)?.excluded ?? null,
+  })).sort((a, b) => String(a.rater_code).localeCompare(String(b.rater_code)) || Number(a.batch_number) - Number(b.batch_number)
+    || String(a.metric_id).localeCompare(String(b.metric_id)))
+
+  return { Bilgi: info, Briefing: briefing, Puanlar_Ham: raw, ...matrices, Gereksinim_Ozeti: summary, Oturumlar_QC: sessions }
 }
