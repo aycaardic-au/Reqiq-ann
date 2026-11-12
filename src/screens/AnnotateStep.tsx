@@ -5,10 +5,11 @@ import Annotate from './Annotate'
 
 /** Loads (or resumes) the session's batch, then runs K5. */
 export default function AnnotateStep({
-  config, sessionId, onProgress, onBatchDone, onNoMore, onEnded,
+  config, sessionId, language, onProgress, onBatchDone, onNoMore, onEnded,
 }: {
   config: RubricContent
   sessionId: string
+  language?: string | null
   onProgress: (done: number, total: number) => void
   onBatchDone: (r: CompleteResult) => void
   onNoMore: () => void
@@ -49,6 +50,7 @@ export default function AnnotateStep({
       key={batch.batch_id}
       config={config}
       items={batch.items}
+      sessionLang={language}
       onProgress={onProgress}
       onSave={async (item, scores, seconds) => { await saveScores(sessionId, item.batch_item_id, scores, seconds) }}
       onFinish={async () => onBatchDone(await completeBatch(sessionId, batch.batch_id))}

@@ -23,16 +23,22 @@ function storeDrafts(d: Record<number, Draft>): void {
  * keyboard shortcuts (UI-004); visible-time measurement (FR-QC-001); draft persistence (NFR-REL-005).
  */
 export default function Annotate({
-  config, items, onSave, onFinish, onProgress, onClosed,
+  config, items, sessionLang, onSave, onFinish, onProgress, onClosed,
 }: {
   config: RubricContent
   items: BatchItem[]
+  sessionLang?: string | null
   onSave: (item: BatchItem, scores: MetricScore[], seconds: number) => Promise<void>
   onFinish: () => Promise<void>
   onProgress: (done: number, total: number) => void
   onClosed: () => void
 }) {
   const t = config.annotate.tr
+  // Session-level texts (ui_texts 2.18): English only when the participant chose EN; TR and BOTH keep Turkish
+  const enA = (config.annotate as unknown as { en?: Partial<typeof t> }).en ?? {}
+  const ui = (sessionLang === 'EN' ? { ...t, ...enA } : t) as typeof t
+  const cEn = (config.common as unknown as { en?: Partial<typeof config.common.tr> }).en ?? {}
+  const cm = (sessionLang === 'EN' ? { ...config.common.tr, ...cEn } : config.common.tr) as typeof config.common.tr
   const metrics = config.metrics
   const [serverDrafts, setServerDrafts] = useState<Record<number, Draft>>(() => Object.fromEntries(items.map((it) => [it.batch_item_id, toDraft(it.scores)])))
   const [drafts, setDrafts] = useState<Record<number, Draft>>(() => {
@@ -131,14 +137,14 @@ export default function Annotate({
     <main className="annotate">
       <section className="req" aria-labelledby="req-label" ref={reqRef} tabIndex={-1}>
         <div id="req-label" className="req-label">
-          <span>{t.requirement_title}</span>
-          <span className="req-meta">{t.lang_names[item.language_tag]}</span>
+          <span>{ui.requirement_title}</span>
+          <span className="req-meta">{ui.lang_names[item.language_tag]}</span>
         </div>
         <p className="req-text" lang={lang}>{item.text}</p>
       </section>
 
-      {restored && t.draft_restored && <p className="notice" role="status">{t.draft_restored}</p>}
-      {t.shortcut_hint && idx === 0 && <p className="muted shortcut">{t.shortcut_hint}</p>}
+      {restored && ui.draft_restored && <p className="notice" role="status">{ui.draft_restored}</p>}
+      {ui.shortcut_hint && idx === 0 && <p className="muted shortcut">{ui.shortcut_hint}</p>}
 
       {metrics.map((m, i) => (
         <MetricBlock
@@ -147,20 +153,21 @@ export default function Annotate({
           m={m}
           lang={lang}
           config={config}
+          sessionLang={sessionLang}
           value={draft[m.id]}
           showError={tried && (draft[m.id]?.score ?? null) === null}
           onChange={(p) => setMetric(m.id, p)}
         />
       ))}
 
-      {tried && !complete && <p className="err" role="alert">{t.incomplete}</p>}
-      {error && <p className="err" role="alert">{config.common.tr.save_error}</p>}
+      {tried && !complete && <p className="err" role="alert">{ui.incomplete}</p>}
+      {error && <p className="err" role="alert">{cm.save_error}</p>}
       <div className="navrow">
         <button type="button" className="btn btn-quiet" disabled={idx === 0 || busy} onClick={() => { setTried(false); setIdx(idx - 1) }}>
-          ← {t.prev}
+          ← {ui.prev}
         </button>
         <button type="button" className="btn btn-primary" disabled={busy} onClick={save}>
-          {busy ? config.common.tr.saving : finalSave ? t.finish : t.next}
+          {busy ? cm.saving : finalSave ? ui.finish : ui.next}
         </button>
       </div>
     </main>
@@ -186,12 +193,13 @@ function Bulb() {
 }
 
 function MetricBlock({
-  n, m, lang, config, value, showError, onChange,
+  n, m, lang, config, sessionLang, value, showError, onChange,
 }: {
   n: number
   m: RubricMetric
   lang: 'en' | 'tr'
   config: RubricContent
+  sessionLang?: string | null
   value: MetricScore | undefined
   showError: boolean
   onChange: (p: Partial<MetricScore>) => void
@@ -200,6 +208,8 @@ function MetricBlock({
   const trT = config.annotate.tr
   const enT = (config.annotate as unknown as { en?: Partial<typeof trT> }).en ?? {}
   const t = (lang === 'en' ? { ...trT, ...enT } : trT) as typeof trT & { hint_heading?: string; details_heading?: string }
+  // Session-level labels (metric number, note toggle and placeholder) follow the participant's language choice
+  const st = (sessionLang === 'EN' ? { ...trT, ...enT } : trT) as typeof trT
   const hint = useMemo(() => config.hints?.metrics?.find((h) => h.id === m.id), [config, m.id])
   const [hintOpen, setHintOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
@@ -217,7 +227,7 @@ function MetricBlock({
   return (
     <fieldset className={`metric${showError ? ' missing' : ''}`} onKeyDown={onKey}>
       <legend>
-        <span className="metric-no">{fill(t.metric_label, { n: String(n) })}</span>
+        <span className="metric-no">{fill(st.metric_label, { n: String(n) })}</span>
         <span className="metric-name">{m.name_tr} <span className="metric-en">/ {m.name_en}</span></span>
       </legend>
       <p className="question" lang={lang}>{m.question[lang]}</p>
@@ -236,12 +246,12 @@ function MetricBlock({
         })}
       </div>
       {!noteOpen && (
-        <button type="button" className="score score-note" onClick={() => setNoteOpen(true)}>{t.note_toggle}</button>
+        <button type="button" className="score score-note" onClick={() => setNoteOpen(true)}>{st.note_toggle}</button>
       )}
       </div>
 
       {noteOpen && (
-        <textarea className="note" maxLength={500} rows={2} placeholder={t.note_placeholder} aria-label={`${t.note_placeholder} — ${m.name_tr}`}
+        <textarea className="note" maxLength={500} rows={2} placeholder={st.note_placeholder} aria-label={`${st.note_placeholder} — ${m.name_tr}`}
           value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
       )}
 

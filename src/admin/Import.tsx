@@ -144,7 +144,7 @@ function Versions() {
   const activate = async (c: Cfg) => {
     if (!window.confirm(`"${c.version_label}" sürümü etkin yapılsın mı? Yeni setler bu sürümle atanır.`)) return
     const { error } = await adminDb!.rpc('admin_activate_config', { p_config_id: c.config_id })
-    setMsg(error ? `Hata: ${error.message}` : `Etkin sürüm: ${c.version_label}`); setTick(tick + 1)
+    setMsg(error ? `Hata: ${error.message}` : `Etkin sürüm: ${c.version_label} (yapılandırma #${c.config_id})`); setTick(tick + 1)
   }
   return (
     <section className="panel">

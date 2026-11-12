@@ -145,6 +145,7 @@ export default function AnnotatorApp() {
           <AnnotateStep
             config={config}
             sessionId={readSession()!.session_id}
+            language={flow.language}
             onProgress={onProgress}
             onBatchDone={(r) => update({ ...flow, step: 'batch_complete',
               summary: { batchCount: r.batch_count, batchNumber: r.batch_number, total: r.total, canContinue: r.can_continue } })}
