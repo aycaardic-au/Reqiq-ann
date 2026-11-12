@@ -6,6 +6,7 @@ import ConsentPage from '../screens/ConsentPage'
 import InfoForm from '../screens/InfoForm'
 import Intro from '../screens/Intro'
 import AnnotateStep from '../screens/AnnotateStep'
+import Briefing from '../screens/Briefing'
 import { BatchComplete, ThankYou } from '../screens/BatchEnd'
 import { Ended, EndSession, TopBar, type EndChoice } from '../screens/SessionChrome'
 
@@ -34,6 +35,21 @@ export default function AnnotatorApp() {
       setFailed(true)
     })
   }, [loadTick])
+
+  // /#/reset typed in a tab that is already open only changes the hash: no reload, so handle it here too.
+  useEffect(() => {
+    const onHash = () => {
+      if (window.location.hash.replace(/\/+$/, '') !== '#/reset') return
+      clearLocal()
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/`)
+      setEnded(null)
+      setProgress(null)
+      setFlow(INITIAL_FLOW)
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
   useEffect(() => {
     if (!config) return
@@ -101,7 +117,17 @@ export default function AnnotatorApp() {
       return (
         <>
           <TopBar appName={appName} step={config.intro.tr.step} />
-          <Intro t={config.intro.tr} config={config} onStart={() => update({ ...flow, step: 'annotate' })} />
+          <Intro t={config.intro.tr} config={config} onStart={() => update({ ...flow, step: 'briefing' })} />
+          {end}
+        </>
+      )
+    case 'briefing':
+      // K4b (SRS FR-BRF): one page per metric before the first item of every batch
+      return (
+        <>
+          <TopBar appName={appName} step={(config.briefing?.tr as { step?: string } | undefined)?.step ?? 'Adım 3 / 4: Metrik bilgilendirmesi'} />
+          <Briefing config={config} sessionId={readSession()!.session_id} language={flow.language}
+            onDone={() => update({ ...flow, step: 'annotate' })} />
           {end}
         </>
       )
@@ -137,7 +163,7 @@ export default function AnnotatorApp() {
           batchNumber={flow.summary?.batchNumber}
           total={flow.summary?.total ?? 0}
           canContinue={flow.summary?.canContinue ?? false}
-          onContinue={() => { setProgress(null); update({ ...flow, step: 'annotate' }) }}
+          onContinue={() => { setProgress(null); update({ ...flow, step: 'briefing' }) }}
           onStop={() => update({ ...flow, step: 'thankyou' })}
         />
       )
