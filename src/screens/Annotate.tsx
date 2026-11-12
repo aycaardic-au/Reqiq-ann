@@ -197,6 +197,8 @@ function MetricBlock({
   onChange: (p: Partial<MetricScore>) => void
 }) {
   const t = config.annotate.tr
+  // Panel titles (ui_texts 2.14); typed here so the build does not depend on the AnnotateTexts type.
+  const titles = t as typeof t & { hint_heading?: string; details_heading?: string }
   const rt = config.annotate_rubric[lang]
   const hint = useMemo(() => config.hints?.metrics?.find((h) => h.id === m.id), [config, m.id])
   const [hintOpen, setHintOpen] = useState(false)
@@ -252,7 +254,7 @@ function MetricBlock({
 
       {detailsOpen && (
         <div className="details-panel" lang={lang}>
-          <h3 className="panel-title">{t.details_heading}</h3>
+          <h3 className="panel-title">{titles.details_heading ?? 'Puanlama Açıklamaları'}</h3>
           <p>{m.guidance[lang]}</p>
           <dl>
             {(['0', '1', '2'] as const).map((k) => {
@@ -276,7 +278,7 @@ function MetricBlock({
 
       {hintOpen && hint && (
         <div className="hint-panel" lang={lang}>
-          <h3 className="panel-title">{t.hint_heading}</h3>
+          <h3 className="panel-title">{titles.hint_heading ?? 'Metrik Açıklamaları'}</h3>
           <h4>{t.hint_rules}</h4>
           <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           <h4>{t.hint_bad}</h4>
