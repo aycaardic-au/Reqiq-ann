@@ -17,6 +17,11 @@ const DEFAULTS = {
   progress: 'Metrik {n} / {total}',
   guidance_heading: 'Puanlama Açıklamaları ve Örnek Gereksinimler',
   hints_heading: 'Metriğe ait kurallar ve örnek gereksinimler',
+  hint_rules: 'Kurallar',
+  hint_bad: 'Uyumsuz Gereksinim Örnekleri (Score=0)',
+  hint_partial: 'Kısmen Uyumlu Gereksinim Örnekleri (Score=1)',
+  hint_good: 'Uyumlu Gereksinim Örnekleri (Score=2)',
+  hint_rationale: 'Gerekçe (0 ve 1 puanları)',
   block_tr: 'Türkçe',
   block_en: 'English',
   wait: 'Sonraki {seconds} saniye sonra etkinleşir',
@@ -158,21 +163,21 @@ export default function Briefing({ config, sessionId, language, onDone }: {
             {hint && (
               <div className="hint-panel">
                 <h3 className="bf-h">{t.hints_heading}</h3>
-                <h4>{lang === 'tr' ? 'Kurallar' : 'Rules'}</h4>
+                <h4>{lang === 'tr' ? t.hint_rules : 'Rules'}</h4>
                 <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                <h4>{lang === 'tr' ? 'Kötü örnekler' : 'Bad examples'}</h4>
+                <h4>{lang === 'tr' ? t.hint_bad : 'Non-Compliant Sample Requirements (Score=0)'}</h4>
                 <ol>{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                 {hint.partial?.[lang]?.length ? (
                   <>
-                    <h4>{lang === 'tr' ? 'Kısmen uyumlu örnekler' : 'Partially compliant examples'}</h4>
+                    <h4>{lang === 'tr' ? t.hint_partial : 'Partially Compliant Sample Requirements (Score=1)'}</h4>
                     <ol>{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                   </>
                 ) : null}
-                <h4>{lang === 'tr' ? 'İyi örnekler' : 'Good examples'}</h4>
+                <h4>{lang === 'tr' ? t.hint_good : 'Compliant Sample Requirements (Score=2)'}</h4>
                 <ol>{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                 {hint.rationale?.[lang]?.length ? (
                   <>
-                    <h4>{lang === 'tr' ? 'Puan gerekçeleri (0 ve 1)' : 'Score rationales (0 and 1)'}</h4>
+                    <h4>{lang === 'tr' ? t.hint_rationale : 'Rationale for 0 and 1 scores'}</h4>
                     <ol className="rationale">{hint.rationale[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                   </>
                 ) : null}

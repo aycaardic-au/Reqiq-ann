@@ -276,15 +276,15 @@ function MetricBlock({
           <h4>{t.hint_rules}</h4>
           <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           <h4>{t.hint_bad}</h4>
-          <ol className="samples bad">{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+          <ol>{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           {hint.partial?.[lang]?.length ? (
             <>
               <h4>{t.hint_partial ?? 'Kısmen uyumlu örnekler'}</h4>
-              <ol className="samples mid">{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+              <ol>{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
             </>
           ) : null}
           <h4>{t.hint_good}</h4>
-          <ol className="samples good">{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
+          <ol>{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           {hint.rationale?.[lang]?.length ? (
             <>
               <h4>{t.hint_rationale ?? 'Puan gerekçeleri (0 ve 1)'}</h4>

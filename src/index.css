@@ -157,9 +157,6 @@ input[type=text], input[type=email], input[type=password], input[type=number], s
 .hint-panel { background: var(--hint-bg); border: 1px solid var(--hint-line); border-radius: 12px; padding: 12px 18px; margin-top: 10px; font-size: .94rem; }
 .hint-panel ol { margin: 0 0 8px; padding-left: 22px; }
 .hint-panel li { margin-bottom: 5px; white-space: pre-line; }
-.samples.bad li::marker { color: var(--err); font-weight: 700; }
-.samples.good li::marker { color: var(--primary); font-weight: 700; }
-.samples.mid li::marker { color: var(--note-fg); font-weight: 700; }
 .hint-panel .rationale li { color: var(--muted); }
 .note { width: 100%; margin-top: 10px; resize: vertical; }
 .navrow { display: flex; justify-content: space-between; gap: 12px; margin: 10px 0 0; }
