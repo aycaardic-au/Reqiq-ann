@@ -24,7 +24,7 @@ const DEFAULTS = {
   hint_rationale: 'Gerekçe (0 ve 1 puanları)',
   block_tr: 'Türkçe',
   block_en: 'English',
-  wait: 'Sonraki {seconds} saniye sonra etkinleşir',
+  wait: '{seconds} saniye sonra yeni sayfaya geçebilirsiniz',
   prev_button: '← Önceki',
   next_button: 'Sonraki',
   start_button: 'Değerlendirmeye başla',
@@ -158,11 +158,10 @@ export default function Briefing({ config, sessionId, language, onDone }: {
           <div key={lang} className="bf-block" lang={lang}>
             {langs.length > 1 && <p className="bf-lang">{lang === 'tr' ? t.block_tr : t.block_en}</p>}
             <p className="question">{m.question[lang]}</p>
-            {m.partial_scope_note && <p className="partial">{config.annotate_rubric[lang].partial_note}</p>}
 
             {hint && (
               <div className="hint-panel">
-                <h3 className="bf-h">{t.hints_heading}</h3>
+                <h3 className="bf-h">{lang === 'en' ? 'Metric Guidance' : t.hints_heading}</h3>
                 <h4>{lang === 'tr' ? t.hint_rules : 'Rules'}</h4>
                 <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                 <h4>{lang === 'tr' ? t.hint_bad : 'Non-Compliant Sample Requirements (Score=0)'}</h4>
@@ -185,7 +184,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
             )}
 
             <div className="details-panel">
-              <h3 className="bf-h">{t.guidance_heading}</h3>
+              <h3 className="bf-h">{lang === 'en' ? 'Scoring Guidance' : t.guidance_heading}</h3>
               <p>{m.guidance[lang]}</p>
               <dl>
                 {(['0', '1', '2'] as const).map((k) => {

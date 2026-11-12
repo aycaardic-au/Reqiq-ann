@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.14",
+  "ui_texts_version": "2.16",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -115,7 +115,7 @@
       "items": [
         "Bu değerlendirme kapsamında kullanılan gereksinimler açık kaynaklardaki veri setlerinden edinilmiştir. Her sayfada bir gereksinim ve altında değerlendirmesi yapılacak 6 metrik göreceksiniz.",
         "Her metrik için puanlama yapmanız beklenmektedir. Puanlar: {scale}.",
-        "Her metrik için kısa bir soru ve açıklama yer alır. \"Puanlama açıklamaları\" düğmesi, her puanın (0, 1 ve 2) ne anlama geldiğini ve örnekleri gösterir. \"Metrik Detayları\" düğmesi ise gereksinimin sahip olması gereken özellikleri ve kötü/iyi örnek gereksinimleri gösterir.",
+        "Her metrik için kısa bir soru yer alır. \"Metrik açıklamaları\" düğmesi, metriğin kurallarını ve kötü/iyi örnek gereksinimleri gösterir. \"Puanlama açıklamaları\" düğmesi ise her puanın (0, 1 ve 2) ne anlama geldiğini ve örnekleri gösterir.",
         "Yalnızca gereksinimde yazılı olan bilgiyi puanlayınız. Görülmeyen doküman, sözlük, bağlam, üst gereksinim veya gerekçenin varlığını ya da yokluğunu varsaymayınız. Gereksinimin bağlamı eksik olsa bile her metriği puanlayınız.",
         "\"Hızlı\", \"kolay\" gibi belirsizliğe yol açabilecek ifadeleri kendiliğinden kusur saymayınız; gereksinimde belirsizlik yaratıp yaratmadıklarını değerlendiriniz.",
         "Kusur sayısını otomatik olarak puana dönüştürmeyiniz. Tek bir ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir.",
@@ -142,7 +142,7 @@
       "hint_rationale": "Gerekçe (0 ve 1 puanları)",
       "block_tr": "Türkçe",
       "block_en": "English",
-      "wait": "Sonraki {seconds} saniye sonra etkinleşir",
+      "wait": "{seconds} saniye sonra yeni sayfaya geçebilirsiniz",
       "prev_button": "← Önceki",
       "next_button": "Sonraki",
       "start_button": "Değerlendirmeye başla"

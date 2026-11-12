@@ -199,7 +199,6 @@ function MetricBlock({
   const t = config.annotate.tr
   // Panel titles (ui_texts 2.14); typed here so the build does not depend on the AnnotateTexts type.
   const titles = t as typeof t & { hint_heading?: string; details_heading?: string }
-  const rt = config.annotate_rubric[lang]
   const hint = useMemo(() => config.hints?.metrics?.find((h) => h.id === m.id), [config, m.id])
   const [hintOpen, setHintOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
@@ -221,7 +220,6 @@ function MetricBlock({
         <span className="metric-name">{m.name_tr} <span className="metric-en">/ {m.name_en}</span></span>
       </legend>
       <p className="question" lang={lang}>{m.question[lang]}</p>
-      {m.partial_scope_note && <p className="partial" lang={lang}>{rt.partial_note}</p>}
 
       <div className="score-row">
       <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
@@ -257,33 +255,9 @@ function MetricBlock({
         </button>
       </div>
 
-      {detailsOpen && (
-        <div className="details-panel" lang={lang}>
-          <h3 className="panel-title">{titles.details_heading ?? 'Puanlama Açıklamaları'}</h3>
-          <p>{m.guidance[lang]}</p>
-          <dl>
-            {(['0', '1', '2'] as const).map((k) => {
-              const sample = m.samples?.find((s) => s.score === Number(k) && sampleText(s))
-              return (
-                <div key={k}>
-                  <dt><b>{k}</b> {config.scale[k].label[lang]}</dt>
-                  <dd>{m.anchors[k][lang]}</dd>
-                  {sample && (
-                    <dd className="sample">
-                      <span className="sample-label">{t.sample_label ?? 'Örnek'}:</span> “{sampleText(sample)}”
-                      {sampleReason(sample) && <span className="muted"> — {sampleReason(sample)}</span>}
-                    </dd>
-                  )}
-                </div>
-              )
-            })}
-          </dl>
-        </div>
-      )}
-
       {hintOpen && hint && (
         <div className="hint-panel" lang={lang}>
-          <h3 className="panel-title">{titles.hint_heading ?? 'Metrik Açıklamaları'}</h3>
+          <h3 className="panel-title">{lang === 'en' ? 'Metric Guidance' : (titles.hint_heading ?? 'Metrik Açıklamaları')}</h3>
           <h4>{t.hint_rules}</h4>
           <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           <h4>{t.hint_bad}</h4>
@@ -302,6 +276,30 @@ function MetricBlock({
               <ol className="rationale">{hint.rationale[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
             </>
           ) : null}
+        </div>
+      )}
+
+      {detailsOpen && (
+        <div className="details-panel" lang={lang}>
+          <h3 className="panel-title">{lang === 'en' ? 'Scoring Guidance' : (titles.details_heading ?? 'Puanlama Açıklamaları')}</h3>
+          <p>{m.guidance[lang]}</p>
+          <dl>
+            {(['0', '1', '2'] as const).map((k) => {
+              const sample = m.samples?.find((s) => s.score === Number(k) && sampleText(s))
+              return (
+                <div key={k}>
+                  <dt><b>{k}</b> {config.scale[k].label[lang]}</dt>
+                  <dd>{m.anchors[k][lang]}</dd>
+                  {sample && (
+                    <dd className="sample">
+                      <span className="sample-label">{t.sample_label ?? 'Örnek'}:</span> “{sampleText(sample)}”
+                      {sampleReason(sample) && <span className="muted"> — {sampleReason(sample)}</span>}
+                    </dd>
+                  )}
+                </div>
+              )
+            })}
+          </dl>
         </div>
       )}
 
