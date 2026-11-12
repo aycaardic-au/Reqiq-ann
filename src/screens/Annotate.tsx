@@ -240,20 +240,19 @@ function MetricBlock({
       </div>
 
       <div className="metric-tools">
-        {hint ? (
+        {hint && (
           <button type="button" className="link hint-link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
             <Bulb />{hintOpen ? t.hint_hide : t.hint_button}
           </button>
-        ) : <span />}
-        <div className="metric-tools-end">
-          <button type="button" className="link hint-link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
-            <Bulb />{detailsOpen ? t.details_hide : t.details_button}
-          </button>
-        </div>
+        )}
+        <button type="button" className="link hint-link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
+          <Bulb />{detailsOpen ? t.details_hide : t.details_button}
+        </button>
       </div>
 
       {detailsOpen && (
         <div className="details-panel" lang={lang}>
+          <h3 className="panel-title">{t.details_heading}</h3>
           <p>{m.guidance[lang]}</p>
           <dl>
             {(['0', '1', '2'] as const).map((k) => {
@@ -277,6 +276,7 @@ function MetricBlock({
 
       {hintOpen && hint && (
         <div className="hint-panel" lang={lang}>
+          <h3 className="panel-title">{t.hint_heading}</h3>
           <h4>{t.hint_rules}</h4>
           <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
           <h4>{t.hint_bad}</h4>

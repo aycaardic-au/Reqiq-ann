@@ -39,20 +39,28 @@ export function writeFlow(s: FlowState): void {
   }
 }
 
+let resetRequested = false
+
 /**
  * FR-SES-010: the address ".../#/reset" clears this browser's flow state only.
- * The hash is removed afterwards, so a later reload does not reset again.
- * Returns true when the reset was requested (the caller then starts at K1).
+ * The check runs once, when this module loads, so a router that changes the hash
+ * later cannot hide the request. The hash is then set back to "#/", so a reload does not reset again.
  */
-export function consumeResetHash(): boolean {
-  try {
-    if (window.location.hash.replace(/\/+$/, '') !== '#/reset') return false
+try {
+  if (typeof window !== 'undefined' && window.location.hash.replace(/\/+$/, '') === '#/reset') {
+    resetRequested = true
     clearLocal()
     window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/`)
-    return true
-  } catch {
-    return false
   }
+} catch {
+  /* storage or history unavailable: no reset */
+}
+
+/** True once when the reset was requested; the caller then starts at K1. */
+export function consumeResetHash(): boolean {
+  if (!resetRequested) return false
+  resetRequested = false
+  return true
 }
 
 export function clearLocal(): void {

@@ -152,7 +152,8 @@ input[type=text], input[type=email], input[type=password], input[type=number], s
 .score-head { font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
 .score-head b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #dfe8e7; color: var(--primary-hover); font-size: .82rem; margin-right: 6px; }
 .score.on .score-head b { background: var(--primary); color: #fff; }
-.metric-tools { display: flex; justify-content: space-between; align-items: center; gap: 12px 20px; flex-wrap: wrap; margin-top: 10px; }
+.metric-tools { display: flex; justify-content: flex-start; align-items: center; gap: 8px 20px; flex-wrap: wrap; margin-top: 10px; }
+.panel-title { font-size: 1rem; font-weight: 800; margin: 0 0 8px; }
 .metric-tools-end { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-left: auto; }
 .hint-link { display: inline-flex; align-items: center; gap: 5px; }
 .bulb { flex: none; }
