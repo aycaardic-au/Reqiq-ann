@@ -1,5 +1,5 @@
 import { adminDb, fetchAll } from '../lib/adminClient'
-import type { Bat, Cfg, Item, RawData, Ref, Req, Sc, Ses } from './exportData'
+import type { Bat, Brf, Cfg, Item, RawData, Ref, Req, Sc, Ses } from './exportData'
 
 /** Loads every table the admin views need (paged reads, RLS: admins only). */
 export async function loadAll(): Promise<RawData> {
@@ -10,6 +10,9 @@ export async function loadAll(): Promise<RawData> {
     fetchAll<Cfg>('rubric_config', 'config_id'),
   ])
   const { data: cfg } = await adminDb!.from('app_config').select('*').eq('id', 1).single()
+  // FR-BRF-009: briefing_views has no table grants; read through the admin-only function (migration 0026)
+  const { data: briefing, error: briefingError } = await adminDb!.rpc('admin_briefing_views')
+  if (briefingError) throw briefingError
   const active = configs.find((c) => c.is_active)
-  return { reqs, sessions, batches, items, scores, refs, cfg: cfg ?? {}, rubricVersion: active?.version_label ?? '', configs }
+  return { reqs, sessions, batches, items, scores, refs, cfg: cfg ?? {}, rubricVersion: active?.version_label ?? '', configs, briefing: (briefing ?? []) as Brf[] }
 }

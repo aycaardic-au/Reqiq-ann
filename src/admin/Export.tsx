@@ -5,6 +5,7 @@ import { A } from './texts'
 
 const DESC: Record<string, string> = {
   Bilgi: 'Dışa aktarım zamanı, rubrik sürümü, uygulanan filtre, parametreler ve sütun açıklamaları.',
+  Briefing: 'Her satır: oturum × set × metrik; görünür süre (sn), gösterilen dil, tamamlanma zamanı, yapılandırma sürümü (FR-BRF-009).',
   Puanlar_Ham: 'Her satır: oturum × gereksinim × metrik; gereksinim metni, yapılandırma sürümü, dikkat sorusu işareti dahil.',
   Gereksinim_Ozeti: 'Gereksinim × metrik: puan sayısı, ortalama, medyan, std, 0/1/2 dağılımı, referans puan ve farkı.',
   Oturumlar_QC: 'Oturum bilgileri, süreler, sunucunun hesapladığı bayraklar, dikkat sorusu tutarlılığı, yorum.',

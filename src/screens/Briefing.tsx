@@ -30,6 +30,17 @@ const DEFAULTS = {
   start_button: 'Değerlendirmeye başla',
 }
 
+/** English block headings (FR-BRF-008): read from briefing.en in the configuration (ui_texts 2.19); these are the fallbacks. */
+const DEFAULTS_EN = {
+  hints_heading: 'Metric Guidance',
+  hint_rules: 'Rules',
+  hint_bad: 'Non-Compliant Sample Requirements (Score=0)',
+  hint_partial: 'Partially Compliant Sample Requirements (Score=1)',
+  hint_good: 'Compliant Sample Requirements (Score=2)',
+  hint_rationale: 'Rationale for 0 and 1 scores',
+  guidance_heading: 'Scoring Guidance',
+}
+
 export default function Briefing({ config, sessionId, language, onDone }: {
   config: RubricContent
   sessionId: string
@@ -37,6 +48,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
   onDone: () => void
 }) {
   const t = { ...DEFAULTS, ...(config.briefing?.tr ?? {}) }
+  const te = { ...DEFAULTS_EN, ...((config as unknown as { briefing?: { en?: Partial<typeof DEFAULTS_EN> } }).briefing?.en ?? {}) }
   const metrics = config.metrics
   const pref: LanguagePref = language ?? 'TR'
   const langs: UiLang[] = pref === 'EN' ? ['en'] : pref === 'BOTH' ? ['tr', 'en'] : ['tr']
@@ -161,22 +173,22 @@ export default function Briefing({ config, sessionId, language, onDone }: {
 
             {hint && (
               <div className="hint-panel">
-                <h3 className="bf-h">{lang === 'en' ? 'Metric Guidance' : t.hints_heading}</h3>
-                <h4>{lang === 'tr' ? t.hint_rules : 'Rules'}</h4>
+                <h3 className="bf-h">{lang === 'en' ? te.hints_heading : t.hints_heading}</h3>
+                <h4>{lang === 'tr' ? t.hint_rules : te.hint_rules}</h4>
                 <ol>{hint.rules[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
-                <h4>{lang === 'tr' ? t.hint_bad : 'Non-Compliant Sample Requirements (Score=0)'}</h4>
+                <h4>{lang === 'tr' ? t.hint_bad : te.hint_bad}</h4>
                 <ol>{hint.bad[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                 {hint.partial?.[lang]?.length ? (
                   <>
-                    <h4>{lang === 'tr' ? t.hint_partial : 'Partially Compliant Sample Requirements (Score=1)'}</h4>
+                    <h4>{lang === 'tr' ? t.hint_partial : te.hint_partial}</h4>
                     <ol>{hint.partial[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                   </>
                 ) : null}
-                <h4>{lang === 'tr' ? t.hint_good : 'Compliant Sample Requirements (Score=2)'}</h4>
+                <h4>{lang === 'tr' ? t.hint_good : te.hint_good}</h4>
                 <ol>{hint.good[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                 {hint.rationale?.[lang]?.length ? (
                   <>
-                    <h4>{lang === 'tr' ? t.hint_rationale : 'Rationale for 0 and 1 scores'}</h4>
+                    <h4>{lang === 'tr' ? t.hint_rationale : te.hint_rationale}</h4>
                     <ol className="rationale">{hint.rationale[lang].map((r, i) => <li key={i}>{r}</li>)}</ol>
                   </>
                 ) : null}
@@ -184,7 +196,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
             )}
 
             <div className="details-panel">
-              <h3 className="bf-h">{lang === 'en' ? 'Scoring Guidance' : t.guidance_heading}</h3>
+              <h3 className="bf-h">{lang === 'en' ? te.guidance_heading : t.guidance_heading}</h3>
               <p>{m.guidance[lang]}</p>
               <dl>
                 {(['0', '1', '2'] as const).map((k) => {
