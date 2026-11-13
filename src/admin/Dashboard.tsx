@@ -13,8 +13,8 @@ interface Dash {
 }
 
 const METRICS: [string, string][] = [
-  ['M_IND_01', 'Uygunluk'], ['M_IND_02', 'Tek anlamlılık'], ['M_IND_03', 'Tamlık'],
-  ['M_IND_04', 'Tekillik'], ['M_IND_05', 'Doğrulanabilirlik'], ['M_IND_06', 'Kurallara uygunluk'],
+  ['M_IND_01', 'Uygunluk'], ['M_IND_02', 'Açıklık'], ['M_IND_03', 'Tamlık'],
+  ['M_IND_04', 'Tekillik'], ['M_IND_05', 'Doğrulanabilirlik'], ['M_IND_06', 'Biçimsel Uyum'],
 ]
 const TYPES: Record<string, string> = { student: 'Öğrenci', industry: 'Sektör', researcher: 'Akademik', other: 'Diğer', none: 'Yanıtsız' }
 const LANGS: Record<string, string> = { EN: 'İngilizce', TR: 'Türkçe', BOTH: 'Her ikisi' }
@@ -49,7 +49,7 @@ export default function Dashboard({ tick }: { tick: number }) {
         <Tile label="Yanıtlarını silen" value={st?.withdrawn ?? '—'} />
         <Tile label="Bayrak: tutarlılık / hız" value={st ? `${st.flag_consistency} / ${st.flag_speed}` : '—'} />
         <Tile label="İstemci hatası (son 24 saat)" value={st?.client_errors_24h ?? '—'} />
-        <Tile label="Etkin örnekleme stratejisi" value={st ? (st.strategy === 'RAND' ? 'RAND' : `${st.strategy} → RAND`) : '—'} />
+        <Tile label="Etkin örnekleme stratejisi" value={st ? st.strategy : '—'} />
         <Tile label="Etkin yapılandırma sürümü" value={st?.config_version ?? '—'} />
       </div>
       <div className="grid2">

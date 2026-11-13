@@ -12,7 +12,7 @@ const FIELDS: { key: string; label: string; hint: string; type: 'int' | 'real' |
   { key: 'project_id_cap_pct', label: 'Bir projenin set içindeki en yüksek payı', hint: '0–1 arası. Varsayılan 0,25 (%25).', type: 'real' },
   { key: 'speed_flag_threshold_sec', label: 'Hız uyarısı eşiği (sn / öğe)', hint: 'Ortanca süre bunun altındaysa dışa aktarımda uyarı verilir. Varsayılan 20.', type: 'int' },
   { key: 'briefing_min_seconds', label: 'Briefing: sayfa başına en kısa süre (sn)', hint: 'Briefing sayfasında "Sonraki" düğmesinin etkinleşmesi için gereken süre (0–300). Varsayılan 10.', type: 'int' },
-  { key: 'sampling_strategy', label: 'Örnekleme stratejisi', hint: 'Şu an yalnızca RAND (kademe + rastgele + proje payı sınırı) uygulanıyor; diğerleri RAND gibi çalışır (D-27).', type: 'strategy' },
+  { key: 'sampling_strategy', label: 'Örnekleme stratejisi', hint: 'RAND: kademe + rastgele + proje payı sınırı. DIST: proje ve cümle uzunluğu dengesi. SCORE-STRAT: ön puan düzeyi dengesi (ön puanı olmayan gereksinimler nötr). ADAPT henüz uygulanmadı; RAND gibi çalışır (FR-ASN-012).', type: 'strategy' },
 ]
 
 export default function Params() {
