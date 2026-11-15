@@ -2,7 +2,7 @@
 
 export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean; source_meta?: Record<string, unknown> }
 export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
-export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null }
+export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null; sampling_strategy?: string | null }
 export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
 export interface Sc { session_id: string; batch_item_id: number; req_id: string; metric_id: string; score: number; note: string | null; annotation_language: string; round: number; created_at: string }
@@ -82,6 +82,12 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
   const perSes = new Map<string, Bat[]>()
   for (const b of d.batches) perSes.set(b.session_id, [...(perSes.get(b.session_id) ?? []), b])
   for (const list of perSes.values()) list.sort((a, b) => a.created_at.localeCompare(b.created_at)).forEach((b, i) => batchNo.set(b.batch_id, i + 1))
+  // 0033 / review item 4: batch_number repeats across raters, so the export also carries a unique key
+  const batchKey = (batchId: string | null | undefined) => {
+    if (!batchId) return null
+    const sid = batBy.get(batchId)?.session_id
+    return sid ? `${code.get(sid) ?? '?'}-${batchNo.get(batchId) ?? '?'}` : null
+  }
 
   // 1. Raw scores, long format
   const raw: Row[] = d.scores.map((s) => {
@@ -90,13 +96,14 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
       rater_code: code.get(s.session_id) ?? null, session_id: s.session_id,
       annotator_type: se?.annotator_type ?? null, annotator_type_other: se?.annotator_type_other ?? null,
       language_pref: se?.language_pref ?? null, session_excluded: se?.excluded ?? null,
-      batch_number: it ? batchNo.get(it.batch_id) ?? null : null, position: it?.position ?? null,
+      batch_number: it ? batchNo.get(it.batch_id) ?? null : null, batch_key: it ? batchKey(it.batch_id) : null, position: it?.position ?? null,
       batch_item_id: s.batch_item_id, is_attention_check: it?.is_attention_check ?? null,
       req_id: s.req_id, base_id: r?.base_id ?? null, project_id: r?.project_id ?? null, language_tag: s.annotation_language,
       requirement_text: (s.annotation_language === 'EN' ? r?.text_en : r?.text_tr) ?? null, text_en: r?.text_en ?? null, text_tr: r?.text_tr ?? null,
       config_version: it ? cfgLabel.get(batBy.get(it.batch_id)?.config_id ?? -1) ?? null : null,
       metric_id: s.metric_id, score: s.score, note: s.note,
       round: s.round, time_seconds_item: it?.time_seconds ?? null, created_at: s.created_at,
+      sampling_strategy: it ? batBy.get(it.batch_id)?.sampling_strategy ?? '(0033 öncesi)' : null,
     }
   }).sort((a, b) => String(a.rater_code).localeCompare(String(b.rater_code)) || Number(a.batch_number) - Number(b.batch_number)
     || Number(a.position) - Number(b.position) || String(a.metric_id).localeCompare(String(b.metric_id)))
@@ -148,20 +155,30 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     const sItems = d.items.filter((i) => batBy.get(i.batch_id)?.session_id === se.session_id)
     const times = sItems.map((i) => i.time_seconds).filter((t): t is number => t != null)
     const scoresOf = (itemId: number) => new Map(d.scores.filter((s) => s.batch_item_id === itemId).map((s) => [s.metric_id, s]))
-    let acPairs = 0, acSame = 0, acMax = 0
+    let acPairs = 0, acSame = 0, acMax = 0, acBad = 0
     for (const ac of sItems.filter((i) => i.is_attention_check)) {
       const orig = sItems.find((i) => i.batch_id === ac.batch_id && !i.is_attention_check && i.req_id === ac.req_id)
       if (!orig) continue
       const a = scoresOf(ac.batch_item_id), o = scoresOf(orig.batch_item_id)
+      let rowBad = false
       for (const m of METRIC_IDS) {
         const x = a.get(m), y = o.get(m)
         if (!x || !y) continue
         acPairs++
         if (x.score === y.score) acSame++
+        else rowBad = true
         acMax = Math.max(acMax, Math.abs(x.score - y.score))
       }
+      if (rowBad) acBad++
     }
     const med = median(times)
+    // 0033 review items 6 and 7: fast items and uniform scoring (flags for review only, no automatic exclusion)
+    const fastOver = (lim: number) => (times.length ? Math.round((100 * times.filter((t) => t < lim).length) / times.length) : null)
+    let fullItems = 0, uniformItems = 0
+    for (const it of sItems.filter((i) => !i.is_attention_check)) {
+      const vals = [...scoresOf(it.batch_item_id).values()].map((x) => x.score)
+      if (vals.length === METRIC_IDS.length) { fullItems++; if (new Set(vals).size === 1) uniformItems++ }
+    }
     return {
       rater_code: code.get(se.session_id)!, session_id: se.session_id, language_pref: se.language_pref,
       annotator_type: se.annotator_type, annotator_type_other: se.annotator_type_other, consent_version: se.consent_version,
@@ -170,6 +187,10 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
       median_seconds_per_item: r3(med), speed_flag: med != null && med < speedSec,
       attention_metric_pairs: acPairs, attention_exact_match_pct: acPairs ? Math.round((100 * acSame) / acPairs) : null,
       attention_max_abs_diff: acPairs ? acMax : null,
+      dikkat_hatasi_sayisi: acBad,
+      cok_hizli_oge_sayisi: times.filter((t) => t < 5).length,
+      hizli_oge_yuzde: fastOver(10),
+      tekduze_puan_yuzde: fullItems ? Math.round((100 * uniformItems) / fullItems) : null,
       flag_consistency: se.flag_consistency ?? null, flag_speed: se.flag_speed ?? null, ended_at: se.ended_at ?? null, withdrawn_at: se.withdrawn_at ?? null,
       excluded: se.excluded, comment: se.comment,
     }
@@ -183,18 +204,35 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'matrix_cells', value: '0/1/2 = score, empty = not scored by that rater.' },
     { key: 'flags', value: 'flag_consistency / flag_speed are computed by the server at batch completion (FR-QC-003/004).' },
     { key: 'config_version', value: 'Configuration (rubric + texts) version active when the batch was assigned (FR-CFG-VER-002).' },
-    ...Object.entries(d.cfg).map(([k, v]) => ({ key: `app_config.${k}`, value: typeof v === 'object' ? JSON.stringify(v) : (v as string | number) })),
+    ...Object.entries(d.cfg).map(([k, v]) => ({
+      key: k === 'dist_dimensions' ? 'app_config.dist_dimensions (kullanılmıyor: DIST yalnızca sentence_bin kullanır)' : `app_config.${k}`,
+      value: typeof v === 'object' ? JSON.stringify(v) : (v as string | number),
+    })),
+    { key: '--- SAYFA AÇIKLAMALARI ---', value: '' },
+    { key: 'Bilgi', value: 'Bu sayfa: dışa aktarım bilgisi, yapılandırma değerleri ve sayfa açıklamaları.' },
+    { key: 'Briefing', value: 'Briefing görünme süreleri. rater_code ve batch_key ile eşleştirin (batch_number tek başına benzersiz değil).' },
+    { key: 'Puanlar_Ham', value: 'Her değerlendirici × öğe × metrik için tek satır. Dışlanan oturumlar dahil (session_excluded). sampling_strategy: batch oluşturulurken geçerli strateji.' },
+    { key: 'Matris_M_IND_01..06', value: 'Metrik başına öğe × değerlendirici tablosu. Boş = puanlanmadı. Yalnızca dahil oturumlar.' },
+    { key: 'Gereksinim_Ozeti', value: 'Öğe × metrik özeti: n_raters, n0/n1/n2, ortalama, medyan, referans farkı, coverage_met.' },
+    { key: 'Alpha_Girdi', value: 'Krippendorff alfa için uzun biçim: birim = req_id × metric_id, değerlendirici = rater_code. Yalnızca dahil oturumlar, dikkat soruları hariç.' },
+    { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. dikkat_hatasi_sayisi: dikkat sorusunda eşleşmeyen öğe sayısı. cok_hizli_oge_sayisi: öğe süresi 5 sn altı. hizli_oge_yuzde: öğe süresi 10 sn altı yüzdesi. tekduze_puan_yuzde: altı metriğin hepsine aynı puan verilen öğe yüzdesi.' },
   ]
 
   // 5. Briefing (FR-BRF-009): one row per session × batch × metric. Briefing time is never added to item time (FR-BRF-007).
   const briefing: Row[] = (d.briefing ?? []).map((b) => ({
     rater_code: code.get(b.session_id) ?? null, session_id: b.session_id,
-    batch_number: batchNo.get(b.batch_id) ?? null, batch_id: b.batch_id, metric_id: b.metric_id,
+    batch_number: batchNo.get(b.batch_id) ?? null, batch_key: batchKey(b.batch_id), batch_id: b.batch_id, metric_id: b.metric_id,
     language_shown: b.language_shown, visible_seconds: r3(b.visible_seconds), completed_at: b.completed_at,
     created_at: b.created_at, config_version: cfgLabel.get(b.config_id ?? -1) ?? null,
     session_excluded: sesBy.get(b.session_id)?.excluded ?? null,
   })).sort((a, b) => String(a.rater_code).localeCompare(String(b.rater_code)) || Number(a.batch_number) - Number(b.batch_number)
     || String(a.metric_id).localeCompare(String(b.metric_id)))
 
-  return { Bilgi: info, Briefing: briefing, Puanlar_Ham: raw, ...matrices, Gereksinim_Ozeti: summary, Oturumlar_QC: sessions }
+  const alpha: Row[] = valid.map((s) => {
+    const it = itemBy.get(s.batch_item_id); const r = reqBy.get(s.req_id)
+    return { rater_code: code.get(s.session_id) ?? null, req_id: s.req_id, base_id: r?.base_id ?? null, language_tag: s.annotation_language,
+      metric_id: s.metric_id, score: s.score, round: s.round, batch_key: it ? batchKey(it.batch_id) : null }
+  }).sort((a, b) => String(a.metric_id).localeCompare(String(b.metric_id)) || String(a.req_id).localeCompare(String(b.req_id)) || String(a.rater_code).localeCompare(String(b.rater_code)))
+
+  return { Bilgi: info, Briefing: briefing, Puanlar_Ham: raw, ...matrices, Gereksinim_Ozeti: summary, Oturumlar_QC: sessions, Alpha_Girdi: alpha }
 }
