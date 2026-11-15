@@ -31,8 +31,8 @@ def main() -> None:
     for k in REQUIRED[1:]:
         if "tr" not in data[k] or not set(data[k]) <= {"en", "tr"}:
             raise SystemExit(f"Key '{k}' must have 'tr' (and optionally 'en') only")
-        if "en" in data[k] and set(data[k]["en"].keys()) != set(data[k]["tr"].keys()):
-            raise SystemExit(f"Key '{k}': en and tr sub-keys differ")
+        if "en" in data[k] and not set(data[k]["en"].keys()) <= set(data[k]["tr"].keys()):
+            raise SystemExit(f"Key '{k}': en has sub-keys that tr does not have")  # en may be partial (falls back to tr)
 
     body = json.dumps(data, ensure_ascii=False, indent=2)
     if "$json$" in body:

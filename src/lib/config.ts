@@ -156,15 +156,15 @@ export interface RubricContent {
   consent: { tr: ConsentTexts }
   declined: { tr: DeclinedTexts }
   form: { tr: FormTexts }
-  intro: { tr: IntroTexts }
-  annotate: { tr: AnnotateTexts }
+  intro: { tr: IntroTexts; en?: Partial<IntroTexts> }
+  annotate: { tr: AnnotateTexts; en?: Partial<AnnotateTexts> }
   annotate_rubric: Record<UiLang, AnnotateRubricTexts>
-  briefing?: { tr: BriefingTexts }
-  batch_complete: { tr: BatchCompleteTexts }
-  thankyou: { tr: ThankYouTexts }
+  briefing?: { tr: BriefingTexts; en?: Partial<BriefingTexts> }
+  batch_complete: { tr: BatchCompleteTexts; en?: Partial<BatchCompleteTexts> }
+  thankyou: { tr: ThankYouTexts; en?: Partial<ThankYouTexts> }
   hints: { source: string; metrics: HintMetric[] }
-  session_bar: { tr: SessionBarTexts }
-  common: { tr: CommonTexts }
+  session_bar: { tr: SessionBarTexts; en?: SessionBarTexts }
+  common: { tr: CommonTexts; en?: CommonTexts }
   scale: Record<'0' | '1' | '2', { label: Record<UiLang, string> }>
   metrics: RubricMetric[]
   [key: string]: unknown
@@ -188,6 +188,11 @@ function isValid(c: unknown): c is RubricContent {
       x?.intro?.tr?.items && x?.annotate?.tr?.step && x?.annotate_rubric?.en && x?.thankyou?.tr?.closed &&
       x?.session_bar?.tr?.opt_withdraw && x?.common?.tr?.not_ready && x?.metrics?.length && x?.hints?.metrics?.length,
   )
+}
+
+/** Picks the Turkish block, or the English block merged over it for English sessions (missing English keys fall back to Turkish). */
+export function pickLang<T extends object>(section: { tr: T; en?: Partial<T> }, english: boolean): T {
+  return english && section.en ? ({ ...section.tr, ...section.en } as T) : section.tr
 }
 
 /** EXT-CFG-001: load the active rubric configuration at startup. */

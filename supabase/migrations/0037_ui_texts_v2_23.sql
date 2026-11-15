@@ -1,0 +1,375 @@
+-- ReqIQ-ANN: UI texts 2.23 -> NEW rubric_config version (FR-CFG-VER-001, migration 0018)
+-- GENERATED from config/ui_texts.json by scripts/build_ui_texts_sql.py. Do not edit by hand.
+-- Run in Supabase SQL Editor. Creates a new active configuration version (the previous one is kept).
+-- Alternative without SQL: admin panel -> İçe aktar -> Ekran metinleri.
+
+SELECT _config_new_version($json${
+  "ui_texts_version": "2.23",
+  "app_name": {
+    "en": "Requirements Quality Metrics Evaluation Survey",
+    "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
+  },
+  "consent": {
+    "tr": {
+      "title": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması",
+      "lede": "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirmeyi amaçlamaktadır.",
+      "steps": [
+        "Bir set gereksinim değerlendirme süresi, ortalama 30–40 dk"
+      ],
+      "form_title": "Aydınlatılmış Onam Formu",
+      "form_sections": [
+        {
+          "heading": "",
+          "paragraphs": [
+            "Sayın gönüllü,",
+            "Ankara Üniversitesi Fen Bilimleri Enstitüsü, Disiplinlerarası Yapay Zekâ Teknolojileri Tezli Yüksek Lisans Programı'nda, Dr. Öğr. Üyesi Rukiye Savran Kızıltepe danışmanlığında Ayca Ardıç tarafından yürütülen \"Büyük Dil Modelleri Kullanarak Gereksinim Belirtimlerinin Otomatik Kalite Değerlendirmesi\" başlıklı tez çalışması kapsamındaki bu araştırmaya katılmaya davet ediliyorsunuz. Bu araştırmaya yalnızca 18 yaşını doldurmuş gönüllüler katılabilir.",
+            "Araştırmada yer almayı kabul etmeden önce aşağıdaki bilgileri lütfen dikkatlice okuyunuz."
+          ]
+        },
+        {
+          "heading": "Araştırmanın Amacı ve Kapsamı",
+          "paragraphs": [
+            "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirerek, yazılım ve sistem gereksinimlerinin kalitesini ölçmeyi amaçlamaktadır.",
+            "Sizden, ekranda gösterilecek gereksinimleri altı kalite metriğine göre 0, 1 veya 2 puanla değerlendirmeniz istenecektir. Gerekli değerlendirme kriterleri ilerleyen sayfalarda yer almaktadır."
+          ]
+        },
+        {
+          "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
+          "paragraphs": [
+            "Bir set birden fazla gereksinimden oluşur ve ortalama 30–40 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
+          ]
+        },
+        {
+          "heading": "Gönüllülük Esası",
+          "paragraphs": [
+            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanır. Katılmayı reddedebilir ya da herhangi bir anda, gerekçe göstermeden \"Oturumu sonlandır\" bağlantısını kullanarak veya sayfayı kapatarak çalışmadan ayrılabilirsiniz. Ara verip daha sonra aynı tarayıcıdan kaldığınız yerden devam edebilirsiniz. Oturumu sonlandırırken o ana kadar kaydedilen yanıtlarınızın saklanmasını ya da silinmesini seçebilirsiniz.",
+            "Katılımınız için sizden herhangi bir ücret istenmeyecek ve size herhangi bir ödeme yapılmayacaktır."
+          ]
+        },
+        {
+          "heading": "Toplanan Veriler ve Gizlilik",
+          "paragraphs": [
+            "Araştırma sırasında, adınız, e-posta adresiniz veya sizi tanımlayabilecek başka bir bilgi sorulmayacaktır. Araştırma kapsamında toplanan veriler şunlardır: tarayıcınızda tek yönlü olarak hesaplanan takma adlı bir oturum kimliği, değerlendirme dili tercihiniz, katılımcı türünüz, verdiğiniz puanlar ve notlar ile her gereksinim için harcanan süre.",
+            "Veriler yalnızca bu tez ve tezden üretilecek bilimsel yayınlar için kullanılacak, sonuçlar toplu olarak raporlanacaktır."
+          ]
+        },
+        {
+          "heading": "Olası Riskler",
+          "paragraphs": [
+            "Araştırma düşük risk kategorisindedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Ekran başında uzun süre kalmaktan kaynaklanabilecek yorgunluğu azaltmak için setler arasında ara verebilirsiniz."
+          ]
+        },
+        {
+          "heading": "Araştırmaya Dahil Olacak Toplam Gönüllü Sayısı",
+          "paragraphs": [
+            "Araştırmaya yaklaşık 60 gönüllünün katılması planlanmaktadır."
+          ]
+        },
+        {
+          "heading": "Gönüllü Katılımcı Onayı",
+          "paragraphs": [
+            "Yukarıda yer alan ve araştırmaya başlamadan önce gönüllülere verilmesi gereken bilgileri okudum ve anladım. Bu koşullar altında, araştırma kapsamında elde edilen verilerin bilimsel amaçlarla kullanılmasını kabul ediyorum."
+          ]
+        }
+      ],
+      "contact": "Sorularınız için: Ayca ARDIÇ (ayca.ardic@gmail.com), Burak Taha YAMAN (buraktahayaman@gmail.com) veya Dr. Öğr. Üyesi Rukiye Savran Kızıltepe (rukiyekiziltepe@ankara.edu.tr)",
+      "choice_title": "Onam",
+      "agree": "Bilgilendirme metnini okudum, 18 yaşını doldurdum ve araştırmaya kendi özgür irademle, gönüllü olarak katılıyorum.",
+      "decline": "Katılmak istemiyorum.",
+      "start_button": "Başla",
+      "choice_required": "Devam etmek için bir seçenek işaretleyiniz."
+    }
+  },
+  "declined": {
+    "tr": {
+      "title": "Teşekkür ederiz",
+      "body": "Araştırmaya katılmamayı seçtiniz. Hiçbir yanıtınız kaydedilmedi.",
+      "button": "Başa dön"
+    }
+  },
+  "form": {
+    "tr": {
+      "step": "Adım 1 / 4: Bilgi formu",
+      "title": "Bilgi formu",
+      "lede": "Devam etmek için lütfen her iki soruyu da yanıtlayınız.",
+      "language_question": "Hangi dilde yazılmış gereksinimleri değerlendirmek istersiniz?",
+      "language_hint": "Bu seçim oturum boyunca değiştirilemeyecektir. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları seçilen dilde gösterilecektir.",
+      "language_options": {
+        "EN": "İngilizce",
+        "TR": "Türkçe",
+        "BOTH": "Her ikisi (İngilizce ve Türkçe)"
+      },
+      "type_question": "Aşağıdakilerden hangisi sizi en iyi tanımlar?",
+      "type_options": {
+        "student": "Öğrenci",
+        "industry": "Çalışan",
+        "researcher": "Akademik Araştırmacı",
+        "other": "Diğer"
+      },
+      "other_label": "Lütfen kısaca belirtiniz (isteğe bağlı, en fazla 50 karakter).",
+      "other_warning": "Lütfen adınızı, kurumunuzu veya sizi tanımlayabilecek herhangi bir bilgiyi yazmayınız.",
+      "required_error": "Lütfen soruyu yanıtlayınız.",
+      "button": "Kaydet ve Devam et"
+    }
+  },
+  "intro": {
+    "tr": {
+      "step": "Adım 2 / 4: Yönerge",
+      "title": "Değerlendirme yönergesi",
+      "items": [
+        "Bu değerlendirme kapsamında kullanılan gereksinimler açık kaynaklardaki veri setlerinden edinilmiştir. Her sayfada bir gereksinim ve altında değerlendirmesi yapılacak 6 metrik göreceksiniz.",
+        "Her metrik için puanlama yapmanız beklenmektedir. Puanlar: {scale}.",
+        "Her metrik için kısa bir soru yer alır. \"Metrik açıklamaları\" düğmesi, metriğin kurallarını ve kötü/iyi örnek gereksinimleri gösterir. \"Puanlama açıklamaları\" düğmesi ise her puanın (0, 1 ve 2) ne anlama geldiğini ve örnekleri gösterir.",
+        "Yalnızca gereksinimde yazılı olan bilgiyi puanlayınız. Görülmeyen doküman, sözlük, bağlam, üst gereksinim veya gerekçenin varlığını ya da yokluğunu varsaymayınız. Gereksinimin bağlamı eksik olsa bile her metriği puanlayınız.",
+        "\"Hızlı\", \"kolay\" gibi belirsizliğe yol açabilecek ifadeleri kendiliğinden kusur saymayınız; gereksinimde belirsizlik yaratıp yaratmadıklarını değerlendiriniz.",
+        "Kusur sayısını otomatik olarak puana dönüştürmeyiniz. Tek bir ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir.",
+        "Aynı kusur birden fazla metriği etkiliyorsa her metrikte ayrı ayrı değerlendiriniz.",
+        "Her metriğe isteğe bağlı not ekleyerek, puanınızın gerekçesini açıklayabilirsiniz.",
+        "Her sette yer alan gereksinim sayısı ve tamamladığınız gereksinim sayısı sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
+        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz."
+      ],
+      "button": "Devam"
+    },
+    "en": {
+      "step": "Step 2 / 4: Instructions",
+      "title": "Evaluation instructions",
+      "items": [
+        "The requirements used in this evaluation come from open-source datasets. On each page you will see one requirement and, below it, the 6 metrics you are asked to evaluate.",
+        "For each metric you are expected to assign a score. Scores: {scale}.",
+        "Each metric has a short question. The \"Metric guidance\" button shows the rules of the metric and good and bad example requirements. The \"Scoring guidance\" button explains what each score (0, 1 and 2) means and shows examples.",
+        "Score only the information written in the requirement. Do not assume the existence or absence of an unseen document, glossary, context, parent requirement or rationale. Score every metric even if the context of the requirement is incomplete.",
+        "Do not count words such as \"quick\" or \"easy\" as defects automatically; assess whether they create ambiguity in the requirement.",
+        "Do not convert the number of defects automatically into a score. A single serious defect may be more decisive than several minor ones.",
+        "If the same defect affects more than one metric, assess it separately in each metric.",
+        "You may add an optional note to any metric to explain your score.",
+        "The number of requirements in each set and the number you have completed are shown at the top right. When needed, you can go back to previous requirements and correct your scores.",
+        "You can pause or end the session at any time with the \"Take a break / End session\" link at the bottom of the page."
+      ],
+      "button": "Continue"
+    }
+  },
+  "briefing": {
+    "tr": {
+      "step": "Adım 3 / 4: Metrik bilgilendirmesi",
+      "title": "Metrik bilgilendirmesi",
+      "lede": "Değerlendirmeye başlamadan önce her metriğin açıklamalarını ve örneklerini inceleyiniz. Her sayfa için \"Sonraki\" düğmesi, kısa bir okuma süresinden sonra etkinleşir.",
+      "progress": "Metrik {n} / {total}",
+      "guidance_heading": "Puanlama Açıklamaları ve Örnek Gereksinimler",
+      "hints_heading": "Metriğe ait kurallar ve örnek gereksinimler",
+      "hint_rules": "Kurallar",
+      "hint_bad": "Uyumsuz Gereksinim Örnekleri (Score=0)",
+      "hint_partial": "Kısmen Uyumlu Gereksinim Örnekleri (Score=1)",
+      "hint_good": "Uyumlu Gereksinim Örnekleri (Score=2)",
+      "hint_rationale": "Gerekçe (0 ve 1 puanları)",
+      "sample_label": "Örnek",
+      "block_tr": "Türkçe",
+      "block_en": "English",
+      "wait": "{seconds} saniye sonra yeni sayfaya geçebilirsiniz",
+      "prev_button": "← Önceki",
+      "next_button": "Sonraki",
+      "start_button": "Değerlendirmeye başla"
+    },
+    "en": {
+      "hints_heading": "Metric Guidance",
+      "hint_rules": "Rules",
+      "hint_bad": "Non-Compliant Sample Requirements (Score=0)",
+      "hint_partial": "Partially Compliant Sample Requirements (Score=1)",
+      "hint_good": "Compliant Sample Requirements (Score=2)",
+      "hint_rationale": "Rationale for 0 and 1 scores",
+      "guidance_heading": "Scoring Guidance",
+      "sample_label": "Example",
+      "step": "Step 3 / 4: Metric briefing",
+      "title": "Metric briefing",
+      "lede": "Before you start evaluating, review the guidance and examples for each metric. The \"Next\" button becomes active after a short reading time on each page.",
+      "progress": "Metric {n} / {total}",
+      "wait": "You can move to the next page after {seconds} seconds.",
+      "prev_button": "← Previous",
+      "next_button": "Next",
+      "start_button": "Start evaluation"
+    }
+  },
+  "annotate": {
+    "tr": {
+      "step": "Adım 4 / 4: Değerlendirme",
+      "progress": "{done}/{total} değerlendirilen gereksinim",
+      "requirement_label": "Gereksinim",
+      "requirement_label_lang": "Gereksinim ({lang})",
+      "lang_names": {
+        "EN": "İngilizce",
+        "TR": "Türkçe"
+      },
+      "hint_button": "Metrik açıklamaları",
+      "hint_hide": "Metrik açıklamalarını gizle",
+      "hint_rules": "Kurallar",
+      "hint_bad": "Uyumsuz Gereksinim Örnekleri (Score=0)",
+      "hint_partial": "Kısmen Uyumlu Gereksinim Örnekleri (Score=1)",
+      "hint_good": "Uyumlu Gereksinim Örnekleri (Score=2)",
+      "hint_rationale": "Gerekçe (0 ve 1 puanları)",
+      "note_toggle": "Not ekle (isteğe bağlı)",
+      "note_placeholder": "Not (en fazla 500 karakter)",
+      "prev": "Önceki",
+      "next": "Kaydet ve sonraki",
+      "finish": "Kaydet ve seti bitir",
+      "incomplete": "Devam etmek için lütfen altı metriğin hepsini puanlayınız.",
+      "loading": "Gereksinimler yükleniyor…",
+      "exhausted": "Bu sette değerlendirebileceğiniz yeni gereksinim kalmadı. Katılımınız için teşekkür ederiz.",
+      "max_reached": "Bu oturumda değerlendirilebilecek en fazla set sayısına ulaştınız. Katılımınız için teşekkür ederiz.",
+      "to_thankyou": "Devam et",
+      "requirement_title": "Değerlendirilecek gereksinim",
+      "metric_label": "Metrik {n}",
+      "details_button": "Puanlama açıklamaları",
+      "details_hide": "Puanlama açıklamalarını gizle",
+      "details_heading": "Puanlama Açıklamaları",
+      "hint_heading": "Metrik Açıklamaları",
+      "draft_restored": "Bu gereksinim için kaydedilmemiş seçimleriniz geri yüklendi.",
+      "sample_label": "Örnek",
+      "unsaved_hint": "Bu gereksinimde kaydedilmemiş seçimleriniz var."
+    },
+    "en": {
+      "hint_button": "Metric guidance",
+      "hint_hide": "Hide metric guidance",
+      "details_button": "Scoring guidance",
+      "details_hide": "Hide scoring guidance",
+      "hint_heading": "Metric Guidance",
+      "details_heading": "Scoring Guidance",
+      "hint_rules": "Rules",
+      "hint_bad": "Non-Compliant Sample Requirements (Score=0)",
+      "hint_partial": "Partially Compliant Sample Requirements (Score=1)",
+      "hint_good": "Compliant Sample Requirements (Score=2)",
+      "hint_rationale": "Rationale for 0 and 1 scores",
+      "sample_label": "Example",
+      "requirement_title": "Requirement to evaluate",
+      "lang_names": {
+        "EN": "English",
+        "TR": "Turkish"
+      },
+      "metric_label": "Metric {n}",
+      "note_toggle": "Add note (optional)",
+      "note_placeholder": "Note (max. 500 characters)",
+      "prev": "Previous",
+      "next": "Save and next",
+      "finish": "Save and finish set",
+      "incomplete": "To continue, please score all six metrics.",
+      "draft_restored": "Your unsaved selections for this requirement have been restored.",
+      "step": "Step 4 / 4: Evaluation",
+      "progress": "{done}/{total} requirements evaluated",
+      "loading": "Loading requirements…",
+      "exhausted": "There are no new requirements left for you to evaluate in this set. Thank you for taking part.",
+      "max_reached": "You have reached the maximum number of sets that can be evaluated in this session. Thank you for taking part.",
+      "to_thankyou": "Continue"
+    }
+  },
+  "annotate_rubric": {
+    "en": {
+      "partial_note": "Score only the information that can be observed within the requirement itself."
+    },
+    "tr": {
+      "partial_note": "Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayın."
+    }
+  },
+  "session_bar": {
+    "tr": {
+      "end_link": "Ara ver / Oturumu sonlandır",
+      "end_confirm_title": "Ne yapmak istersiniz?",
+      "end_confirm_text": "Yanıtlarınız her gereksinim kaydedildiğinde veritabanına yazılır.",
+      "opt_pause": "Ara ver",
+      "opt_pause_hint": "Daha sonra bu tarayıcıdan aynı adrese girerek kaldığınız yerden devam edebilirsiniz.",
+      "opt_end": "Oturumu sonlandır, yanıtlarım saklansın",
+      "opt_end_hint": "Bu tarayıcıda bu oturuma geri dönemezsiniz. Kaydedilen yanıtlarınız analizlerde kullanılır.",
+      "opt_withdraw": "Oturumu sonlandır ve yanıtlarımı sil",
+      "opt_withdraw_hint": "Bu oturumda kaydedilen tüm yanıtlarınız kalıcı olarak silinir. Geri alınamaz.",
+      "end_confirm_ok": "Onayla",
+      "end_confirm_cancel": "Vazgeç",
+      "end_confirm_simple": "Oturumu sonlandırmak istediğinizden emin misiniz? Henüz yanıt kaydedilmedi.",
+      "paused_title": "Ara verdiniz",
+      "paused_body": "Bu tarayıcıdan aynı adrese girdiğinizde kaldığınız yerden devam edebilirsiniz. Sayfayı kapatabilirsiniz.",
+      "paused_button": "Şimdi devam et",
+      "ended_title": "Oturumunuz sonlandırıldı",
+      "ended_body": "Katılımınız için teşekkür ederiz. Yanıtlarınız saklandı. Bu sayfayı kapatabilirsiniz.",
+      "withdrawn_body": "Yanıtlarınız silindi. Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
+      "ended_button": "Başa dön"
+    },
+    "en": {
+      "end_link": "Take a break / End session",
+      "end_confirm_title": "What would you like to do?",
+      "end_confirm_text": "Your answers are saved to the database each time a requirement is saved.",
+      "opt_pause": "Take a break",
+      "opt_pause_hint": "You can continue where you left off later by opening the same address in this browser.",
+      "opt_end": "End the session, keep my answers",
+      "opt_end_hint": "You cannot return to this session in this browser. Saved answers are used in the analysis.",
+      "opt_withdraw": "End the session and delete my answers",
+      "opt_withdraw_hint": "All answers saved in this session are permanently deleted. This cannot be undone.",
+      "end_confirm_ok": "Confirm",
+      "end_confirm_cancel": "Cancel",
+      "end_confirm_simple": "Are you sure you want to end the session? No answers have been saved yet.",
+      "paused_title": "You have taken a break",
+      "paused_body": "When you open the same address in this browser, you can continue where you left off. You may close the page.",
+      "paused_button": "Continue now",
+      "ended_title": "Your session has ended",
+      "ended_body": "Thank you for taking part. Your answers have been saved. You may close this page.",
+      "withdrawn_body": "Your answers have been deleted. Thank you for taking part. You may close this page.",
+      "ended_button": "Back to start"
+    }
+  },
+  "batch_complete": {
+    "en": {
+      "title": "Batch Complete!",
+      "body": "You have evaluated {batch_count} requirements in this batch. Total evaluated in this session: {total}.",
+      "question": "Would you like to continue with another set of requirements?",
+      "continue_button": "Continue with another batch",
+      "stop_button": "No, thank you - finish",
+      "title_n": "Batch {n} complete!"
+    },
+    "tr": {
+      "title": "Set Tamamlandı!",
+      "body": "Bu sette {batch_count} gereksinim değerlendirdiniz. Bu oturumda toplam: {total}.",
+      "question": "Bir set daha puanlamak ister misiniz?",
+      "continue_button": "Yeni set ile devam et",
+      "stop_button": "Hayır, teşekkürler - bitir",
+      "title_n": "{n}. set tamamlandı!"
+    }
+  },
+  "thankyou": {
+    "en": {
+      "title": "Thank you very much for your contribution!",
+      "body": "You have successfully completed the evaluation of {n} requirements.",
+      "session_label": "Your session ID is:",
+      "session_note": "Please note it down if you would like to reference your participation later.",
+      "comment_label": "If you have any comments about the annotation experience, you may leave them below (optional).",
+      "comment_placeholder": "Optional comments about the annotation experience...",
+      "button": "Submit and Finish",
+      "closed": "Thank you, your answer has been saved. You may close this page.",
+      "comment_max": "Max 500 characters"
+    },
+    "tr": {
+      "title": "Katkınız için çok teşekkür ederiz!",
+      "body": "{n} gereksinimi başarıyla değerlendirdiniz.",
+      "session_label": "Oturum kimliğiniz:",
+      "session_note": "Katılımınıza daha sonra başvurmanız gerekirse bu kimliği not alabilirsiniz.",
+      "comment_label": "Değerlendirme deneyiminize ilişkin yorumlarınızı aşağıya bırakabilirsiniz (isteğe bağlı).",
+      "comment_placeholder": "Değerlendirme deneyiminize ilişkin isteğe bağlı yorumlarınız...",
+      "button": "Gönder ve Bitir",
+      "closed": "Teşekkürler, yanıtınız kaydedildi. Bu sayfayı kapatabilirsiniz.",
+      "comment_max": "En fazla 500 karakter"
+    }
+  },
+  "common": {
+    "tr": {
+      "save_error": "Yanıtınız kaydedilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.",
+      "saving": "Kaydediliyor...",
+      "not_ready": "Değerlendirme ekranı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz.",
+      "retry": "Tekrar dene",
+      "session_closed": "Bu oturum kapatılmış. Yeni bir oturum başlatabilirsiniz."
+    },
+    "en": {
+      "save_error": "Your answer could not be saved. Please check your connection and try again.",
+      "saving": "Saving...",
+      "not_ready": "The evaluation screen is being prepared. Please try again later.",
+      "retry": "Try again",
+      "session_closed": "This session has been closed. You can start a new session."
+    }
+  }
+}$json$::jsonb, NULL, 'ui_texts 2.23') AS new_version;
+
+-- Verify: ui_texts_version = 2.23
+SELECT version_label, content->>'ui_texts_version' AS ui_texts_version FROM rubric_config WHERE is_active = TRUE;

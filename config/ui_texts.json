@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.21",
+  "ui_texts_version": "2.23",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -125,6 +125,23 @@
         "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz."
       ],
       "button": "Devam"
+    },
+    "en": {
+      "step": "Step 2 / 4: Instructions",
+      "title": "Evaluation instructions",
+      "items": [
+        "The requirements used in this evaluation come from open-source datasets. On each page you will see one requirement and, below it, the 6 metrics you are asked to evaluate.",
+        "For each metric you are expected to assign a score. Scores: {scale}.",
+        "Each metric has a short question. The \"Metric guidance\" button shows the rules of the metric and good and bad example requirements. The \"Scoring guidance\" button explains what each score (0, 1 and 2) means and shows examples.",
+        "Score only the information written in the requirement. Do not assume the existence or absence of an unseen document, glossary, context, parent requirement or rationale. Score every metric even if the context of the requirement is incomplete.",
+        "Do not count words such as \"quick\" or \"easy\" as defects automatically; assess whether they create ambiguity in the requirement.",
+        "Do not convert the number of defects automatically into a score. A single serious defect may be more decisive than several minor ones.",
+        "If the same defect affects more than one metric, assess it separately in each metric.",
+        "You may add an optional note to any metric to explain your score.",
+        "The number of requirements in each set and the number you have completed are shown at the top right. When needed, you can go back to previous requirements and correct your scores.",
+        "You can pause or end the session at any time with the \"Take a break / End session\" link at the bottom of the page."
+      ],
+      "button": "Continue"
     }
   },
   "briefing": {
@@ -156,7 +173,15 @@
       "hint_good": "Compliant Sample Requirements (Score=2)",
       "hint_rationale": "Rationale for 0 and 1 scores",
       "guidance_heading": "Scoring Guidance",
-      "sample_label": "Example"
+      "sample_label": "Example",
+      "step": "Step 3 / 4: Metric briefing",
+      "title": "Metric briefing",
+      "lede": "Before you start evaluating, review the guidance and examples for each metric. The \"Next\" button becomes active after a short reading time on each page.",
+      "progress": "Metric {n} / {total}",
+      "wait": "You can move to the next page after {seconds} seconds.",
+      "prev_button": "← Previous",
+      "next_button": "Next",
+      "start_button": "Start evaluation"
     }
   },
   "annotate": {
@@ -221,7 +246,13 @@
       "next": "Save and next",
       "finish": "Save and finish set",
       "incomplete": "To continue, please score all six metrics.",
-      "draft_restored": "Your unsaved selections for this requirement have been restored."
+      "draft_restored": "Your unsaved selections for this requirement have been restored.",
+      "step": "Step 4 / 4: Evaluation",
+      "progress": "{done}/{total} requirements evaluated",
+      "loading": "Loading requirements…",
+      "exhausted": "There are no new requirements left for you to evaluate in this set. Thank you for taking part.",
+      "max_reached": "You have reached the maximum number of sets that can be evaluated in this session. Thank you for taking part.",
+      "to_thankyou": "Continue"
     }
   },
   "annotate_rubric": {
@@ -253,6 +284,27 @@
       "ended_body": "Katılımınız için teşekkür ederiz. Yanıtlarınız saklandı. Bu sayfayı kapatabilirsiniz.",
       "withdrawn_body": "Yanıtlarınız silindi. Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
       "ended_button": "Başa dön"
+    },
+    "en": {
+      "end_link": "Take a break / End session",
+      "end_confirm_title": "What would you like to do?",
+      "end_confirm_text": "Your answers are saved to the database each time a requirement is saved.",
+      "opt_pause": "Take a break",
+      "opt_pause_hint": "You can continue where you left off later by opening the same address in this browser.",
+      "opt_end": "End the session, keep my answers",
+      "opt_end_hint": "You cannot return to this session in this browser. Saved answers are used in the analysis.",
+      "opt_withdraw": "End the session and delete my answers",
+      "opt_withdraw_hint": "All answers saved in this session are permanently deleted. This cannot be undone.",
+      "end_confirm_ok": "Confirm",
+      "end_confirm_cancel": "Cancel",
+      "end_confirm_simple": "Are you sure you want to end the session? No answers have been saved yet.",
+      "paused_title": "You have taken a break",
+      "paused_body": "When you open the same address in this browser, you can continue where you left off. You may close the page.",
+      "paused_button": "Continue now",
+      "ended_title": "Your session has ended",
+      "ended_body": "Thank you for taking part. Your answers have been saved. You may close this page.",
+      "withdrawn_body": "Your answers have been deleted. Thank you for taking part. You may close this page.",
+      "ended_button": "Back to start"
     }
   },
   "batch_complete": {

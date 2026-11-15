@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { fill, type HintMetric, type LanguagePref, type RubricContent, type RubricMetric, type UiLang } from '../lib/config'
+import { fill, pickLang, type HintMetric, type LanguagePref, type RubricContent, type RubricMetric, type UiLang } from '../lib/config'
 import { assignBatch, fetchBriefingMinSeconds, getBriefingProgress, saveBriefingView } from '../lib/session'
 
 /**
@@ -49,7 +49,9 @@ export default function Briefing({ config, sessionId, language, onDone }: {
   language: LanguagePref | null
   onDone: () => void
 }) {
-  const t = { ...DEFAULTS, ...(config.briefing?.tr ?? {}) }
+  const english = language === 'EN'
+  const t = { ...DEFAULTS, ...(config.briefing?.tr ?? {}), ...(english ? (config.briefing?.en ?? {}) : {}) }
+  const c = pickLang(config.common, english)
   const te = { ...DEFAULTS_EN, ...((config as unknown as { briefing?: { en?: Partial<typeof DEFAULTS_EN> } }).briefing?.en ?? {}) }
   const metrics = config.metrics
   const pref: LanguagePref = language ?? 'TR'
@@ -122,8 +124,8 @@ export default function Briefing({ config, sessionId, language, onDone }: {
   if (error) {
     return (
       <main className="narrow"><section className="panel">
-        <p className="err" role="alert">{config.common.tr.save_error}</p>
-        <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>{config.common.tr.retry ?? '↻'}</button>
+        <p className="err" role="alert">{c.save_error}</p>
+        <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>{c.retry ?? '↻'}</button>
       </section></main>
     )
   }
@@ -228,7 +230,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
         <div className="bf-next">
           {!ready && <p className="muted" role="status">{fill(t.wait, { seconds: String(remaining) })}</p>}
           <button type="button" className="btn btn-primary" disabled={!ready || saving} onClick={next}>
-            {saving ? config.common.tr.saving : last ? t.start_button : t.next_button}
+            {saving ? c.saving : last ? t.start_button : t.next_button}
           </button>
         </div>
       </div>

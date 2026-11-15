@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { RubricContent } from '../lib/config'
+import { pickLang, type RubricContent } from '../lib/config'
 import { assignBatch, completeBatch, isSessionClosed, saveScores, type BatchResult, type CompleteResult } from '../lib/session'
 import Annotate from './Annotate'
 
@@ -15,7 +15,9 @@ export default function AnnotateStep({
   onNoMore: () => void
   onEnded: () => void
 }) {
-  const t = config.annotate.tr
+  const english = language === 'EN'
+  const t = pickLang(config.annotate, english)
+  const c = pickLang(config.common, english)
   const [batch, setBatch] = useState<BatchResult | null>(null)
   const [error, setError] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -31,8 +33,8 @@ export default function AnnotateStep({
   if (error) {
     return (
       <main className="narrow"><section className="panel">
-        <p className="err" role="alert">{config.common.tr.save_error}</p>
-        <button type="button" className="btn btn-primary" onClick={() => { setError(false); setAttempt(attempt + 1) }}>{config.common.tr.retry ?? '↻'}</button>
+        <p className="err" role="alert">{c.save_error}</p>
+        <button type="button" className="btn btn-primary" onClick={() => { setError(false); setAttempt(attempt + 1) }}>{c.retry ?? '↻'}</button>
       </section></main>
     )
   }
