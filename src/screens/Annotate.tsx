@@ -230,7 +230,7 @@ function MetricBlock({
         {(['0', '1', '2'] as const).map((k) => {
           const on = value?.score === Number(k)
           return (
-            <label key={k} className={`score${on ? ' on' : ''}`}>
+            <label key={k} className={`score${on ? ' on' : ''}`} title={m.anchors[k][lang]}>
               <input type="radio" name={group} checked={on}
                 onChange={() => onChange({ score: Number(k) })} />
               <span className="score-head" lang={lang}><b>{k}</b> {config.scale[k].label[lang]}</span>
@@ -293,6 +293,7 @@ function MetricBlock({
               return (
                 <div key={k}>
                   <dt><b>{k}</b> {config.scale[k].label[lang]}</dt>
+                  <dd>{m.anchors[k][lang]}</dd>
                   {sample && (
                     <dd className="sample">
                       <span className="sample-label">{t.sample_label ?? 'Örnek'}:</span> “{sampleText(sample)}”

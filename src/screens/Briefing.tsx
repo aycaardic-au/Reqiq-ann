@@ -208,6 +208,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
                   return (
                     <div key={k}>
                       <dt><b>{k}</b> {config.scale[k].label[lang]}</dt>
+                      <dd>{m.anchors[k][lang]}</dd>
                       {sampleText && (
                         <dd className="sample"><span className="sample-label">{lang === 'en' ? te.sample_label : t.sample_label}:</span> “{sampleText}”{reason && <span className="muted"> — {reason}</span>}</dd>
                       )}
