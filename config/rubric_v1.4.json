@@ -41,7 +41,7 @@
     {
       "id": "M_IND_01",
       "name_en": "Appropriate",
-      "name_tr": "Amaca uygunluk",
+      "name_tr": "Uygunluk",
       "partial_scope_note": true,
       "question": {
         "tr": "Gereksinim, ihtiyaç duyulan işlevi veya sonucu mu tarif ediyor, yoksa bir çözüm yöntemini mi şart koşuyor?",
@@ -98,7 +98,7 @@
     {
       "id": "M_IND_02",
       "name_en": "Unambiguous",
-      "name_tr": "Belirsizlikten Arınmışlık",
+      "name_tr": "Açıklık",
       "partial_scope_note": false,
       "question": {
         "tr": "Gereksinim yalnızca tek bir makul biçimde yorumlanabiliyor mu?",
@@ -326,7 +326,7 @@
     {
       "id": "M_IND_06",
       "name_en": "Conforming",
-      "name_tr": "Yazım standartlarına uygunluk",
+      "name_tr": "Biçimsel Uyum",
       "partial_scope_note": false,
       "question": {
         "tr": "Gereksinim, ilgili yazım ve dil kurallarına uyuyor mu?",
