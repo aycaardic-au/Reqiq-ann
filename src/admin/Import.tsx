@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { adminDb, fetchAll } from '../lib/adminClient'
 import type { Cfg } from './exportData'
+import ParticipantImport from './ParticipantImport'
 
 type Kind = 'requirements' | 'refs'
 const COLS: Record<Kind, string[]> = {
@@ -23,6 +24,7 @@ export default function Import() {
         note="Var olan req_id satırları güncellenir, yenileri eklenir. language_tag: EN veya TR; req_id biçimi EN_<no> / TR_<no>; base_id iki dilde aynı numara." />
       <TableImport kind="refs" title="Referans puanlar"
         note="base_id × metric_id başına bir satır (M_IND_01…M_IND_06). llm_score zorunlu, 0/1/2." />
+      <ParticipantImport />
       <JsonImport />
       <Versions />
     </div>
