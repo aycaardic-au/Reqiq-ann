@@ -48,8 +48,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Component status display):\n0 - Fixes dashboard layout, colors, and scrollbars; this detailed design excludes other solutions that could meet the need (anchor 0).\n1 - Outcome is clear; a limited interface-technology preference (web-based dashboard) is imposed (anchor 1).",
-          "Topic 2 (Track ranking):\n0 - Fixes the algorithm (bubble sort) and the programming language (C++), excluding other solutions that could meet the need (anchor 0).\n1 - Outcome is clear; a limited implementation choice (standard sorting library) is imposed (anchor 1)."
+          "Topic 1 (Component status display):\n0 - Fixes dashboard layout, colors, and scrollbars; this detailed design excludes other solutions that could meet the need.\n1 - Outcome is clear; a limited interface-technology preference (web-based dashboard) is imposed.",
+          "Topic 2 (Track ranking):\n0 - Fixes the algorithm (bubble sort) and the programming language (C++), excluding other solutions that could meet the need.\n1 - Outcome is clear; a limited implementation choice (standard sorting library) is imposed."
         ],
         "tr": [
           "Konu 1 (Bileşen durumu gösterimi):\n0 - Gösterge paneli düzenini, renklerini ve kaydırma çubuklarını sabitliyor; bu ayrıntılı tasarım, ihtiyacı karşılayabilecek diğer çözümleri dışlıyor (çapa 0).\n1 - Sonuç açık; sınırlı bir arayüz teknolojisi tercihi (web tabanlı gösterge paneli) dayatılıyor (çapa 1).",
@@ -120,8 +120,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Order identifier assignment):\n0 - 'quickly' is undefined, so the main timing obligation is open to more than one interpretation (anchor 0).\n1 - The 2-second timing is clear; the secondary qualifier 'appropriate numbering scheme' is vague (anchor 1).",
-          "Topic 2 (Target tracking capacity):\n0 - 'several' is an undefined quantity in the main obligation (anchor 0).\n1 - The main quantity ('at least 50') is clear; 'reasonable accuracy' is a vague secondary attribute (anchor 1)."
+          "Topic 1 (Order identifier assignment):\n0 - 'quickly' is undefined, so the main timing obligation is open to more than one interpretation.\n1 - The 2-second timing is clear; the secondary qualifier 'appropriate numbering scheme' is vague.",
+          "Topic 2 (Target tracking capacity):\n0 - 'several' is an undefined quantity in the main obligation.\n1 - The main quantity ('at least 50') is clear; 'reasonable accuracy' is a vague secondary attribute."
         ],
         "tr": [
           "Konu 1 (Sipariş kimliği ataması):\n0 - 'hızlıca' tanımsız; ana zamanlama yükümlülüğü birden fazla yoruma açık (çapa 0).\n1 - 2 saniyelik zamanlama açık; ikincil nitelik ('uygun numaralandırma şeması') muğlak (çapa 1).",
@@ -184,8 +184,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Daily status report transmission):\n0 - 'handle ... as needed' does not identify the required behavior; the core behavior cannot be determined (anchor 0).\n1 - The behavior (transmit the report) is identified; the timing value is missing (anchor 1).",
-          "Topic 2 (Sensor connection status):\n0 - 'the relevant connection status ... as needed' states neither whose connection status nor when it is displayed, so the demanded behavior cannot be determined (anchor 0).\n1 - The behavior is known; 'applicable sensors' does not identify which sensors are covered (anchor 1)."
+          "Topic 1 (Daily status report transmission):\n0 - 'handle ... as needed' does not identify the required behavior; the core behavior cannot be determined.\n1 - The behavior (transmit the report) is identified; the timing value is missing.",
+          "Topic 2 (Sensor connection status):\n0 - 'the relevant connection status ... as needed' states neither whose connection status nor when it is displayed, so the demanded behavior cannot be determined.\n1 - The behavior is known; 'applicable sensors' does not identify which sensors are covered."
         ],
         "tr": [
           "Konu 1 (Günlük durum raporu iletimi):\n0 - 'gerektiği gibi işlemek' hangi davranışın istendiğini belirlemiyor; temel davranış belirlenemiyor (çapa 0).\n1 - Davranış (raporu iletmek) belirlenmiş; zamanlama değeri eksik (çapa 1).",
@@ -242,8 +242,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Smoke alarm response):\n0 - Displaying the evacuation route is a second core function: it serves a different operational purpose (guiding evacuation) than alerting and is not part of the alarm activation; the event record only documents the alarm response (anchor 0).\n1 - One core function (alarm activation) with an attached, separable secondary function (recording the event that the alarm responds to) (anchor 1).",
-          "Topic 2 (Equipment status display):\n0 - Generating the monthly maintenance report is a core function independent of the status display, with its own trigger and output (anchor 0).\n1 - One core function (status display) with an attached, separable secondary function (change logging) (anchor 1)."
+          "Topic 1 (Smoke alarm response):\n0 - Displaying the evacuation route is a second core function: it serves a different operational purpose (guiding evacuation) than alerting and is not part of the alarm activation; the event record only documents the alarm response.\n1 - One core function (alarm activation) with an attached, separable secondary function (recording the event that the alarm responds to).",
+          "Topic 2 (Equipment status display):\n0 - Generating the monthly maintenance report is a core function independent of the status display, with its own trigger and output.\n1 - One core function (status display) with an attached, separable secondary function (change logging)."
         ],
         "tr": [
           "Konu 1 (Duman alarmı yanıtı):\n0 - Tahliye güzergâhını göstermek ikinci bir temel işlev; uyarıdan farklı bir işletimsel amaca (tahliyeye yön verme) hizmet ediyor ve alarm etkinleştirmenin parçası değil; olay kaydı yalnızca alarm yanıtını belgeliyor (çapa 0).\n1 - Bir temel işlev (alarmı etkinleştirme) ile buna eklenmiş, ayrılabilir bir ikincil işlev (alarmın yanıt verdiği olayın kaydı) (çapa 1).",
@@ -300,8 +300,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Active alarm presentation):\n0 - 'easy to distinguish' has no objective pass/fail criterion; the core behavior cannot be verified (anchor 0).\n1 - Displaying alarms is verifiable, but 'high level of clarity' is an undefined acceptance criterion (anchor 1).",
-          "Topic 2 (Command retransmission):\n0 - 'handle ... appropriately' names no observable behavior; not verifiable (anchor 0).\n1 - The core behavior and the initial 100 ms timeout are verifiable; the number of retransmissions and the wait after each retransmission are not bounded (anchor 1)."
+          "Topic 1 (Active alarm presentation):\n0 - 'easy to distinguish' has no objective pass/fail criterion; the core behavior cannot be verified.\n1 - Displaying alarms is verifiable, but 'high level of clarity' is an undefined acceptance criterion.",
+          "Topic 2 (Command retransmission):\n0 - 'handle ... appropriately' names no observable behavior; not verifiable.\n1 - The core behavior and the initial 100 ms timeout are verifiable; the number of retransmissions and the wait after each retransmission are not bounded."
         ],
         "tr": [
           "Konu 1 (Aktif alarm gösterimi):\n0 - 'kolayca ayırt edilebilir' nesnel bir geçme/kalma ölçütü içermiyor; temel davranış doğrulanamaz (çapa 0).\n1 - Alarmların gösterimi doğrulanabilir; ancak 'yüksek düzeyde netlik' tanımsız bir kabul ölçütü (çapa 1).",
@@ -360,8 +360,8 @@
       },
       "rationale": {
         "en": [
-          "Topic 1 (Logout session termination):\n0 - Passive main clause ('the active session shall be terminated'): no responsible system element is the grammatical subject, so the obligation structure is broken even though 'shall' is present (decisive defect, anchor 0).\n1 - Active structure and responsible subject are preserved; only a limited grammatical error ('terminates' after 'shall') (anchor 1).",
-          "Topic 2 (Fault recording):\n0 - Passive main clause ('will be recorded'): no responsible subject (decisive defect); 'will' is an additional modal mismatch (anchor 0).\n1 - Active structure with the controller as subject is preserved; only a modal mismatch ('will' instead of 'shall') (anchor 1)."
+          "Topic 1 (Logout session termination):\n0 - Passive main clause ('the active session shall be terminated'): no responsible system element is the grammatical subject, so the obligation structure is broken even though 'shall' is present (decisive defect).\n1 - Active structure and responsible subject are preserved; only a limited grammatical error ('terminates' after 'shall').",
+          "Topic 2 (Fault recording):\n0 - Passive main clause ('will be recorded'): no responsible subject (decisive defect); 'will' is an additional modal mismatch.\n1 - Active structure with the controller as subject is preserved; only a modal mismatch ('will' instead of 'shall')."
         ],
         "tr": [
           "Konu 1 (Oturum kapatma):\n0 - Edilgen ana cümle ('etkin oturum sonlandırılmalıdır'): sorumlu sistem öğesi dil bilgisel özne değil; '-malıdır' bulunsa da zorunluluk yapısı bozuk (belirleyici kusur, çapa 0).\n1 - Etken yapı ve sorumlu özne korunmuş; yalnızca sınırlı bir dil bilgisi hatası ('sonlandırmalıyor') var (çapa 1).",

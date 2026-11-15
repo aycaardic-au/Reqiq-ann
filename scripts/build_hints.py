@@ -107,6 +107,10 @@ def main() -> None:
         raise SystemExit(f"Metric ids found {[m['id'] for m in metrics]} != rubric {scored}")
 
     hints = {"source": f"{args.workbook.name} / Metrics_ENG_TR", "metrics": metrics}
+    # Annotator-facing texts must not carry anchor markers (ToDO: anchors are not shown in the tool).
+    _hints_txt = json.dumps(hints, ensure_ascii=False)
+    _hints_txt = re.sub(r",\s*anchor [012]\)", ")", re.sub(r"\s*\(anchor [012]\)", "", _hints_txt))
+    hints = json.loads(_hints_txt)
     (ROOT / "config" / "metric_hints.json").write_text(json.dumps(hints, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("Written: config/metric_hints.json")
     if args.out:

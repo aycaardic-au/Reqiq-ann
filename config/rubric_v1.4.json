@@ -350,8 +350,8 @@
           "en_status": "v1.8 workbook (EN; needs review)"
         },
         "2": {
-          "tr": "Bu çalışmanın metin ve yazım kurallarına uyum gözlenir.",
-          "en": "Compliance with the text and writing rules of this study is observed.",
+          "tr": "Gereksinim, ilgili yazım ve dil kurallarının tümüne uyar; ihlal gözlenmez.",
+          "en": "The requirement complies with all relevant writing and language rules; no violation is observed.",
           "en_status": "v1.8 workbook (EN; needs review)"
         }
       },
