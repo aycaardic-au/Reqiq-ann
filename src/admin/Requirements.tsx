@@ -24,7 +24,7 @@ export default function Requirements({ tick }: { tick: number }) {
     if (!data || !sheets) return []
     const target = Number(data.cfg.coverage_target ?? 3)
     const byReq = new Map<string, Row>()
-    for (const r of sheets.Gereksinim_Ozeti) if (!byReq.has(String(r.req_id))) byReq.set(String(r.req_id), r)
+    for (const r of sheets.Gereksinim_Metrik_Ozeti) if (!byReq.has(String(r.req_id))) byReq.set(String(r.req_id), r)
     return data.reqs
       .filter((r) => lang === 'ALL' || r.language_tag === lang)
       .filter((r) => !q || r.req_id.toLowerCase().includes(q.toLowerCase()) || (r.text_en ?? r.text_tr ?? '').toLowerCase().includes(q.toLowerCase()))

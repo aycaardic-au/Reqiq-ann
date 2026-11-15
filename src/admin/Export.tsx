@@ -1,14 +1,29 @@
 import { useState } from 'react'
 import { loadAll } from './data'
-import { applyFilter, buildSheets, DEFAULT_FILTER, sanitizeRows, type ExportFilter, type Row } from './exportData'
+import { applyFilter, buildSheets, DEFAULT_FILTER, QC_RULES, sanitizeRows, type ExportFilter, type Row } from './exportData'
 import { A } from './texts'
 
 const DESC: Record<string, string> = {
   Bilgi: 'Dışa aktarım zamanı, rubrik sürümü, uygulanan filtre, parametreler ve sütun açıklamaları.',
   Briefing: 'Her satır: oturum × set × metrik; görünür süre (sn), gösterilen dil, tamamlanma zamanı, yapılandırma sürümü (FR-BRF-009).',
   Puanlar_Ham: 'Her satır: oturum × gereksinim × metrik; gereksinim metni, yapılandırma sürümü, dikkat sorusu işareti dahil.',
-  Gereksinim_Ozeti: 'Gereksinim × metrik: puan sayısı, ortalama, medyan, std, 0/1/2 dağılımı, referans puan ve farkı.',
-  Oturumlar_QC: 'Oturum bilgileri, süreler, sunucunun hesapladığı bayraklar, dikkat sorusu tutarlılığı, yorum.',
+  Gereksinim_Metrik_Ozeti: 'Gereksinim × metrik: puan sayısı, ortalama, medyan, std, 0/1/2 dağılımı, referans puan ve farkı.',
+  Batch_QC: 'Batch bazlı dikkat sorusu, süre ve tekdüze puan kanıtı. Yalnızca incelemeye yardımcıdır.',
+  Alpha_Girdi: 'Krippendorff alfası için uzun biçim: değerlendirici × öğe × metrik puanı. Dikkat soruları ve dışlanan oturumlar yok.',
+  Oturumlar_QC: 'Oturum bilgileri, süreler, sunucunun hesapladığı bayraklar, dikkat sorusu tutarlılığı, yorum ve QC_ONERI (öneri; karar admin).',
+}
+
+/** QC_ONERI as a live Excel formula (same rule as qcOneri in exportData.ts). Formula text is ours, not user data, so it is written after sanitising. */
+function qcFormulas(XLSX: typeof import('xlsx'), ws: Record<string, unknown>, keys: string[], n: number) {
+  const col = (k: string) => XLSX.utils.encode_col(keys.indexOf(k))
+  const c = (k: string, r: number) => `${col(k)}${r}`
+  const { failAttentionItems: F, reviewAttentionItems: R, reviewFastItems5: F5, reviewFastPct10: P10, reviewUniformPct: PU } = QC_RULES
+  for (let r = 2; r <= n + 1; r++) {
+    const f = `IF(N(${c('items_scored', r)})=0,"",IF(N(${c('dikkat_hatasi_sayisi', r)})>=${F},"QC Fail",` +
+      `IF(OR(N(${c('dikkat_hatasi_sayisi', r)})>=${R},N(${c('cok_hizli_oge_sayisi', r)})>=${F5},N(${c('hizli_oge_yuzde', r)})>=${P10},` +
+      `N(${c('tekduze_puan_yuzde', r)})>=${PU},${c('speed_flag', r)}=TRUE),"Admin incelemesi","QC Pass")))`
+    ws[c('QC_ONERI', r)] = { f }
+  }
 }
 
 /** Dışa aktar (FR-ADM-007/008, D-31): filters, Excel with all sheets or CSV per sheet; cells sanitised (NFR-SEC-005). */
@@ -41,7 +56,9 @@ export default function Export() {
     const XLSX = await import('xlsx')
     const wb = XLSX.utils.book_new()
     for (const [name, rows] of Object.entries(sheets!)) {
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows.length ? sanitizeRows(rows) : [{ bilgi: 'Kayıt yok' }]), name.slice(0, 31))
+      const ws = XLSX.utils.json_to_sheet(rows.length ? sanitizeRows(rows) : [{ bilgi: 'Kayıt yok' }])
+      if (name === 'Oturumlar_QC' && rows.length) qcFormulas(XLSX, ws, Object.keys(rows[0]), rows.length)
+      XLSX.utils.book_append_sheet(wb, ws, name.slice(0, 31))
     }
     XLSX.writeFile(wb, `degerlendirme_export_${stamp()}.xlsx`)
   }

@@ -64,6 +64,17 @@ const sd = (a: number[]) => {
 }
 const r3 = (v: number | null) => (v == null ? null : Math.round(v * 1000) / 1000)
 
+/** QC_ONERI rules (draft for admin confirmation, sözlük §8). Thresholds live here only; Export.tsx writes the same rule as an Excel formula. */
+export const QC_RULES = { failAttentionItems: 2, reviewAttentionItems: 1, reviewFastItems5: 2, reviewFastPct10: 20, reviewUniformPct: 50 }
+/** Suggestion only; the final decision is an admin decision. Empty when the session has no scored items. */
+export function qcOneri(v: { items_scored: number; dikkat_hatasi_sayisi: number; cok_hizli_oge_sayisi: number; hizli_oge_yuzde: number | null; tekduze_puan_yuzde: number | null; speed_flag: boolean }): string {
+  if (!v.items_scored) return ''
+  if (v.dikkat_hatasi_sayisi >= QC_RULES.failAttentionItems) return 'QC Fail'
+  const review = v.dikkat_hatasi_sayisi >= QC_RULES.reviewAttentionItems || v.cok_hizli_oge_sayisi >= QC_RULES.reviewFastItems5
+    || (v.hizli_oge_yuzde ?? 0) >= QC_RULES.reviewFastPct10 || (v.tekduze_puan_yuzde ?? 0) >= QC_RULES.reviewUniformPct || v.speed_flag
+  return review ? 'Admin incelemesi' : 'QC Pass'
+}
+
 export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> {
   const reqBy = new Map(d.reqs.map((r) => [r.req_id, r]))
   const sesBy = new Map(d.sessions.map((s) => [s.session_id, s]))
@@ -173,13 +184,14 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     }
     const med = median(times)
     // 0033 review items 6 and 7: fast items and uniform scoring (flags for review only, no automatic exclusion)
-    const fastOver = (lim: number) => (times.length ? Math.round((100 * times.filter((t) => t < lim).length) / times.length) : null)
+    const workTimes = sItems.filter((i) => !i.is_attention_check).map((i) => i.time_seconds).filter((t): t is number => t != null)
+    const fastOver = (lim: number) => (workTimes.length ? Math.round((100 * workTimes.filter((t) => t < lim).length) / workTimes.length) : null)
     let fullItems = 0, uniformItems = 0
     for (const it of sItems.filter((i) => !i.is_attention_check)) {
       const vals = [...scoresOf(it.batch_item_id).values()].map((x) => x.score)
       if (vals.length === METRIC_IDS.length) { fullItems++; if (new Set(vals).size === 1) uniformItems++ }
     }
-    return {
+    const row: Row = {
       rater_code: code.get(se.session_id)!, session_id: se.session_id, language_pref: se.language_pref,
       annotator_type: se.annotator_type, annotator_type_other: se.annotator_type_other, consent_version: se.consent_version,
       created_at: se.created_at, last_active_at: se.last_active_at, batches_completed: se.batches_completed,
@@ -188,19 +200,60 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
       attention_metric_pairs: acPairs, attention_exact_match_pct: acPairs ? Math.round((100 * acSame) / acPairs) : null,
       attention_max_abs_diff: acPairs ? acMax : null,
       dikkat_hatasi_sayisi: acBad,
-      cok_hizli_oge_sayisi: times.filter((t) => t < 5).length,
+      cok_hizli_oge_sayisi: workTimes.filter((t) => t < 5).length,
       hizli_oge_yuzde: fastOver(10),
       tekduze_puan_yuzde: fullItems ? Math.round((100 * uniformItems) / fullItems) : null,
       flag_consistency: se.flag_consistency ?? null, flag_speed: se.flag_speed ?? null, ended_at: se.ended_at ?? null, withdrawn_at: se.withdrawn_at ?? null,
       excluded: se.excluded, comment: se.comment,
     }
+    row.QC_ONERI = qcOneri({
+      items_scored: Number(row.items_scored), dikkat_hatasi_sayisi: acBad, cok_hizli_oge_sayisi: Number(row.cok_hizli_oge_sayisi),
+      hizli_oge_yuzde: fastOver(10), tekduze_puan_yuzde: row.tekduze_puan_yuzde as number | null, speed_flag: med != null && med < speedSec,
+    })
+    return row
   })
+
+  // Batch_QC (review item 4): one row per batch, attention and speed evidence per batch; decision stays at session level
+  const scoresByItem = new Map<number, Sc[]>()
+  for (const s of d.scores) scoresByItem.set(s.batch_item_id, [...(scoresByItem.get(s.batch_item_id) ?? []), s])
+  const batchQc: Row[] = d.batches.map((b) => {
+    const bItems = d.items.filter((i) => i.batch_id === b.batch_id)
+    const work = bItems.filter((i) => !i.is_attention_check)
+    const ac = bItems.filter((i) => i.is_attention_check)
+    const wTimes = work.map((i) => i.time_seconds).filter((t): t is number => t != null)
+    let uniform = 0, full = 0
+    for (const it of work) {
+      const vals = (scoresByItem.get(it.batch_item_id) ?? []).map((x) => x.score)
+      if (vals.length === METRIC_IDS.length) { full++; if (new Set(vals).size === 1) uniform++ }
+    }
+    let acBad = 0
+    for (const a of ac) {
+      const orig = work.find((i) => i.req_id === a.req_id)
+      if (!orig) continue
+      const x = new Map((scoresByItem.get(a.batch_item_id) ?? []).map((q) => [q.metric_id, q.score]))
+      const y = new Map((scoresByItem.get(orig.batch_item_id) ?? []).map((q) => [q.metric_id, q.score]))
+      if (METRIC_IDS.some((m) => x.has(m) && y.has(m) && x.get(m) !== y.get(m))) acBad++
+    }
+    const sid = b.session_id
+    return {
+      batch_key: `${code.get(sid) ?? '?'}-${batchNo.get(b.batch_id) ?? '?'}`, rater_code: code.get(sid) ?? null,
+      batch_number: batchNo.get(b.batch_id) ?? null, session_id: sid, batch_id: b.batch_id,
+      sampling_strategy: b.sampling_strategy ?? '(0033 öncesi)', created_at: b.created_at, completed_at: b.completed_at,
+      session_excluded: sesBy.get(sid)?.excluded ?? null,
+      items_work: work.length, items_attention: ac.length,
+      dikkat_hatasi_sayisi: acBad,
+      attention_metric_pairs: b.ac_pairs ?? null, attention_metric_mismatches: b.ac_mismatches ?? null, attention_max_abs_diff: b.ac_max_diff ?? null,
+      median_seconds_per_item: r3(median(wTimes)),
+      hizli_oge_yuzde: wTimes.length ? Math.round((100 * wTimes.filter((t) => t < 10).length) / wTimes.length) : null,
+      tekduze_puan_yuzde: full ? Math.round((100 * uniform) / full) : null,
+    }
+  }).sort((a, b) => String(a.batch_key).localeCompare(String(b.batch_key)))
 
   const info: Row[] = [
     { key: 'exported_at', value: new Date().toISOString() },
     { key: 'rubric_version', value: d.rubricVersion },
     { key: 'filter', value: filterNote || 'none' },
-    { key: 'analysis_rows', value: 'Matris_* and Gereksinim_Ozeti exclude attention-check duplicates and excluded sessions; Puanlar_Ham includes everything.' },
+    { key: 'analysis_rows', value: 'Matris_* and Gereksinim_Metrik_Ozeti exclude attention-check duplicates and excluded sessions; Puanlar_Ham includes everything.' },
     { key: 'matrix_cells', value: '0/1/2 = score, empty = not scored by that rater.' },
     { key: 'flags', value: 'flag_consistency / flag_speed are computed by the server at batch completion (FR-QC-003/004).' },
     { key: 'config_version', value: 'Configuration (rubric + texts) version active when the batch was assigned (FR-CFG-VER-002).' },
@@ -213,9 +266,10 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'Briefing', value: 'Briefing görünme süreleri. rater_code ve batch_key ile eşleştirin (batch_number tek başına benzersiz değil).' },
     { key: 'Puanlar_Ham', value: 'Her değerlendirici × öğe × metrik için tek satır. Dışlanan oturumlar dahil (session_excluded). sampling_strategy: batch oluşturulurken geçerli strateji.' },
     { key: 'Matris_M_IND_01..06', value: 'Metrik başına öğe × değerlendirici tablosu. Boş = puanlanmadı. Yalnızca dahil oturumlar.' },
-    { key: 'Gereksinim_Ozeti', value: 'Öğe × metrik özeti: n_raters, n0/n1/n2, ortalama, medyan, referans farkı, coverage_met.' },
+    { key: 'Gereksinim_Metrik_Ozeti', value: 'Öğe × metrik özeti: n_raters, n0/n1/n2, ortalama, medyan, referans farkı, coverage_met.' },
     { key: 'Alpha_Girdi', value: 'Krippendorff alfa için uzun biçim: birim = req_id × metric_id, değerlendirici = rater_code. Yalnızca dahil oturumlar, dikkat soruları hariç.' },
-    { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. dikkat_hatasi_sayisi: dikkat sorusunda eşleşmeyen öğe sayısı. cok_hizli_oge_sayisi: öğe süresi 5 sn altı. hizli_oge_yuzde: öğe süresi 10 sn altı yüzdesi. tekduze_puan_yuzde: altı metriğin hepsine aynı puan verilen öğe yüzdesi.' },
+    { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. QC_ONERI: sütun kurallarından türetilen öneri (QC Pass / Admin incelemesi / QC Fail); nihai karar admin tarafından verilir.' },
+    { key: 'Batch_QC', value: 'Batch bazlı kalite kanıtı: dikkat sorusu sonuçları, medyan süre, hızlı öğe ve tekdüze puan oranları. Karar oturum düzeyindedir; bu sayfa yalnızca incelemeye yardımcıdır.' },
   ]
 
   // 5. Briefing (FR-BRF-009): one row per session × batch × metric. Briefing time is never added to item time (FR-BRF-007).
@@ -234,5 +288,5 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
       metric_id: s.metric_id, score: s.score, round: s.round, batch_key: it ? batchKey(it.batch_id) : null }
   }).sort((a, b) => String(a.metric_id).localeCompare(String(b.metric_id)) || String(a.req_id).localeCompare(String(b.req_id)) || String(a.rater_code).localeCompare(String(b.rater_code)))
 
-  return { Bilgi: info, Briefing: briefing, Puanlar_Ham: raw, ...matrices, Gereksinim_Ozeti: summary, Oturumlar_QC: sessions, Alpha_Girdi: alpha }
+  return { Bilgi: info, Briefing: briefing, Puanlar_Ham: raw, ...matrices, Gereksinim_Metrik_Ozeti: summary, Oturumlar_QC: sessions, Batch_QC: batchQc, Alpha_Girdi: alpha }
 }
