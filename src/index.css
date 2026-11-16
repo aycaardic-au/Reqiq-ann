@@ -99,6 +99,7 @@ code { font-size: .88em; background: var(--surface-2); padding: 1px 6px; border-
 .choice:hover { background: var(--surface-2); }
 .choice.on { background: var(--primary-soft); border-color: #9cc3bf; }
 .choice.danger.on { background: var(--err-soft); border-color: #e3b1ab; }
+.agree-text { white-space: pre-line; }
 .choice input, .pill input { accent-color: var(--primary); margin-top: 5px; flex: none; }
 
 /* K3 form, K4 intro */
