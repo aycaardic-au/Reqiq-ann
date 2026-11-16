@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.23",
+  "ui_texts_version": "2.24",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -8,69 +8,69 @@
   "consent": {
     "tr": {
       "title": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması",
-      "lede": "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirmeyi amaçlamaktadır.",
-      "steps": [
-        "Bir set gereksinim değerlendirme süresi, ortalama 30–40 dk"
-      ],
+      "lede": "Bu araştırma, yazılı gereksinim belirtimlerindeki cümlelerin kalitesini altı ölçüt açısından puanlamayı amaçlamaktadır.",
+      "steps": [],
       "form_title": "Aydınlatılmış Onam Formu",
       "form_sections": [
         {
           "heading": "",
           "paragraphs": [
             "Sayın gönüllü,",
-            "Ankara Üniversitesi Fen Bilimleri Enstitüsü, Disiplinlerarası Yapay Zekâ Teknolojileri Tezli Yüksek Lisans Programı'nda, Dr. Öğr. Üyesi Rukiye Savran Kızıltepe danışmanlığında Ayca Ardıç tarafından yürütülen \"Büyük Dil Modelleri Kullanarak Gereksinim Belirtimlerinin Otomatik Kalite Değerlendirmesi\" başlıklı tez çalışması kapsamındaki bu araştırmaya katılmaya davet ediliyorsunuz. Bu araştırmaya yalnızca 18 yaşını doldurmuş gönüllüler katılabilir.",
-            "Araştırmada yer almayı kabul etmeden önce aşağıdaki bilgileri lütfen dikkatlice okuyunuz."
+            "Ankara Üniversitesi Fen Bilimleri Enstitüsü, Yapay Zekâ Teknolojileri Tezli Yüksek Lisans Programı kapsamında yürütülen “Büyük Dil Modelleri Kullanarak Gereksinim Belirtimlerinin Otomatik Kalite Değerlendirmesi” başlıklı tez çalışmasına katılmak üzere davet edilmiş bulunuyorsunuz. Bu çalışmaya yalnızca 18 yaşını doldurmuş gönüllüler katılabilir. Bu araştırmada yer almayı kabul etmeden önce, araştırmanın ne amaçla yapılmak istendiğini anlamanız ve kararınızı bu bilgilendirme çerçevesinde özgürce vermeniz gerekmektedir.",
+            "Aşağıdaki bilgileri lütfen dikkatlice okuyunuz, sorularınız olursa sorunuz ve açık yanıtlar isteyiniz."
           ]
         },
         {
           "heading": "Araştırmanın Amacı ve Kapsamı",
           "paragraphs": [
-            "Bu araştırma, yazılım ve sistem gereksinimlerinin kalitesini altı metrikle değerlendirerek, yazılım ve sistem gereksinimlerinin kalitesini ölçmeyi amaçlamaktadır.",
-            "Sizden, ekranda gösterilecek gereksinimleri altı kalite metriğine göre 0, 1 veya 2 puanla değerlendirmeniz istenecektir. Gerekli değerlendirme kriterleri ilerleyen sayfalarda yer almaktadır."
+            "Bu araştırmanın amacı, yazılı gereksinim belirtimlerindeki cümlelerin kalitesini altı ölçüt (Uygunluk, Açıklık, Tamlık, Tekillik, Doğrulanabilirlik ve Biçimsel Uyum) açısından puanlamaktır. Bu puanlar, tezin ilerleyen safhalarında verinin etiketlenmesinde ve yerel bilgisayarlarda çalışacak küçük dil modellerinin eğitilmesinde kullanılacaktır. Eğitilen küçük dil modelleri çevrimdışı (yerel) ortamda çalıştırılarak gereksinimlerin kalitesini otomatik olarak değerlendirecektir.",
+            "Puanlamanız beklenen gereksinimler, açık kaynaklarda yer alan Promise+ veri setinden alınmıştır. Sizden, İngilizce gereksinimleri veya çeviriyle elde edilen Türkçe karşılıklarını, verilen puanlama ölçütüne göre (0, 1 veya 2 puanla) değerlendirmeniz istenecektir. İhtiyaç duyacağınız teknik bilgiler ilerleyen sayfalarda yer alacaktır. Doğru ya da yanlış bir yanıt yoktur."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
           "paragraphs": [
-            "Bir set birden fazla gereksinimden oluşur ve ortalama 30–40 dakika sürer. Bir seti tamamladıktan sonra isterseniz yeni bir set değerlendirebilirsiniz."
+            "Araştırma kapsamında gönüllülerden önce Katılımcı Bilgi Formu’nu doldurmaları, ardından çevrimiçi değerlendirme aracında en az 1 set (ortalama 30 gereksinim) tamamlamaları beklenmektedir. Bilgi formunun doldurulması yaklaşık 3 dakika, ölçüt tanıtımı (brifing) yaklaşık 20 dakika ve değerlendirme yaklaşık 35 dakika sürecektir. Toplam süre yaklaşık 1 saattir. Değerlendirmeyi uygun olduğunuz zaman ve yerde, çevrimiçi olarak yapabilir; istediğiniz zaman ara verebilirsiniz. Ses veya görüntü kaydı yapılmayacaktır."
           ]
         },
         {
-          "heading": "Gönüllülük Esası",
+          "heading": "Araştırmaya Katılacak Kişiler için Gönüllülük Esası",
           "paragraphs": [
-            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanır. Katılmayı reddedebilir ya da herhangi bir anda, gerekçe göstermeden \"Oturumu sonlandır\" bağlantısını kullanarak veya sayfayı kapatarak çalışmadan ayrılabilirsiniz. Ara verip daha sonra aynı tarayıcıdan kaldığınız yerden devam edebilirsiniz. Oturumu sonlandırırken o ana kadar kaydedilen yanıtlarınızın saklanmasını ya da silinmesini seçebilirsiniz.",
-            "Katılımınız için sizden herhangi bir ücret istenmeyecek ve size herhangi bir ödeme yapılmayacaktır."
+            "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanmaktadır. Çalışmaya katılmama veya katıldıktan sonra herhangi bir anda çalışmadan çıkma veya oturumu sonlandırma hakkına sahipsiniz. Araştırmaya katılmayı reddetmeniz veya yarıda bırakmanız durumunda herhangi bir olumsuz sonuçla karşılaşmayacaksınız.",
+            "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir. Sadece, tarayıcınızda üretilen oturum kimliği, verdiğiniz puanlar ve cevaplama süreleriniz kaydedilecektir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir.",
+            "Web form üzerinden verilen onay kaydı, değerlendirme verilerinden ayrı tutulacak ve yalnızca araştırma ekibi tarafından erişilebilecektir."
           ]
         },
         {
-          "heading": "Toplanan Veriler ve Gizlilik",
+          "heading": "Araştırmaya Katılacak Kişiler için Olası Riskler",
           "paragraphs": [
-            "Araştırma sırasında, adınız, e-posta adresiniz veya sizi tanımlayabilecek başka bir bilgi sorulmayacaktır. Araştırma kapsamında toplanan veriler şunlardır: tarayıcınızda tek yönlü olarak hesaplanan takma adlı bir oturum kimliği, değerlendirme dili tercihiniz, katılımcı türünüz, verdiğiniz puanlar ve notlar ile her gereksinim için harcanan süre.",
-            "Veriler yalnızca bu tez ve tezden üretilecek bilimsel yayınlar için kullanılacak, sonuçlar toplu olarak raporlanacaktır."
-          ]
-        },
-        {
-          "heading": "Olası Riskler",
-          "paragraphs": [
-            "Araştırma düşük risk kategorisindedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Ekran başında uzun süre kalmaktan kaynaklanabilecek yorgunluğu azaltmak için setler arasında ara verebilirsiniz."
+            "Araştırma, düşük risk kategorisinde değerlendirilmektedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Olası düşük düzeyli riskler, değerlendirme sırasında yaşanabilecek kısa süreli yorgunluk ve ekran başında uzun süre kalmakla sınırlıdır.",
+            "Olası riskleri en aza indirmek için değerlendirme oturumlarını istediğiniz zaman duraklatabilir veya sonlandırabilirsiniz. Değerlendirmeleriniz hiçbir şekilde notlandırılmayacak, akademik bir değerlendirmede kullanılmayacak ve sizin hakkınızda yargılayıcı bir değerlendirme yapılmayacaktır. Veriler, Supabase üzerinde İrlanda’da (Avrupa Birliği, eu-west-1 bölgesi) şifreli olarak saklanacaktır ve Türkiye dışında barındırılmaktadır; uygulama kodu GitHub’da barındırılır, ancak katılımcı verileri GitHub’da tutulmaz ve yalnızca araştırma ekibi tarafından erişilebilecektir. Kişisel verileriniz Kişisel Verilerin Korunması Kanunu’na uygun olarak işlenecektir."
           ]
         },
         {
           "heading": "Araştırmaya Dahil Olacak Toplam Gönüllü Sayısı",
           "paragraphs": [
-            "Araştırmaya yaklaşık 60 gönüllünün katılması planlanmaktadır."
+            "Araştırmaya, gereksinim mühendisliği, sistem mühendisliği veya yazılım mühendisliği konusunda iş deneyimi olan ya da bu konuyu okulda öğrenmiş bireyler arasından toplam 60 gönüllü dahil edilmesi planlanmaktadır."
+          ]
+        },
+        {
+          "heading": "Çekilme ve Veri Güvenliği",
+          "paragraphs": [
+            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm değerlendirme yanıtlarınız (puanlar, gerekçe notları, set kayıtları ve metrik açıklamalarının görüntülenme süreleri) anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; oturum kimliği yalnızca silindiğini kaydetmek için tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Anonim veriler araştırmanın bitiminden itibaren 1 yıl süreyle saklanacaktır. Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz."
           ]
         },
         {
           "heading": "Gönüllü Katılımcı Onayı",
           "paragraphs": [
-            "Yukarıda yer alan ve araştırmaya başlamadan önce gönüllülere verilmesi gereken bilgileri okudum ve anladım. Bu koşullar altında, araştırma kapsamında elde edilen verilerin bilimsel amaçlarla kullanılmasını kabul ediyorum."
+            "Yukarıda yer alan ve araştırmaya başlamadan önce gönüllülere verilmesi gereken bilgileri içeren metni okudum ve bu metni web form üzerinden onaylıyorum. Eksik kaldığını düşündüğüm konularda sorularımı araştırmacılara soracağım konusunda bilgilendirildim. Yazılı ve sözlü olarak tarafıma sunulan tüm açıklamaları ayrıntılarıyla anladığım kanısındayım. Çalışmaya katılmayı isteyip istemediğim konusunda karar vermem için yeterince zaman tanındı. 18 yaşını doldurmuş olduğumu beyan ederim.",
+            "Bu koşullar altında, araştırma kapsamında elde edilen şahsıma ait bilgilerin bilimsel amaçlarla kullanılmasını, gizlilik kurallarına uymak kaydıyla sunulmasını ve yayınlanmasını, hiçbir baskı ve zorlama altında kalmaksızın, kendi özgür irademle kabul ettiğimi beyan ederim."
           ]
         }
       ],
-      "contact": "Sorularınız için: Ayca ARDIÇ (ayca.ardic@gmail.com), Burak Taha YAMAN (buraktahayaman@gmail.com) veya Dr. Öğr. Üyesi Rukiye Savran Kızıltepe (rukiyekiziltepe@ankara.edu.tr)",
+      "contact": "Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz.",
       "choice_title": "Onam",
-      "agree": "Bilgilendirme metnini okudum, 18 yaşını doldurdum ve araştırmaya kendi özgür irademle, gönüllü olarak katılıyorum.",
+      "agree": "Yukarıda yer alan ve araştırmaya başlamadan önce gönüllülere verilmesi gereken bilgileri içeren metni okudum ve bu metni web form üzerinden onaylıyorum. 18 yaşını doldurmuş olduğumu beyan ederim.",
       "decline": "Katılmak istemiyorum.",
       "start_button": "Başla",
       "choice_required": "Devam etmek için bir seçenek işaretleyiniz."
