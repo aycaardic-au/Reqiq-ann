@@ -33,9 +33,11 @@ export default function ConsentPage({ t, d, onAgree }: { t: ConsentTexts; d: Dec
       <div className="wleft">
         <h1>{t.title}</h1>
         <p className="lede">{t.lede}</p>
-        <ol className="steps" aria-label="Aşamalar">
-          {t.steps.map((s, i) => <li key={i}><b>{i + 1}</b><span>{s}</span></li>)}
-        </ol>
+        {t.steps.length > 0 && (
+          <ol className="steps" aria-label="Aşamalar">
+            {t.steps.map((s, i) => <li key={i}><b>{i + 1}</b><span>{s}</span></li>)}
+          </ol>
+        )}
         <section className="consent-box" tabIndex={0} aria-label={t.form_title}>
           <h2>{t.form_title}</h2>
           {t.form_sections.map((s, i) => (
