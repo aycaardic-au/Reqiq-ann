@@ -56,7 +56,7 @@ export default function ConsentPage({ t, d, onAgree }: { t: ConsentTexts; d: Dec
             <label key={v} className={`choice${choice === v ? ' on' : ''}`}>
               <input type="radio" name="consent" value={v} checked={choice === v}
                 onChange={() => { setChoice(v); setError(false) }} />
-              <span>{v === 'yes' ? t.agree : t.decline}</span>
+              <span className={v === 'yes' ? 'agree-text' : undefined}>{v === 'yes' ? t.agree : t.decline}</span>
             </label>
           ))}
         </fieldset>
