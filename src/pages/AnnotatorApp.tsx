@@ -104,9 +104,9 @@ export default function AnnotatorApp() {
           <InfoForm
             t={config.form.tr}
             c={config.common.tr}
-            onSubmit={async (lang, type, other) => {
+            onSubmit={async (lang, background) => {
               const s = await createSession(lang, config.ui_texts_version)
-              await saveBackground(s.session_id, type, other)
+              await saveBackground(s.session_id, background)
               update({ step: 'intro', language: lang })
             }}
           />

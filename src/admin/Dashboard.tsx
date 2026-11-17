@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { adminDb } from '../lib/adminClient'
+import { adminDb, fetchAll } from '../lib/adminClient'
 import { Bars, Stacked } from './Charts'
-import { A } from './texts'
+import type { Ses } from './exportData'
+import { A, PROFILE_LABELS } from './texts'
 
 interface Dash {
   sessions: number; sessions_scored: number; sessions_batch_done: number; sessions_excluded: number
@@ -23,7 +24,9 @@ export default function Dashboard({ tick }: { tick: number }) {
   const [d, setD] = useState<Dash | null>(null)
   const [st, setSt] = useState<{ ended: number; withdrawn: number; strategy: string; config_version: string; flag_consistency: number; flag_speed: number; client_errors_24h: number } | null>(null)
   const [err, setErr] = useState('')
+  const [ses, setSes] = useState<Ses[] | null>(null)
   useEffect(() => {
+    fetchAll<Ses>('sessions', 'created_at').then(setSes).catch(() => setSes(null))
     adminDb!.rpc('admin_dashboard').then(({ data, error }) => {
       if (error) setErr(error.message); else setD(data as Dash)
     })
@@ -73,6 +76,22 @@ export default function Dashboard({ tick }: { tick: number }) {
           <Bars rows={Object.entries(d.by_type).map(([k, v]) => ({ label: TYPES[k] ?? k, value: v }))} />
         </section>
         <section className="panel">
+          <h2>Bilgi formu: isteğe bağlı yanıtlar</h2>
+          <p className="muted">Boş = sorulmadı, atlandı ya da 0038 öncesi / içe aktarma oturumu.</p>
+          {!ses ? <p className="muted">{A.loading}</p> : (
+            <>
+              <h2 className="mt">Çalışan: rol</h2>
+              <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'industry'), 'role_category')} />
+              <h2 className="mt">Çalışan: sektörde çalışma yılı</h2>
+              <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'industry'), 'experience_band')} />
+              <h2 className="mt">Akademik araştırmacı: sektör/akademik deneyim yılı</h2>
+              <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'researcher'), 'experience_band')} />
+              <h2 className="mt">Öğrenci: seviye</h2>
+              <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'student'), 'study_level')} />
+            </>
+          )}
+        </section>
+        <section className="panel">
           <h2>Günlere göre yeni oturum</h2>
           <Bars rows={d.daily.map((x) => ({ label: x.day, value: x.n }))} />
           <h2 className="mt">Havuz</h2>
@@ -81,6 +100,14 @@ export default function Dashboard({ tick }: { tick: number }) {
       </div>
     </div>
   )
+}
+
+/** Counts sessions per answer in the fixed option order of the form (FR-ADM-005). */
+function countBy(list: Ses[], field: 'role_category' | 'experience_band' | 'study_level') {
+  const labels = PROFILE_LABELS[field]
+  const n = new Map<string, number>()
+  for (const x of list) { const k = x[field] ?? 'none'; n.set(k, (n.get(k) ?? 0) + 1) }
+  return Object.keys(labels).filter((k) => n.has(k)).map((k) => ({ label: labels[k], value: n.get(k)! }))
 }
 
 function Tile({ label, value }: { label: string; value: number | string }) {

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { adminDb, fetchAll } from '../lib/adminClient'
 import { loadAll } from './data'
 import { buildSheets, type Row } from './exportData'
-import { A } from './texts'
+import { A, profileSummary } from './texts'
 
 interface ClientError { id: number; session_id: string | null; location: string; message: string; created_at: string }
 
@@ -34,7 +34,7 @@ export default function Sessions({ tick }: { tick: number }) {
         <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz.</p>
         <div className="scroll">
           <table className="tbl">
-            <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th></tr></thead>
+            <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th></tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={String(r.session_id)}>
@@ -42,6 +42,7 @@ export default function Sessions({ tick }: { tick: number }) {
                   <td>{String(r.created_at).slice(0, 16).replace('T', ' ')}</td>
                   <td>{r.language_pref}</td>
                   <td>{r.annotator_type}{r.annotator_type_other ? ` (${r.annotator_type_other})` : ''}</td>
+                  <td>{profileSummary(r) || '—'}</td>
                   <td>{r.batches_completed}</td>
                   <td>{r.items_scored}/{r.items_assigned}</td>
                   <td>{r.median_seconds_per_item ?? '—'}</td>

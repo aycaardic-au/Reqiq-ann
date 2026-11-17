@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.27",
+  "ui_texts_version": "2.29",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -30,14 +30,14 @@
         {
           "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
           "paragraphs": [
-            "Araştırma kapsamında gönüllülerden önce Katılımcı Bilgi Formu’nu doldurmaları, ardından çevrimiçi değerlendirme aracında en az 1 set (ortalama 30 gereksinim) tamamlamaları beklenmektedir. Bilgi formunun doldurulması yaklaşık 3 dakika, ölçüt tanıtımı (brifing) yaklaşık 20 dakika ve değerlendirme yaklaşık 35 dakika sürecektir. Toplam süre yaklaşık 1 saattir. Değerlendirmeyi uygun olduğunuz zaman ve yerde, çevrimiçi olarak yapabilir; istediğiniz zaman ara verebilirsiniz. Ses veya görüntü kaydı yapılmayacaktır."
+            "Araştırma kapsamında gönüllülerden önce Katılımcı Bilgi Formu’nu doldurmaları, ardından çevrimiçi değerlendirme aracında en az 1 set (ortalama 30 gereksinim) tamamlamaları beklenmektedir. Her oturum yaklaşık 1 saat sürer: Aydınlatılmış Onam Formu ve Bilgi formunun doldurulması yaklaşık 5 dakika, ölçüt tanıtımı (brifing) ortalama 15 dakika, değerlendirme ortalama 40 dakika. Değerlendirmeyi uygun olduğunuz zaman ve yerde, çevrimiçi olarak yapabilir; istediğiniz zaman ara verebilirsiniz. Ses veya görüntü kaydı yapılmayacaktır."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişiler için Gönüllülük Esası",
           "paragraphs": [
             "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanmaktadır. Çalışmaya katılmama veya katıldıktan sonra herhangi bir anda çalışmadan çıkma veya oturumu sonlandırma hakkına sahipsiniz. Araştırmaya katılmayı reddetmeniz veya yarıda bırakmanız durumunda herhangi bir olumsuz sonuçla karşılaşmayacaksınız.",
-            "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir. Sadece, tarayıcınızda üretilen oturum kimliği, verdiğiniz puanlar ve cevaplama süreleriniz kaydedilecektir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir.",
+            "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir. Sadece, tarayıcınızda üretilen oturum kimliği, Bilgi formundaki yanıtlarınız (değerlendirme dili, katılımcı türü ve isteğe bağlı olarak rol, sektördeki çalışma yılı aralığı, öğrenim seviyesi veya sektör/akademik deneyim yılı aralığı), verdiğiniz puanlar ve cevaplama süreleriniz kaydedilecektir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir.",
             "Web form üzerinden verilen onay kaydı, değerlendirme verilerinden ayrı tutulacak ve yalnızca araştırma ekibi tarafından erişilebilecektir."
           ]
         },
@@ -57,7 +57,7 @@
         {
           "heading": "Çekilme ve Veri Güvenliği",
           "paragraphs": [
-            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm değerlendirme yanıtlarınız (puanlar, gerekçe notları, set kayıtları ve metrik açıklamalarının görüntülenme süreleri) anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; oturum kimliği yalnızca silindiğini kaydetmek için tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Anonim veriler araştırmanın bitiminden itibaren 1 yıl süreyle saklanacaktır. Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz."
+            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm değerlendirme yanıtlarınız (puanlar, gerekçe notları, set kayıtları ve metrik açıklamalarının görüntülenme süreleri) anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; oturum kimliği yalnızca silindiğini kaydetmek için tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Anonim veriler, tez savunması ve bu tezden üretilecek yayınlar tamamlandıktan sonra silinecektir. Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz."
           ]
         },
         {
@@ -87,7 +87,7 @@
     "tr": {
       "step": "Adım 1 / 4: Bilgi formu",
       "title": "Bilgi formu",
-      "lede": "Devam etmek için lütfen her iki soruyu da yanıtlayınız.",
+      "lede": "* ile işaretli sorular zorunludur; diğer sorular isteğe bağlıdır.",
       "language_question": "Hangi dilde yazılmış gereksinimleri değerlendirmek istersiniz?",
       "language_hint": "Bu seçim oturum boyunca değiştirilemeyecektir. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları seçilen dilde gösterilecektir.",
       "language_options": {
@@ -104,6 +104,37 @@
       },
       "other_label": "Lütfen kısaca belirtiniz (isteğe bağlı, en fazla 50 karakter).",
       "other_warning": "Lütfen adınızı, kurumunuzu veya sizi tanımlayabilecek herhangi bir bilgiyi yazmayınız.",
+      "role_question": "İşinizdeki rolünüz hangisidir? (isteğe bağlı)",
+      "role_options": {
+        "requirements_engineer": "Gereksinim mühendisi",
+        "systems_engineer": "Sistem mühendisi",
+        "test_engineer": "Test mühendisi",
+        "project_manager": "Proje yöneticisi",
+        "software_developer": "Yazılım geliştirici",
+        "other": "Diğer",
+        "prefer_not_to_say": "Belirtmek istemiyorum"
+      },
+      "experience_question": "Sektörde kaç yıldır çalışıyorsunuz? (isteğe bağlı)",
+      "researcher_experience_question": "Sektör veya akademide kaç yıllık deneyiminiz var? (isteğe bağlı)",
+      "experience_options": {
+        "0-2": "0–2 yıl",
+        "3-5": "3–5 yıl",
+        "6-10": "6–10 yıl",
+        "11-20": "11–20 yıl",
+        "20+": "20+ yıl",
+        "prefer_not_to_say": "Belirtmek istemiyorum"
+      },
+      "study_level_question": "Öğrenim seviyeniz nedir? (isteğe bağlı)",
+      "study_level_options": {
+        "year_1": "1. sınıf",
+        "year_2": "2. sınıf",
+        "year_3": "3. sınıf",
+        "year_4": "4. sınıf",
+        "masters": "Yüksek lisans",
+        "phd": "Doktora",
+        "other": "Diğer",
+        "prefer_not_to_say": "Belirtmek istemiyorum"
+      },
       "required_error": "Lütfen soruyu yanıtlayınız.",
       "button": "Kaydet ve Devam et"
     }
@@ -115,14 +146,16 @@
       "items": [
         "Bu değerlendirme kapsamında kullanılan gereksinimler açık kaynaklardaki veri setlerinden edinilmiştir. Her sayfada bir gereksinim ve altında değerlendirmesi yapılacak 6 metrik göreceksiniz.",
         "Her metrik için puanlama yapmanız beklenmektedir. Puanlar: {scale}.",
-        "Her metrik için kısa bir soru yer alır. \"Metrik açıklamaları\" düğmesi, metriğin kurallarını ve kötü/iyi örnek gereksinimleri gösterir. \"Puanlama açıklamaları\" düğmesi ise her puanın (0, 1 ve 2) ne anlama geldiğini ve örnekleri gösterir.",
-        "Yalnızca gereksinimde yazılı olan bilgiyi puanlayınız. Görülmeyen doküman, sözlük, bağlam, üst gereksinim veya gerekçenin varlığını ya da yokluğunu varsaymayınız. Gereksinimin bağlamı eksik olsa bile her metriği puanlayınız.",
-        "\"Hızlı\", \"kolay\" gibi belirsizliğe yol açabilecek ifadeleri kendiliğinden kusur saymayınız; gereksinimde belirsizlik yaratıp yaratmadıklarını değerlendiriniz.",
-        "Kusur sayısını otomatik olarak puana dönüştürmeyiniz. Tek bir ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir.",
-        "Aynı kusur birden fazla metriği etkiliyorsa her metrikte ayrı ayrı değerlendiriniz.",
+        "Her metrik için kısa bir soru ve metriğe özel açıklama yer alır. 0, 1 ve 2 puanlarının üzerine gelindiğinde, açılan bilgi kutusunda puanlama kriterine yönelik bilgi gösterilir.",
+        "İlave açıklamalar için \"Metrik açıklamaları\" ve \"Puanlama açıklamaları\" düğmeleri bulunmaktadır. \"Metrik açıklamaları\" düğmesi, gereksinimin metrik bazında sahip olması gereken özellikleri ve kötü ve iyi yazılmış gereksinim örneklerini gösterir. \"Puanlama açıklamaları\" düğmesi ise her puanın (0, 1 ve 2) ne anlama geldiğini ve örnek gereksinimleri gösterir.",
         "Her metriğe isteğe bağlı not ekleyerek, puanınızın gerekçesini açıklayabilirsiniz.",
-        "Her sette yer alan gereksinim sayısı ve tamamladığınız gereksinim sayısı sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı düzeltebilirsiniz.",
-        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz."
+        "Gereksinim dili olarak \"Her ikisi (İngilizce ve Türkçe)\" seçilmişse, aynı gereksinim arka arkaya iki ayrı dilde gösterilir. Dile bağlı kusurlar olabileceği için iki sürümün ayrı ayrı değerlendirilmesi önerilir.",
+        "Her sette yer alan gereksinim sayısı ve tamamladığınız gereksinim sayısı sağ üstte gösterilir. İhtiyaç duyduğunuzda önceki gereksinimlere dönüp puanlarınızı değiştirebilirsiniz.",
+        "İstediğiniz zaman sayfanın altındaki \"Ara ver / Oturumu sonlandır\" bağlantısıyla ara verebilir veya oturumu sonlandırabilirsiniz. Aynı tarayıcıyı (browser) kullanarak, ara verdiğiniz çalışmaya devam edebilirsiniz.",
+        "Yalnızca gereksinimde yazılı olan bilgiyi puanlayınız. Görülmeyen doküman, sözlük, bağlam, üst gereksinim veya gerekçenin varlığını ya da yokluğunu varsaymayınız. Gereksinimin bağlamı eksik olsa bile her metriği puanlayınız.",
+        "\"Hızlı\", \"kolay\" gibi belirsizliğe yol açabilecek ifadeleri otomatik olarak kusur saymayınız; gereksinimde belirsizlik yaratıp yaratmadıklarını değerlendiriniz.",
+        "Kusur sayısını otomatik olarak puana dönüştürmeyiniz. Tek bir ciddi kusur, birkaç küçük kusurdan daha belirleyici olabilir.",
+        "Aynı kusur birden fazla metriği etkiliyorsa her metrikte ayrı ayrı değerlendiriniz."
       ],
       "button": "Devam"
     },
@@ -132,14 +165,16 @@
       "items": [
         "The requirements used in this evaluation come from open-source datasets. On each page you will see one requirement and, below it, the 6 metrics you are asked to evaluate.",
         "For each metric you are expected to assign a score. Scores: {scale}.",
-        "Each metric has a short question. The \"Metric guidance\" button shows the rules of the metric and good and bad example requirements. The \"Scoring guidance\" button explains what each score (0, 1 and 2) means and shows examples.",
+        "Each metric has a short question and a metric-specific explanation. When you move the pointer over the scores 0, 1 and 2, a pop-up box shows information on the scoring criterion.",
+        "For further explanations there are the \"Metric guidance\" and \"Scoring guidance\" buttons. The \"Metric guidance\" button shows the characteristics a requirement should have for the metric, with examples of badly and well written requirements. The \"Scoring guidance\" button explains what each score (0, 1 and 2) means and shows example requirements.",
+        "You may add an optional note to any metric to explain your score.",
+        "If both languages were selected as the requirement language, the same requirement is shown twice in a row, in two languages. As there may be language-dependent defects, it is recommended to evaluate the two versions separately.",
+        "The number of requirements in each set and the number you have completed are shown at the top right. When needed, you can go back to previous requirements and change your scores.",
+        "You can pause or end the session at any time with the \"Take a break / End session\" link at the bottom of the page. You can resume a paused session in the same browser.",
         "Score only the information written in the requirement. Do not assume the existence or absence of an unseen document, glossary, context, parent requirement or rationale. Score every metric even if the context of the requirement is incomplete.",
         "Do not count words such as \"quick\" or \"easy\" as defects automatically; assess whether they create ambiguity in the requirement.",
         "Do not convert the number of defects automatically into a score. A single serious defect may be more decisive than several minor ones.",
-        "If the same defect affects more than one metric, assess it separately in each metric.",
-        "You may add an optional note to any metric to explain your score.",
-        "The number of requirements in each set and the number you have completed are shown at the top right. When needed, you can go back to previous requirements and correct your scores.",
-        "You can pause or end the session at any time with the \"Take a break / End session\" link at the bottom of the page."
+        "If the same defect affects more than one metric, assess it separately in each metric."
       ],
       "button": "Continue"
     }

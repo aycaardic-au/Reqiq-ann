@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { LanguagePref } from './config'
+import type { AnnotatorType, ExperienceBand, LanguagePref, RoleCategory, StudyLevel } from './config'
 
 /**
  * Pseudonymous session (FR-SES-002..004, NFR-SEC-001) and all annotator RPCs (EXT-DB-002).
@@ -84,8 +84,24 @@ export async function createSession(language: LanguagePref, consentVersion: stri
   return s
 }
 
-export async function saveBackground(sessionId: string, type: string, other: string | null): Promise<void> {
-  await rpcData<null>('set_background', { p_session_id: sessionId, p_type: type, p_other: other })
+/** K3 answers. Optional fields are null when skipped or not asked for the chosen type (migration 0038). */
+export interface Background {
+  type: AnnotatorType
+  other: string | null
+  role: RoleCategory | null
+  roleOther: string | null
+  experience: ExperienceBand | null
+  studyLevel: StudyLevel | null
+  studyLevelOther: string | null
+}
+
+/** Requires migration 0038 (set_background with eight parameters). */
+export async function saveBackground(sessionId: string, b: Background): Promise<void> {
+  await rpcData<null>('set_background', {
+    p_session_id: sessionId, p_type: b.type, p_other: b.other,
+    p_role: b.role, p_role_other: b.roleOther, p_experience: b.experience,
+    p_study_level: b.studyLevel, p_study_level_other: b.studyLevelOther,
+  })
 }
 
 /* ---------- K5 / K6 / thank-you ---------- */

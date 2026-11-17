@@ -4,6 +4,13 @@ import { supabase } from './supabase'
 export type UiLang = 'en' | 'tr'
 export type LanguagePref = 'EN' | 'TR' | 'BOTH'
 export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
+/** K3 optional background answers (migration 0038). 'prefer_not_to_say' is an explicit answer; skipped = null. */
+export type RoleCategory = 'requirements_engineer' | 'systems_engineer' | 'test_engineer' | 'project_manager' | 'software_developer' | 'other' | 'prefer_not_to_say'
+export type ExperienceBand = '0-2' | '3-5' | '6-10' | '11-20' | '20+' | 'prefer_not_to_say'
+export type StudyLevel = 'year_1' | 'year_2' | 'year_3' | 'year_4' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
+export const ROLE_CATEGORIES: RoleCategory[] = ['requirements_engineer', 'systems_engineer', 'test_engineer', 'project_manager', 'software_developer', 'other', 'prefer_not_to_say']
+export const EXPERIENCE_BANDS: ExperienceBand[] = ['0-2', '3-5', '6-10', '11-20', '20+', 'prefer_not_to_say']
+export const STUDY_LEVELS: StudyLevel[] = ['year_1', 'year_2', 'year_3', 'year_4', 'masters', 'phd', 'other', 'prefer_not_to_say']
 
 export interface ConsentTexts {
   title: string
@@ -32,6 +39,14 @@ export interface FormTexts {
   type_options: Record<AnnotatorType, string>
   other_label: string
   other_warning: string
+  /* Optional K3 questions (ui_texts 2.29, migration 0038). Missing keys hide the question. */
+  role_question?: string
+  role_options?: Record<RoleCategory, string>
+  experience_question?: string
+  researcher_experience_question?: string
+  experience_options?: Record<ExperienceBand, string>
+  study_level_question?: string
+  study_level_options?: Record<StudyLevel, string>
   required_error: string
   button: string
 }

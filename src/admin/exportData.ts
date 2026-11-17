@@ -1,7 +1,7 @@
 /** Builds the export sheets from raw table rows (D-26, D-31). Pure functions; no I/O. */
 
 export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean; source_meta?: Record<string, unknown> }
-export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
+export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; role_category?: string | null; role_other?: string | null; experience_band?: string | null; study_level?: string | null; study_level_other?: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
 export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null; sampling_strategy?: string | null }
 export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
@@ -11,6 +11,15 @@ export interface Ref { base_id: string; metric_id: string; llm_score: number; ll
 export interface Brf { session_id: string; batch_id: string; metric_id: string; language_shown: string; visible_seconds: number; completed_at: string | null; created_at: string; config_id: number | null }
 
 export interface RawData { reqs: Req[]; sessions: Ses[]; batches: Bat[]; items: Item[]; scores: Sc[]; refs: Ref[]; cfg: Record<string, unknown>; rubricVersion: string; configs?: Cfg[]; briefing?: Brf[] }
+
+/** K3 optional answers (migration 0038). Empty for sessions created before 0038 and for import sessions. */
+export function profileCols(se: Ses | undefined): Row {
+  return {
+    role_category: se?.role_category ?? null, role_other: se?.role_other ?? null,
+    experience_band: se?.experience_band ?? null,
+    study_level: se?.study_level ?? null, study_level_other: se?.study_level_other ?? null,
+  }
+}
 
 /** FR-ADM-008: export filters. */
 export interface ExportFilter {
@@ -106,6 +115,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     return {
       rater_code: code.get(s.session_id) ?? null, session_id: s.session_id,
       annotator_type: se?.annotator_type ?? null, annotator_type_other: se?.annotator_type_other ?? null,
+      ...profileCols(se),
       language_pref: se?.language_pref ?? null, session_excluded: se?.excluded ?? null,
       batch_number: it ? batchNo.get(it.batch_id) ?? null : null, batch_key: it ? batchKey(it.batch_id) : null, position: it?.position ?? null,
       batch_item_id: s.batch_item_id, is_attention_check: it?.is_attention_check ?? null,
@@ -193,7 +203,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     }
     const row: Row = {
       rater_code: code.get(se.session_id)!, session_id: se.session_id, language_pref: se.language_pref,
-      annotator_type: se.annotator_type, annotator_type_other: se.annotator_type_other, consent_version: se.consent_version,
+      annotator_type: se.annotator_type, annotator_type_other: se.annotator_type_other, ...profileCols(se), consent_version: se.consent_version,
       created_at: se.created_at, last_active_at: se.last_active_at, batches_completed: se.batches_completed,
       items_assigned: sItems.length, items_scored: new Set(d.scores.filter((s) => s.session_id === se.session_id).map((s) => s.batch_item_id)).size,
       median_seconds_per_item: r3(med), speed_flag: med != null && med < speedSec,
@@ -269,6 +279,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'Gereksinim_Metrik_Ozeti', value: 'Öğe × metrik özeti: n_raters, n0/n1/n2, ortalama, medyan, referans farkı, coverage_met.' },
     { key: 'Alpha_Girdi', value: 'Krippendorff alfa için uzun biçim: birim = req_id × metric_id, değerlendirici = rater_code. Yalnızca dahil oturumlar, dikkat soruları hariç.' },
     { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. QC_ONERI: sütun kurallarından türetilen öneri (QC Pass / Admin incelemesi / QC Fail); nihai karar admin tarafından verilir.' },
+    { key: 'K3 profil sütunları', value: 'Puanlar_Ham ve Oturumlar_QC: role_category, role_other, experience_band, study_level, study_level_other (K3 isteğe bağlı yanıtlar, migration 0038). Boş = sorulmadı, atlandı ya da 0038 öncesi veya içe aktarma oturumu; prefer_not_to_say = "Belirtmek istemiyorum". experience_band: industry için sektörde çalışma yılı, researcher için sektör/akademik deneyim yılı.' },
     { key: 'Batch_QC', value: 'Batch bazlı kalite kanıtı: dikkat sorusu sonuçları, medyan süre, hızlı öğe ve tekdüze puan oranları. Karar oturum düzeyindedir; bu sayfa yalnızca incelemeye yardımcıdır.' },
   ]
 
