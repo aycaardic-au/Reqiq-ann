@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.30",
+  "ui_texts_version": "2.32",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -24,7 +24,7 @@
           "heading": "Araştırmanın Amacı ve Kapsamı",
           "paragraphs": [
             "Bu araştırmanın amacı, yazılı gereksinim belirtimlerindeki cümlelerin kalitesini altı ölçüt (Uygunluk, Açıklık, Tamlık, Tekillik, Doğrulanabilirlik ve Biçimsel Uyum) açısından puanlamaktır. Bu puanlar, tezin ilerleyen safhalarında verinin etiketlenmesinde ve yerel bilgisayarlarda çalışacak küçük dil modellerinin eğitilmesinde kullanılacaktır. Eğitilen küçük dil modelleri çevrimdışı (yerel) ortamda çalıştırılarak gereksinimlerin kalitesini otomatik olarak değerlendirecektir.",
-            "Puanlamanız beklenen gereksinimler, açık kaynaklarda yer alan Promise+ veri setinden alınmıştır. Sizden, İngilizce gereksinimleri veya çeviriyle elde edilen Türkçe karşılıklarını, verilen puanlama ölçütüne göre (0, 1 veya 2 puanla) değerlendirmeniz istenecektir. İhtiyaç duyacağınız teknik bilgiler ilerleyen sayfalarda yer alacaktır. Doğru ya da yanlış bir yanıt yoktur."
+            "Puanlamanız beklenen gereksinimler, açık kaynaklarda yer alan Promise+ veri setinden alınmıştır. Sizden, İngilizce gereksinimleri veya çeviriyle elde edilen Türkçe karşılıklarını, verilen puanlama ölçütüne göre (0, 1 veya 2 puanla) değerlendirmeniz istenecektir. İhtiyaç duyacağınız teknik bilgiler ilerleyen sayfalarda yer alacaktır.  "
           ]
         },
         {
@@ -37,15 +37,23 @@
           "heading": "Araştırmaya Katılacak Kişiler için Gönüllülük Esası",
           "paragraphs": [
             "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanmaktadır. Çalışmaya katılmama veya katıldıktan sonra herhangi bir anda çalışmadan çıkma veya oturumu sonlandırma hakkına sahipsiniz. Araştırmaya katılmayı reddetmeniz veya yarıda bırakmanız durumunda herhangi bir olumsuz sonuçla karşılaşmayacaksınız.",
-            "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir. Sadece, tarayıcınızda üretilen oturum kimliği, Bilgi formundaki yanıtlarınız (değerlendirme dili, katılımcı türü ve isteğe bağlı olarak rol, sektördeki çalışma yılı aralığı, öğrenim seviyesi veya sektör/akademik deneyim yılı aralığı), verdiğiniz puanlar ve cevaplama süreleriniz kaydedilecektir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir.",
-            "Web form üzerinden verilen onay kaydı, değerlendirme verilerinden ayrı tutulacak ve yalnızca araştırma ekibi tarafından erişilebilecektir."
+            "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir.",
+            "Web form üzerinden verilen onay kaydı, değerlendirme verilerinden ayrı tutulacak ve yalnızca araştırma ekibi tarafından erişilebilecektir.",
+            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm verileriniz anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; yalnızca oturum kimliği ve verilerin silindiğine dair kayıt tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Katılımcı verileri, tez savunması ve bu tezden üretilecek yayınlar tamamlandıktan sonra silinecektir."
+          ]
+        },
+        {
+          "heading": "Kaydedilen Veriler",
+          "paragraphs": [
+            "Araştırma kapsamında yalnızca şu veriler kaydedilir: oturum kimliği, oturum zamanları, değerlendirme dili ve katılımcı türünüz; katılımcı türünüze göre isteğe bağlı olarak rol, çalışma yılı aralığı, öğrenim seviyesi, lisans sınıfı ve okul / bölüm bilgisi; verdiğiniz puanlar, varsa gerekçe notlarınız, her gereksinim için harcanan süre, metrik açıklamalarının görüntülenme süreleri, dikkat sorularına verdiğiniz yanıtlar ile bu yanıtlardan hesaplanan tutarlılık ve hız kontrol göstergeleri; teşekkür ekranında isteğe bağlı olarak yazdığınız yorum.",
+            "Bilgi formundaki “Diğer” ve “Okul / Bölüm” alanlarına yazdığınız metinler kısa olmalıdır (en fazla 50 ve 100 karakter); bu alanlara adınızı ve iletişim bilgilerinizi yazmayınız. Seçmeli isteğe bağlı sorularda “Belirtmek istemiyorum” seçeneği bulunur; metin alanları boş bırakılabilir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişiler için Olası Riskler",
           "paragraphs": [
             "Araştırma, düşük risk kategorisinde değerlendirilmektedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Olası düşük düzeyli riskler, değerlendirme sırasında yaşanabilecek kısa süreli yorgunluk ve ekran başında uzun süre kalmakla sınırlıdır.",
-            "Olası riskleri en aza indirmek için değerlendirme oturumlarını istediğiniz zaman duraklatabilir veya sonlandırabilirsiniz. Değerlendirmeleriniz hiçbir şekilde notlandırılmayacak, akademik bir değerlendirmede kullanılmayacak ve sizin hakkınızda yargılayıcı bir değerlendirme yapılmayacaktır. Veriler, Supabase üzerinde İrlanda’da (Avrupa Birliği, eu-west-1 bölgesi) şifreli olarak saklanacaktır ve Türkiye dışında barındırılmaktadır; uygulama kodu GitHub’da barındırılır, ancak katılımcı verileri GitHub’da tutulmaz ve yalnızca araştırma ekibi tarafından erişilebilecektir. Kişisel verileriniz Kişisel Verilerin Korunması Kanunu’na uygun olarak işlenecektir."
+            "Olası riskleri en aza indirmek için değerlendirme oturumlarını istediğiniz zaman duraklatabilir veya sonlandırabilirsiniz. Değerlendirmeleriniz hiçbir şekilde notlandırılmayacak, akademik bir değerlendirmede kullanılmayacak ve sizin hakkınızda yargılayıcı bir değerlendirme yapılmayacaktır. Veriler, Supabase üzerinde İrlanda’da (Avrupa Birliği, eu-west-1 bölgesi) şifreli olarak saklanacaktır ve yalnızca araştırma ekibi tarafından erişilebilecektir. Uygulama kodu GitHub’da barındırılmakla birlikte katılımcı verileri GitHub’da tutulmaz."
           ]
         },
         {
@@ -55,22 +63,16 @@
           ]
         },
         {
-          "heading": "Çekilme ve Veri Güvenliği",
-          "paragraphs": [
-            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm değerlendirme yanıtlarınız (puanlar, gerekçe notları, set kayıtları ve metrik açıklamalarının görüntülenme süreleri) anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; oturum kimliği yalnızca silindiğini kaydetmek için tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Anonim veriler, tez savunması ve bu tezden üretilecek yayınlar tamamlandıktan sonra silinecektir. Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz."
-          ]
-        },
-        {
           "heading": "Gönüllü Katılımcı Onayı",
           "paragraphs": [
             "Aydınlatılmış onam formundaki bilgileri okudum, araştırmaya gönüllü olarak katılmayı kabul ediyorum ve 18 yaşını doldurduğumu beyan ediyorum.",
-            "Bu koşullar altında, araştırma kapsamında elde edilen şahsıma ait bilgilerin bilimsel amaçlarla kullanılmasını, gizlilik kurallarına uymak kaydıyla sunulmasını ve yayınlanmasını, hiçbir baskı ve zorlama altında kalmaksızın, kendi özgür irademle kabul ettiğimi beyan ederim."
+            "Bu koşullar altında, araştırma kapsamında elde edilen bilgilerin bilimsel amaçlarla kullanılmasını, gizlilik kurallarına uymak kaydıyla sunulmasını ve yayınlanmasını, hiçbir baskı ve zorlama altında kalmaksızın, kendi özgür irademle kabul ettiğimi beyan ederim."
           ]
         }
       ],
       "contact": "Araştırmayla ilgili sorularınız için Ayca ARDIÇ (ayca.ardic@ankara.edu.tr), Burak Taha YAMAN (buraktahayaman@gmail.com) veya tez danışmanı Dr. Öğr. Üyesi Rukiye SAVRAN KIZILTEPE (rukiyekiziltepe@ankara.edu.tr) ile iletişime geçebilirsiniz.",
-      "choice_title": "Onam",
-      "agree": "Aydınlatılmış onam formundaki bilgileri okudum, araştırmaya gönüllü olarak katılmayı kabul ediyorum ve 18 yaşını doldurduğumu beyan ediyorum.\nBu koşullar altında, araştırma kapsamında elde edilen şahsıma ait bilgilerin bilimsel amaçlarla kullanılmasını, gizlilik kurallarına uymak kaydıyla sunulmasını ve yayınlanmasını, hiçbir baskı ve zorlama altında kalmaksızın, kendi özgür irademle kabul ettiğimi beyan ederim.",
+      "choice_title": "Gönüllü Katılımcı Onayı",
+      "agree": "Aydınlatılmış onam formundaki bilgileri okudum, araştırmaya gönüllü olarak katılmayı kabul ediyorum ve 18 yaşını doldurduğumu beyan ediyorum.",
       "decline": "Katılmak istemiyorum.",
       "start_button": "Başla",
       "choice_required": "Devam etmek için bir seçenek işaretleyiniz."
@@ -99,11 +101,10 @@
       "type_options": {
         "student": "Öğrenci",
         "industry": "Çalışan",
-        "researcher": "Akademik Araştırmacı",
         "other": "Diğer"
       },
       "other_label": "Lütfen kısaca belirtiniz (isteğe bağlı, en fazla 50 karakter).",
-      "other_warning": "Lütfen adınızı, kurumunuzu veya sizi tanımlayabilecek herhangi bir bilgiyi yazmayınız.",
+      "other_warning": "Lütfen adınızı, iletişim bilgilerinizi (telefon numaranızı, e-posta adresinizi) yazmayınız.",
       "role_question": "İşinizdeki rolünüz hangisidir? (isteğe bağlı)",
       "role_options": {
         "requirements_engineer": "Gereksinim mühendisi",
@@ -114,8 +115,7 @@
         "other": "Diğer",
         "prefer_not_to_say": "Belirtmek istemiyorum"
       },
-      "experience_question": "Sektörde kaç yıldır çalışıyorsunuz? (isteğe bağlı)",
-      "researcher_experience_question": "Sektör veya akademide kaç yıllık deneyiminiz var? (isteğe bağlı)",
+      "experience_question": "Kaç yıldır çalışıyorsunuz? (isteğe bağlı)",
       "experience_options": {
         "0-2": "0–2 yıl",
         "3-5": "3–5 yıl",
@@ -126,15 +126,15 @@
       },
       "study_level_question": "Öğrenim seviyeniz nedir? (isteğe bağlı)",
       "study_level_options": {
-        "bachelor_1_2": "Lisans 1.–2. sınıf",
-        "bachelor_3_4": "Lisans 3.–4. sınıf",
+        "bachelor": "Lisans",
         "masters": "Yüksek lisans",
         "phd": "Doktora",
-        "other": "Diğer",
-        "prefer_not_to_say": "Belirtmek istemiyorum"
+        "other": "Diğer"
       },
       "required_error": "Lütfen soruyu yanıtlayınız.",
-      "button": "Kaydet ve Devam et"
+      "button": "Kaydet ve Devam et",
+      "study_year_question": "Kaçıncı sınıftasınız? (isteğe bağlı)",
+      "school_label": "Okul / Bölüm (isteğe bağlı, en fazla 100 karakter)"
     }
   },
   "intro": {

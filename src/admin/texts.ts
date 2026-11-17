@@ -31,7 +31,7 @@ export const PROFILE_LABELS: Record<string, Record<string, string>> = {
   },
   experience_band: { '0-2': '0–2 yıl', '3-5': '3–5 yıl', '6-10': '6–10 yıl', '11-20': '11–20 yıl', '20+': '20+ yıl', prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş' },
   study_level: {
-    bachelor_1_2: 'Lisans 1.–2. sınıf', bachelor_3_4: 'Lisans 3.–4. sınıf', masters: 'Yüksek lisans', phd: 'Doktora',
+    bachelor: 'Lisans', bachelor_1_2: 'Lisans 1.–2. sınıf (eski)', bachelor_3_4: 'Lisans 3.–4. sınıf (eski)', masters: 'Yüksek lisans', phd: 'Doktora',
     other: 'Diğer', prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş',
   },
 }
@@ -47,5 +47,7 @@ export function profileSummary(r: Record<string, unknown>): string {
     withOther('role_category', r.role_category, r.role_other),
     lab('experience_band', r.experience_band),
     withOther('study_level', r.study_level, r.study_level_other),
+    r.study_year ? `${String(r.study_year)}. sınıf` : '',
+    r.school_dept ? String(r.school_dept) : '',
   ].filter(Boolean).join(' · ')
 }

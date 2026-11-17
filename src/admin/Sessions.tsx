@@ -12,6 +12,7 @@ export default function Sessions({ tick }: { tick: number }) {
   const [errors, setErrors] = useState<ClientError[]>([])
   const [err, setErr] = useState('')
   const [reload, setReload] = useState(0)
+  const [delMsg, setDelMsg] = useState('')
 
   useEffect(() => {
     let alive = true
@@ -20,11 +21,16 @@ export default function Sessions({ tick }: { tick: number }) {
     return () => { alive = false }
   }, [tick, reload])
 
-  // 0039: only sessions without scores can be deleted; the server checks this again
+  // 0039/0040: only sessions without scores and idle for at least 60 minutes can be deleted; the server checks this again.
+  // A refusal is shown above the table; it must not replace the whole page (decision of 17 Nov 2026).
   const remove = async (sid: string, rater: string) => {
-    if (!window.confirm(`${rater} oturumunu silmek istiyor musunuz? Oturumun puanı yok; oturum satırı, setleri ve kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz.`)) return
+    if (!window.confirm(`${rater} oturumunu silmek istiyor musunuz? Oturumun puanı yok ve son 60 dakikada etkinlik görülmedi; oturum satırı, setleri ve kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz.`)) return
+    setDelMsg('')
     const { error } = await adminDb!.rpc('admin_delete_session', { p_session_id: sid })
-    if (error) setErr(error.message); else setReload(reload + 1)
+    if (!error) { setReload(reload + 1); return }
+    setDelMsg(/less than 60 minutes/.test(error.message)
+      ? `${rater} oturumunda son 60 dakika içinde etkinlik var; şimdilik silinemez. Daha sonra tekrar deneyiniz.`
+      : /has scores/.test(error.message) ? `${rater} oturumunun puanı var; silinemez.` : error.message)
   }
 
   const toggle = async (sid: string, excluded: boolean) => {
@@ -38,7 +44,8 @@ export default function Sessions({ tick }: { tick: number }) {
     <>
       <section className="panel">
         <h2>Oturumlar ({rows.length})</h2>
-        <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz. Yalnızca puanı olmayan oturumlar silinebilir; silinen oturumun kodu yeniden kullanılmaz.</p>
+        {delMsg && <p className="err" role="alert">{delMsg}</p>}
+        <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz. Yalnızca puanı olmayan ve son 60 dakikada etkinliği olmayan oturumlar silinebilir; silinen oturumun kodu yeniden kullanılmaz.</p>
         <div className="scroll">
           <table className="tbl">
             <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th><th>Sil</th></tr></thead>

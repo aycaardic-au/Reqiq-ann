@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { AnnotatorType, ExperienceBand, LanguagePref, RoleCategory, StudyLevel } from './config'
+import type { AnnotatorType, ExperienceBand, LanguagePref, RoleCategory, StudyLevel, StudyYear } from './config'
 
 /**
  * Pseudonymous session (FR-SES-002..004, NFR-SEC-001) and all annotator RPCs (EXT-DB-002).
@@ -93,14 +93,17 @@ export interface Background {
   experience: ExperienceBand | null
   studyLevel: StudyLevel | null
   studyLevelOther: string | null
+  studyYear: StudyYear | null
+  school: string | null
 }
 
-/** Requires migration 0038 (set_background with eight parameters). */
+/** Requires migration 0040 (set_background with ten parameters). */
 export async function saveBackground(sessionId: string, b: Background): Promise<void> {
   await rpcData<null>('set_background', {
     p_session_id: sessionId, p_type: b.type, p_other: b.other,
     p_role: b.role, p_role_other: b.roleOther, p_experience: b.experience,
     p_study_level: b.studyLevel, p_study_level_other: b.studyLevelOther,
+    p_study_year: b.studyYear, p_school: b.school,
   })
 }
 

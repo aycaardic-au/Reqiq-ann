@@ -1,22 +1,24 @@
 import { useState } from 'react'
 import {
-  EXPERIENCE_BANDS, ROLE_CATEGORIES, STUDY_LEVELS,
-  type AnnotatorType, type CommonTexts, type ExperienceBand, type FormTexts, type LanguagePref, type RoleCategory, type StudyLevel,
+  EXPERIENCE_BANDS, ROLE_CATEGORIES, SCHOOL_LEVELS, STUDY_LEVELS, STUDY_YEARS,
+  type AnnotatorType, type CommonTexts, type ExperienceBand, type FormTexts, type LanguagePref, type RoleCategory, type StudyLevel, type StudyYear,
 } from '../lib/config'
 import type { Background } from '../lib/session'
 
 const LANGS: LanguagePref[] = ['EN', 'TR', 'BOTH']
-const TYPES: AnnotatorType[] = ['student', 'industry', 'researcher', 'other']
+const TYPES: AnnotatorType[] = ['student', 'industry', 'other']
 const MAX_OTHER = 50
+const MAX_SCHOOL = 100
 
 /** Marks a mandatory question (explained in form.tr.lede); screen readers get the native `required` state. */
 const Star = () => <span aria-hidden="true" style={{ color: 'var(--err)' }}> *</span>
 
 /**
  * K3 Bilgi formu: language (FR-LNG) + annotator type (FR-ONB-003, FR-BKG), both required and marked with *.
- * Optional follow-up questions by type (migrations 0038/0039, ui_texts 2.30), each with "prefer not to say",
+ * Optional follow-up questions by type (migrations 0038-0040, ui_texts 2.32), each with "prefer not to say",
  * shown directly under the chosen type option:
- * industry → role + years in the sector; researcher → years of sector/academic experience; student → study level.
+ * industry → role + years of work experience; student → study level, class year (bachelor only) and an optional
+ * free-text school / department (bachelor, master's, PhD). The academic-researcher type was removed on 17 Nov 2026.
  * A question is shown only when its texts exist in the active configuration.
  */
 export default function InfoForm({
@@ -34,25 +36,28 @@ export default function InfoForm({
   const [experience, setExperience] = useState<ExperienceBand | null>(null)
   const [level, setLevel] = useState<StudyLevel | null>(null)
   const [levelOther, setLevelOther] = useState('')
+  const [year, setYear] = useState<StudyYear | null>(null)
+  const [school, setSchool] = useState('')
   const [tried, setTried] = useState(false)
   const [busy, setBusy] = useState(false)
   const [saveError, setSaveError] = useState(false)
 
   const askRole = type === 'industry' && Boolean(t.role_question && t.role_options)
-  const askExperience = (type === 'industry' || type === 'researcher') && Boolean(t.experience_options)
-    && Boolean(type === 'industry' ? t.experience_question : t.researcher_experience_question)
+  const askExperience = type === 'industry' && Boolean(t.experience_options && t.experience_question)
   const askLevel = type === 'student' && Boolean(t.study_level_question && t.study_level_options)
+  const askYear = askLevel && level === 'bachelor' && Boolean(t.study_year_question)
+  const askSchool = askLevel && level !== null && SCHOOL_LEVELS.includes(level) && Boolean(t.school_label)
 
   const chooseType = (k: AnnotatorType) => {
     if (k !== type) {
-      // Follow-up answers belong to one type; the experience question differs between industry and researcher
-      setRole(null); setRoleOther(''); setExperience(null); setLevel(null); setLevelOther('')
+      // Follow-up answers belong to one type and are cleared when the type changes
+      setRole(null); setRoleOther(''); setExperience(null); setLevel(null); setLevelOther(''); setYear(null); setSchool('')
     }
     setType(k)
     if (k !== 'other') setOther('')
   }
 
-  const clean = (s: string) => s.trim().slice(0, MAX_OTHER) || null
+  const clean = (s: string, max = MAX_OTHER) => s.trim().slice(0, max) || null
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -69,6 +74,8 @@ export default function InfoForm({
         experience: askExperience ? experience : null,
         studyLevel: askLevel ? level : null,
         studyLevelOther: askLevel && level === 'other' ? clean(levelOther) : null,
+        studyYear: askYear ? year : null,
+        school: askSchool ? clean(school, MAX_SCHOOL) : null,
       })
     } catch (err) {
       console.error(err)
@@ -91,19 +98,46 @@ export default function InfoForm({
         </Choice>,
       )
     }
-    if (askExperience && (k === 'industry' || k === 'researcher')) {
+    if (askExperience && k === 'industry') {
       parts.push(
-        <Choice key="exp" name="experience" question={(k === 'industry' ? t.experience_question : t.researcher_experience_question)!}
+        <Choice key="exp" name="experience" question={t.experience_question!}
           keys={EXPERIENCE_BANDS} labels={t.experience_options!} value={experience} onChange={setExperience} />,
       )
     }
     if (k === 'student' && askLevel) {
       parts.push(
         <Choice key="level" name="level" question={t.study_level_question!} keys={STUDY_LEVELS} labels={t.study_level_options!}
-          value={level} onChange={(x) => { setLevel(x); if (x !== 'other') setLevelOther('') }}>
+          value={level} onChange={(x) => {
+            setLevel(x)
+            if (x !== 'other') setLevelOther('')
+            if (x !== 'bachelor') setYear(null)
+            if (!SCHOOL_LEVELS.includes(x)) setSchool('')
+          }}>
           {level === 'other' && <OtherText id="level-other" label={t.other_label} warning={t.other_warning} value={levelOther} onChange={setLevelOther} />}
         </Choice>,
       )
+      if (askYear) {
+        parts.push(
+          <fieldset key="year" className="subq">
+            <legend>{t.study_year_question}</legend>
+            <div className="pills">
+              {STUDY_YEARS.map((y) => (
+                <label key={y} className={`pill${year === y ? ' on' : ''}`}>
+                  <input type="radio" name="year" value={y} checked={year === y} onChange={() => setYear(y)} />
+                  <span>{y}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>,
+        )
+      }
+      if (askSchool) {
+        parts.push(
+          <div key="school" className="subq">
+            <OtherText id="school" label={t.school_label!} warning={t.other_warning} value={school} onChange={setSchool} max={MAX_SCHOOL} />
+          </div>,
+        )
+      }
     }
     return parts.length ? <div className="reveal">{parts}</div> : null
   }
@@ -178,14 +212,14 @@ function Choice<K extends string>({
   )
 }
 
-/** Free text for "Diğer" (at most 50 characters) with the no-identifying-information warning (D-04). */
-function OtherText({ id, label, warning, value, onChange }: {
-  id: string; label: string; warning: string; value: string; onChange: (v: string) => void
+/** Free text for "Diğer" (at most 50 characters) and school / department (100) with the no-identifying-information warning (D-04). */
+function OtherText({ id, label, warning, value, onChange, max = MAX_OTHER }: {
+  id: string; label: string; warning: string; value: string; onChange: (v: string) => void; max?: number
 }) {
   return (
     <div className="other">
       <label htmlFor={id}>{label}</label>
-      <input id={id} type="text" maxLength={MAX_OTHER} value={value} onChange={(e) => onChange(e.target.value)} />
+      <input id={id} type="text" maxLength={max} value={value} onChange={(e) => onChange(e.target.value)} />
       <p className="warning" role="note"><span aria-hidden="true">⚠ </span>{warning}</p>
     </div>
   )

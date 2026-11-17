@@ -17,8 +17,8 @@ const METRICS: [string, string][] = [
   ['M_IND_01', 'Uygunluk'], ['M_IND_02', 'Açıklık'], ['M_IND_03', 'Tamlık'],
   ['M_IND_04', 'Tekillik'], ['M_IND_05', 'Doğrulanabilirlik'], ['M_IND_06', 'Biçimsel Uyum'],
 ]
-const TYPES: Record<string, string> = { student: 'Öğrenci', industry: 'Sektör', researcher: 'Akademik', other: 'Diğer', none: 'Yanıtsız' }
-const LANGS: Record<string, string> = { EN: 'İngilizce', TR: 'Türkçe', BOTH: 'Her ikisi' }
+const TYPES: Record<string, string> = { student: 'Öğrenci', industry: 'Sektör', researcher: 'Akademik (eski)', other: 'Diğer', none: 'Yanıtsız' }
+const LANGS: Record<string, string> = { EN: 'İngilizce', TR: 'Türkçe', BOTH: 'Her ikisi', none: 'Yanıtsız' }
 
 export default function Dashboard({ tick }: { tick: number }) {
   const [d, setD] = useState<Dash | null>(null)
@@ -82,10 +82,8 @@ export default function Dashboard({ tick }: { tick: number }) {
             <>
               <h2 className="mt">Çalışan: rol</h2>
               <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'industry'), 'role_category')} />
-              <h2 className="mt">Çalışan: sektörde çalışma yılı</h2>
+              <h2 className="mt">Çalışan: çalışma yılı</h2>
               <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'industry'), 'experience_band')} />
-              <h2 className="mt">Akademik araştırmacı: sektör/akademik deneyim yılı</h2>
-              <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'researcher'), 'experience_band')} />
               <h2 className="mt">Öğrenci: seviye</h2>
               <Bars rows={countBy(ses.filter((x) => x.annotator_type === 'student'), 'study_level')} />
             </>

@@ -1,7 +1,7 @@
 /** Builds the export sheets from raw table rows (D-26, D-31). Pure functions; no I/O. */
 
 export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean; source_meta?: Record<string, unknown> }
-export interface Ses { session_id: string; rater_code?: string | null; annotator_type: string | null; annotator_type_other: string | null; role_category?: string | null; role_other?: string | null; experience_band?: string | null; study_level?: string | null; study_level_other?: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
+export interface Ses { session_id: string; rater_code?: string | null; annotator_type: string | null; annotator_type_other: string | null; role_category?: string | null; role_other?: string | null; experience_band?: string | null; study_level?: string | null; study_level_other?: string | null; study_year?: number | null; school_dept?: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
 export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null; sampling_strategy?: string | null }
 export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
@@ -18,6 +18,7 @@ export function profileCols(se: Ses | undefined): Row {
     role_category: se?.role_category ?? null, role_other: se?.role_other ?? null,
     experience_band: se?.experience_band ?? null,
     study_level: se?.study_level ?? null, study_level_other: se?.study_level_other ?? null,
+    study_year: se?.study_year ?? null, school_dept: se?.school_dept ?? null,
   }
 }
 
@@ -281,7 +282,7 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'Alpha_Girdi', value: 'Krippendorff alfa için uzun biçim: birim = req_id × metric_id, değerlendirici = rater_code. Yalnızca dahil oturumlar, dikkat soruları hariç.' },
     { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. QC_ONERI: sütun kurallarından türetilen öneri (QC Pass / Admin incelemesi / QC Fail); nihai karar admin tarafından verilir.' },
     { key: 'rater_code', value: 'Oturum oluşturulurken bir kez atanır ve değişmez (migration 0039). Filtreler ve silinen oturumlar kodları kaydırmaz; silinen oturumun kodu yeniden kullanılmaz.' },
-    { key: 'K3 profil sütunları', value: 'Puanlar_Ham ve Oturumlar_QC: role_category, role_other, experience_band, study_level, study_level_other (K3 isteğe bağlı yanıtlar, migration 0038; study_level grupları 0039). Boş = sorulmadı, atlandı ya da 0038 öncesi veya içe aktarma oturumu; prefer_not_to_say = "Belirtmek istemiyorum". experience_band: industry için sektörde çalışma yılı, researcher için sektör/akademik deneyim yılı.' },
+    { key: 'K3 profil sütunları', value: 'Puanlar_Ham ve Oturumlar_QC: role_category, role_other, experience_band, study_level, study_level_other, study_year, school_dept (K3 isteğe bağlı yanıtlar, migration 0038; öğrenim düzeyi ve sınıf 0040: study_level = bachelor / masters / phd / other (prefer_not_to_say yalnızca eski satırlarda), study_year = lisans sınıfı 1–4, school_dept = serbest metin okul / bölüm, en fazla 100 karakter; 0039 sürümündeki bachelor_1_2 ve bachelor_3_4 değerleri 0040 ile bachelor olur). Boş = sorulmadı, atlandı ya da 0038 öncesi veya içe aktarma oturumu; prefer_not_to_say = "Belirtmek istemiyorum". experience_band: industry için çalışma yılı (researcher yalnızca 0040 öncesi satırlarda ve içe aktarmada görülür).' },
     { key: 'Batch_QC', value: 'Batch bazlı kalite kanıtı: dikkat sorusu sonuçları, medyan süre, hızlı öğe ve tekdüze puan oranları. Karar oturum düzeyindedir; bu sayfa yalnızca incelemeye yardımcıdır.' },
   ]
 

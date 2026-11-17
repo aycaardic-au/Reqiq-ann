@@ -3,14 +3,21 @@ import { supabase } from './supabase'
 /** Annotator-facing texts (ADD-02 §7). Source: config/ui_texts.json → rubric_config. */
 export type UiLang = 'en' | 'tr'
 export type LanguagePref = 'EN' | 'TR' | 'BOTH'
-export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
+/** 'researcher' is no longer offered (17 Nov 2026); it stays valid only in old stored rows and the admin import. */
+export type AnnotatorType = 'student' | 'industry' | 'other'
 /** K3 optional background answers (migrations 0038, 0039). 'prefer_not_to_say' is an explicit answer; skipped = null. */
 export type RoleCategory = 'requirements_engineer' | 'systems_engineer' | 'test_engineer' | 'project_manager' | 'software_developer' | 'other' | 'prefer_not_to_say'
 export type ExperienceBand = '0-2' | '3-5' | '6-10' | '11-20' | '20+' | 'prefer_not_to_say'
-export type StudyLevel = 'bachelor_1_2' | 'bachelor_3_4' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
+export type StudyLevel = 'bachelor' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
+/** Class year, asked only for bachelor students (migration 0040). */
+export type StudyYear = 1 | 2 | 3 | 4
 export const ROLE_CATEGORIES: RoleCategory[] = ['requirements_engineer', 'systems_engineer', 'test_engineer', 'project_manager', 'software_developer', 'other', 'prefer_not_to_say']
 export const EXPERIENCE_BANDS: ExperienceBand[] = ['0-2', '3-5', '6-10', '11-20', '20+', 'prefer_not_to_say']
-export const STUDY_LEVELS: StudyLevel[] = ['bachelor_1_2', 'bachelor_3_4', 'masters', 'phd', 'other', 'prefer_not_to_say']
+/** Options shown to students; 'prefer_not_to_say' is no longer offered (the question is optional) but stays valid in old rows. */
+export const STUDY_LEVELS: StudyLevel[] = ['bachelor', 'masters', 'phd', 'other']
+export const STUDY_YEARS: StudyYear[] = [1, 2, 3, 4]
+/** Levels for which the school / department field is shown. */
+export const SCHOOL_LEVELS: StudyLevel[] = ['bachelor', 'masters', 'phd']
 
 export interface ConsentTexts {
   title: string
@@ -43,10 +50,11 @@ export interface FormTexts {
   role_question?: string
   role_options?: Record<RoleCategory, string>
   experience_question?: string
-  researcher_experience_question?: string
   experience_options?: Record<ExperienceBand, string>
   study_level_question?: string
   study_level_options?: Record<StudyLevel, string>
+  study_year_question?: string
+  school_label?: string
   required_error: string
   button: string
 }
