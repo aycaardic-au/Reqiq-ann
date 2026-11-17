@@ -1,7 +1,7 @@
 /** Builds the export sheets from raw table rows (D-26, D-31). Pure functions; no I/O. */
 
 export interface Req { req_id: string; base_id: string | null; language_tag: string; project_id: string; text_en: string | null; text_tr: string | null; eligible: boolean; source_meta?: Record<string, unknown> }
-export interface Ses { session_id: string; annotator_type: string | null; annotator_type_other: string | null; role_category?: string | null; role_other?: string | null; experience_band?: string | null; study_level?: string | null; study_level_other?: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
+export interface Ses { session_id: string; rater_code?: string | null; annotator_type: string | null; annotator_type_other: string | null; role_category?: string | null; role_other?: string | null; experience_band?: string | null; study_level?: string | null; study_level_other?: string | null; language_pref: string; batches_completed: number; comment: string | null; excluded: boolean; consent_version: string | null; created_at: string; last_active_at: string; ended_at?: string | null; withdrawn_at?: string | null; flag_consistency?: boolean; flag_speed?: boolean }
 export interface Bat { batch_id: string; session_id: string; created_at: string; completed_at: string | null; config_id?: number | null; ac_pairs?: number | null; ac_mismatches?: number | null; ac_max_diff?: number | null; median_seconds?: number | null; sampling_strategy?: string | null }
 export interface Cfg { config_id: number; version_label: string; uploaded_at: string; is_active: boolean; note?: string | null }
 export interface Item { batch_item_id: number; batch_id: string; req_id: string; position: number; is_attention_check: boolean; attention_check_original_req_id: string | null; time_seconds: number | null; round: number }
@@ -96,7 +96,8 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
 
   // Rater codes R001… in order of session creation
   const sesSorted = [...d.sessions].sort((a, b) => a.created_at.localeCompare(b.created_at))
-  const code = new Map(sesSorted.map((s, i) => [s.session_id, `R${String(i + 1).padStart(3, '0')}`]))
+  // 0039: stable code stored per session; the computed number is only a fallback for rows without one
+  const code = new Map(sesSorted.map((s, i) => [s.session_id, s.rater_code ?? `R${String(i + 1).padStart(3, '0')}`]))
   // Batch number per session
   const batchNo = new Map<string, number>()
   const perSes = new Map<string, Bat[]>()
@@ -279,7 +280,8 @@ export function buildSheets(d: RawData, filterNote = ''): Record<string, Row[]> 
     { key: 'Gereksinim_Metrik_Ozeti', value: 'Öğe × metrik özeti: n_raters, n0/n1/n2, ortalama, medyan, referans farkı, coverage_met.' },
     { key: 'Alpha_Girdi', value: 'Krippendorff alfa için uzun biçim: birim = req_id × metric_id, değerlendirici = rater_code. Yalnızca dahil oturumlar, dikkat soruları hariç.' },
     { key: 'Oturumlar_QC', value: 'Oturum kalitesi. Bayraklar yalnızca inceleme içindir, otomatik dışlama yapmaz. QC_ONERI: sütun kurallarından türetilen öneri (QC Pass / Admin incelemesi / QC Fail); nihai karar admin tarafından verilir.' },
-    { key: 'K3 profil sütunları', value: 'Puanlar_Ham ve Oturumlar_QC: role_category, role_other, experience_band, study_level, study_level_other (K3 isteğe bağlı yanıtlar, migration 0038). Boş = sorulmadı, atlandı ya da 0038 öncesi veya içe aktarma oturumu; prefer_not_to_say = "Belirtmek istemiyorum". experience_band: industry için sektörde çalışma yılı, researcher için sektör/akademik deneyim yılı.' },
+    { key: 'rater_code', value: 'Oturum oluşturulurken bir kez atanır ve değişmez (migration 0039). Filtreler ve silinen oturumlar kodları kaydırmaz; silinen oturumun kodu yeniden kullanılmaz.' },
+    { key: 'K3 profil sütunları', value: 'Puanlar_Ham ve Oturumlar_QC: role_category, role_other, experience_band, study_level, study_level_other (K3 isteğe bağlı yanıtlar, migration 0038; study_level grupları 0039). Boş = sorulmadı, atlandı ya da 0038 öncesi veya içe aktarma oturumu; prefer_not_to_say = "Belirtmek istemiyorum". experience_band: industry için sektörde çalışma yılı, researcher için sektör/akademik deneyim yılı.' },
     { key: 'Batch_QC', value: 'Batch bazlı kalite kanıtı: dikkat sorusu sonuçları, medyan süre, hızlı öğe ve tekdüze puan oranları. Karar oturum düzeyindedir; bu sayfa yalnızca incelemeye yardımcıdır.' },
   ]
 

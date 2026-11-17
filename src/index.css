@@ -112,6 +112,15 @@ code { font-size: .88em; background: var(--surface-2); padding: 1px 6px; border-
 .pill:hover { background: var(--surface-2); }
 .pill.on { background: var(--primary-soft); border-color: #9cc3bf; }
 .other { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+/* K3 type list: one option per line; follow-up questions open under the chosen option (0039) */
+.typeopts { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.typeopt-item { width: 100%; }
+.typeopt-item > .pill { display: inline-flex; }
+.reveal { margin: 10px 0 6px 18px; padding: 4px 0 4px 16px; border-left: 3px solid #9cc3bf; display: flex; flex-direction: column; gap: 14px; }
+.reveal .other { margin-top: 0; }
+.subq { border: 0; padding: 0; margin: 0; min-width: 0; }
+.q .subq legend { float: none; width: auto; font-weight: 600; margin-bottom: 8px; padding: 0; }
+.btn-sm { padding: 4px 12px; font-size: .85rem; }
 input[type=text], input[type=email], input[type=password], input[type=number], select, textarea {
   font: inherit; color: var(--fg); padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: #fff;
 }
@@ -142,6 +151,7 @@ input[type=text], input[type=email], input[type=password], input[type=number], s
 .score-row .scores { flex: 1 1 auto; min-width: 0; }
 .score-note { flex: 0 0 150px; justify-content: center; align-items: center; text-align: center; border-style: dashed; color: var(--primary); font: inherit; font-weight: 600; }
 @media (max-width: 640px) {
+  .reveal { margin-left: 6px; padding-left: 12px; }
   .score-row { flex-wrap: wrap; }
   .score-note { flex-basis: 100%; min-height: 44px; }
 }

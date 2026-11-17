@@ -14,7 +14,8 @@ const Star = () => <span aria-hidden="true" style={{ color: 'var(--err)' }}> *</
 
 /**
  * K3 Bilgi formu: language (FR-LNG) + annotator type (FR-ONB-003, FR-BKG), both required and marked with *.
- * Optional follow-up questions by type (migration 0038, ui_texts 2.29), each with "prefer not to say":
+ * Optional follow-up questions by type (migrations 0038/0039, ui_texts 2.30), each with "prefer not to say",
+ * shown directly under the chosen type option:
  * industry → role + years in the sector; researcher → years of sector/academic experience; student → study level.
  * A question is shown only when its texts exist in the active configuration.
  */
@@ -76,7 +77,37 @@ export default function InfoForm({
     }
   }
 
-  let n = 2
+  /** Follow-up of the chosen type, shown under its option (layout decision 17 Nov 2026). */
+  const reveal = (k: AnnotatorType) => {
+    const parts: React.ReactNode[] = []
+    if (k === 'other') {
+      parts.push(<OtherText key="o" id="type-other" label={t.other_label} warning={t.other_warning} value={other} onChange={setOther} />)
+    }
+    if (k === 'industry' && askRole) {
+      parts.push(
+        <Choice key="role" name="role" question={t.role_question!} keys={ROLE_CATEGORIES} labels={t.role_options!}
+          value={role} onChange={(x) => { setRole(x); if (x !== 'other') setRoleOther('') }}>
+          {role === 'other' && <OtherText id="role-other" label={t.other_label} warning={t.other_warning} value={roleOther} onChange={setRoleOther} />}
+        </Choice>,
+      )
+    }
+    if (askExperience && (k === 'industry' || k === 'researcher')) {
+      parts.push(
+        <Choice key="exp" name="experience" question={(k === 'industry' ? t.experience_question : t.researcher_experience_question)!}
+          keys={EXPERIENCE_BANDS} labels={t.experience_options!} value={experience} onChange={setExperience} />,
+      )
+    }
+    if (k === 'student' && askLevel) {
+      parts.push(
+        <Choice key="level" name="level" question={t.study_level_question!} keys={STUDY_LEVELS} labels={t.study_level_options!}
+          value={level} onChange={(x) => { setLevel(x); if (x !== 'other') setLevelOther('') }}>
+          {level === 'other' && <OtherText id="level-other" label={t.other_label} warning={t.other_warning} value={levelOther} onChange={setLevelOther} />}
+        </Choice>,
+      )
+    }
+    return parts.length ? <div className="reveal">{parts}</div> : null
+  }
+
   return (
     <main className="survey">
       <h1>{t.title}</h1>
@@ -97,46 +128,19 @@ export default function InfoForm({
         </fieldset>
         <fieldset className="q">
           <legend><span className="n">2.</span>{t.type_question}<Star /></legend>
-          <div className="pills">
+          <div className="typeopts">
             {TYPES.map((k) => (
-              <label key={k} className={`pill${type === k ? ' on' : ''}`}>
-                <input type="radio" name="type" value={k} required checked={type === k} onChange={() => chooseType(k)} />
-                <span>{t.type_options[k]}</span>
-              </label>
+              <div key={k} className="typeopt-item">
+                <label className={`pill${type === k ? ' on' : ''}`}>
+                  <input type="radio" name="type" value={k} required checked={type === k} onChange={() => chooseType(k)} />
+                  <span>{t.type_options[k]}</span>
+                </label>
+                {type === k && reveal(k)}
+              </div>
             ))}
           </div>
-          {type === 'other' && (
-            <OtherText id="type-other" label={t.other_label} warning={t.other_warning} value={other} onChange={setOther} />
-          )}
           {tried && !type && <p className="err" role="alert">{t.required_error}</p>}
         </fieldset>
-        {askRole && (
-          <Choice
-            n={++n} name="role" question={t.role_question!} keys={ROLE_CATEGORIES} labels={t.role_options!}
-            value={role} onChange={(k) => { setRole(k); if (k !== 'other') setRoleOther('') }}
-          >
-            {role === 'other' && (
-              <OtherText id="role-other" label={t.other_label} warning={t.other_warning} value={roleOther} onChange={setRoleOther} />
-            )}
-          </Choice>
-        )}
-        {askExperience && (
-          <Choice
-            n={++n} name="experience"
-            question={(type === 'industry' ? t.experience_question : t.researcher_experience_question)!}
-            keys={EXPERIENCE_BANDS} labels={t.experience_options!} value={experience} onChange={setExperience}
-          />
-        )}
-        {askLevel && (
-          <Choice
-            n={++n} name="level" question={t.study_level_question!} keys={STUDY_LEVELS} labels={t.study_level_options!}
-            value={level} onChange={(k) => { setLevel(k); if (k !== 'other') setLevelOther('') }}
-          >
-            {level === 'other' && (
-              <OtherText id="level-other" label={t.other_label} warning={t.other_warning} value={levelOther} onChange={setLevelOther} />
-            )}
-          </Choice>
-        )}
         {saveError && <p className="err" role="alert">{c.save_error}</p>}
         <div className="submitrow">
           <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? c.saving : t.button}</button>
@@ -146,11 +150,10 @@ export default function InfoForm({
   )
 }
 
-/** One optional single-choice question; no error when left empty. */
+/** One optional single-choice follow-up question; no error when left empty. */
 function Choice<K extends string>({
-  n, name, question, keys, labels, value, onChange, children,
+  name, question, keys, labels, value, onChange, children,
 }: {
-  n: number
   name: string
   question: string
   keys: K[]
@@ -160,8 +163,8 @@ function Choice<K extends string>({
   children?: React.ReactNode
 }) {
   return (
-    <fieldset className="q">
-      <legend><span className="n">{n}.</span>{question}</legend>
+    <fieldset className="subq">
+      <legend>{question}</legend>
       <div className="pills">
         {keys.filter((k) => labels[k]).map((k) => (
           <label key={k} className={`pill${value === k ? ' on' : ''}`}>

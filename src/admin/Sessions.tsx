@@ -20,6 +20,13 @@ export default function Sessions({ tick }: { tick: number }) {
     return () => { alive = false }
   }, [tick, reload])
 
+  // 0039: only sessions without scores can be deleted; the server checks this again
+  const remove = async (sid: string, rater: string) => {
+    if (!window.confirm(`${rater} oturumunu silmek istiyor musunuz? Oturumun puanı yok; oturum satırı, setleri ve kayıtları kalıcı olarak silinir. Bu işlem geri alınamaz.`)) return
+    const { error } = await adminDb!.rpc('admin_delete_session', { p_session_id: sid })
+    if (error) setErr(error.message); else setReload(reload + 1)
+  }
+
   const toggle = async (sid: string, excluded: boolean) => {
     const { error } = await adminDb!.from('sessions').update({ excluded }).eq('session_id', sid)
     if (error) setErr(error.message); else setReload(reload + 1)
@@ -31,10 +38,10 @@ export default function Sessions({ tick }: { tick: number }) {
     <>
       <section className="panel">
         <h2>Oturumlar ({rows.length})</h2>
-        <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz.</p>
+        <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz. Yalnızca puanı olmayan oturumlar silinebilir; silinen oturumun kodu yeniden kullanılmaz.</p>
         <div className="scroll">
           <table className="tbl">
-            <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th></tr></thead>
+            <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th><th>Sil</th></tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={String(r.session_id)}>
@@ -53,6 +60,9 @@ export default function Sessions({ tick }: { tick: number }) {
                   <td>{r.withdrawn_at ? <span className="badge bad">sildi</span> : r.ended_at ? <span className="badge">bitti</span> : <span className="badge good">açık</span>}</td>
                   <td><input type="checkbox" aria-label={`${r.rater_code} analize dahil`} checked={!r.excluded} disabled={Boolean(r.withdrawn_at)}
                     onChange={(e) => toggle(String(r.session_id), !e.target.checked)} /></td>
+                  <td>{Number(r.items_scored) === 0
+                    ? <button type="button" className="btn btn-danger btn-sm" onClick={() => remove(String(r.session_id), String(r.rater_code))}>Sil</button>
+                    : <span className="muted" title="Puanı olan oturum silinemez">—</span>}</td>
                 </tr>
               ))}
             </tbody>

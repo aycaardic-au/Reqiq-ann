@@ -31,7 +31,7 @@ export const PROFILE_LABELS: Record<string, Record<string, string>> = {
   },
   experience_band: { '0-2': '0–2 yıl', '3-5': '3–5 yıl', '6-10': '6–10 yıl', '11-20': '11–20 yıl', '20+': '20+ yıl', prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş' },
   study_level: {
-    year_1: '1. sınıf', year_2: '2. sınıf', year_3: '3. sınıf', year_4: '4. sınıf', masters: 'Yüksek lisans', phd: 'Doktora',
+    bachelor_1_2: 'Lisans 1.–2. sınıf', bachelor_3_4: 'Lisans 3.–4. sınıf', masters: 'Yüksek lisans', phd: 'Doktora',
     other: 'Diğer', prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş',
   },
 }

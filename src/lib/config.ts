@@ -4,13 +4,13 @@ import { supabase } from './supabase'
 export type UiLang = 'en' | 'tr'
 export type LanguagePref = 'EN' | 'TR' | 'BOTH'
 export type AnnotatorType = 'student' | 'industry' | 'researcher' | 'other'
-/** K3 optional background answers (migration 0038). 'prefer_not_to_say' is an explicit answer; skipped = null. */
+/** K3 optional background answers (migrations 0038, 0039). 'prefer_not_to_say' is an explicit answer; skipped = null. */
 export type RoleCategory = 'requirements_engineer' | 'systems_engineer' | 'test_engineer' | 'project_manager' | 'software_developer' | 'other' | 'prefer_not_to_say'
 export type ExperienceBand = '0-2' | '3-5' | '6-10' | '11-20' | '20+' | 'prefer_not_to_say'
-export type StudyLevel = 'year_1' | 'year_2' | 'year_3' | 'year_4' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
+export type StudyLevel = 'bachelor_1_2' | 'bachelor_3_4' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
 export const ROLE_CATEGORIES: RoleCategory[] = ['requirements_engineer', 'systems_engineer', 'test_engineer', 'project_manager', 'software_developer', 'other', 'prefer_not_to_say']
 export const EXPERIENCE_BANDS: ExperienceBand[] = ['0-2', '3-5', '6-10', '11-20', '20+', 'prefer_not_to_say']
-export const STUDY_LEVELS: StudyLevel[] = ['year_1', 'year_2', 'year_3', 'year_4', 'masters', 'phd', 'other', 'prefer_not_to_say']
+export const STUDY_LEVELS: StudyLevel[] = ['bachelor_1_2', 'bachelor_3_4', 'masters', 'phd', 'other', 'prefer_not_to_say']
 
 export interface ConsentTexts {
   title: string
