@@ -26,7 +26,7 @@ export const A = {
 export const PROFILE_LABELS: Record<string, Record<string, string>> = {
   role_category: {
     requirements_engineer: 'Gereksinim mühendisi', systems_engineer: 'Sistem mühendisi', test_engineer: 'Test mühendisi',
-    project_manager: 'Proje yöneticisi', software_developer: 'Yazılım geliştirici', other: 'Diğer',
+    project_manager: 'Proje yöneticisi', software_developer: 'Yazılım geliştirici', academic_researcher: 'Akademisyen / Araştırmacı', other: 'Diğer',
     prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş',
   },
   experience_band: { '0-2': '0–2 yıl', '3-5': '3–5 yıl', '6-10': '6–10 yıl', '11-20': '11–20 yıl', '20+': '20+ yıl', prefer_not_to_say: 'Belirtmek istemiyor', none: 'Boş' },

@@ -6,12 +6,12 @@ export type LanguagePref = 'EN' | 'TR' | 'BOTH'
 /** 'researcher' is no longer offered (17 Nov 2026); it stays valid only in old stored rows and the admin import. */
 export type AnnotatorType = 'student' | 'industry' | 'other'
 /** K3 optional background answers (migrations 0038, 0039). 'prefer_not_to_say' is an explicit answer; skipped = null. */
-export type RoleCategory = 'requirements_engineer' | 'systems_engineer' | 'test_engineer' | 'project_manager' | 'software_developer' | 'other' | 'prefer_not_to_say'
+export type RoleCategory = 'requirements_engineer' | 'systems_engineer' | 'test_engineer' | 'project_manager' | 'software_developer' | 'academic_researcher' | 'other' | 'prefer_not_to_say'
 export type ExperienceBand = '0-2' | '3-5' | '6-10' | '11-20' | '20+' | 'prefer_not_to_say'
 export type StudyLevel = 'bachelor' | 'masters' | 'phd' | 'other' | 'prefer_not_to_say'
 /** Class year, asked only for bachelor students (migration 0040). */
 export type StudyYear = 1 | 2 | 3 | 4
-export const ROLE_CATEGORIES: RoleCategory[] = ['requirements_engineer', 'systems_engineer', 'test_engineer', 'project_manager', 'software_developer', 'other', 'prefer_not_to_say']
+export const ROLE_CATEGORIES: RoleCategory[] = ['requirements_engineer', 'systems_engineer', 'test_engineer', 'project_manager', 'software_developer', 'academic_researcher', 'other', 'prefer_not_to_say']
 export const EXPERIENCE_BANDS: ExperienceBand[] = ['0-2', '3-5', '6-10', '11-20', '20+', 'prefer_not_to_say']
 /** Options shown to students; 'prefer_not_to_say' is no longer offered (the question is optional) but stays valid in old rows. */
 export const STUDY_LEVELS: StudyLevel[] = ['bachelor', 'masters', 'phd', 'other']

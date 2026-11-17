@@ -15,7 +15,7 @@ const Star = () => <span aria-hidden="true" style={{ color: 'var(--err)' }}> *</
 
 /**
  * K3 Bilgi formu: language (FR-LNG) + annotator type (FR-ONB-003, FR-BKG), both required and marked with *.
- * Optional follow-up questions by type (migrations 0038-0040, ui_texts 2.32), each with "prefer not to say",
+ * Optional follow-up questions by type (migrations 0038-0040, ui_texts 2.33), each with "prefer not to say",
  * shown directly under the chosen type option:
  * industry → role + years of work experience; student → study level, class year (bachelor only) and an optional
  * free-text school / department (bachelor, master's, PhD). The academic-researcher type was removed on 17 Nov 2026.
