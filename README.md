@@ -19,7 +19,7 @@ src/admin/                   admin views; exportData.ts = pure export builder (f
 src/lib/                     config loader, session + RPC client (retry), admin client, error boundary/reporting
 config/                      ui_texts.json (screen texts), rubric_v1.4.json, metric_hints.json
 scripts/                     build_ui_texts_sql.py, build_hints.py (generate versioned config SQL)
-supabase/migrations/         0001–0039, forward-only, run in order in the Supabase SQL Editor
+supabase/migrations/         0001–0041, forward-only, run in order in the Supabase SQL Editor
                              (0036 was never applied; 0037 supersedes it)
 ```
 
@@ -47,7 +47,8 @@ migration has run; old code keeps working after a migration.
 - Back up: admin → Dışa aktar → Excel, regularly and before any reset.
 - After the pilot: admin → Parametreler → "Çalışma verilerini sıfırla" (type SIFIRLA). Rater codes restart at R001.
 - Rater codes (R001, …) are stored per session (migration 0039) and never renumbered or reused.
-- Delete a test session: admin → Oturumlar → "Sil" (only sessions without scores; the server refuses others).
+- Delete a test session: admin → Oturumlar → "Sil" (only sessions without scores whose last activity is at least 60 minutes old; the server refuses others and the page shows why).
+- Withdrawal ("Oturumu sonlandır ve yanıtlarımı sil", migration 0040): all data of the session (scores, items, batches, briefing views, client errors, answers) is deleted; only a minimal record (code, consent version, times, `excluded`) stays.
 - Testing as a participant: `/#/reset` clears this browser's state.
 
 ## Security
