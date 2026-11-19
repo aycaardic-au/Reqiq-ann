@@ -4,17 +4,17 @@
 --   low-count items while other items wait.
 -- Change: a new helper alloc_session_counts(p_session_id) counts, per requirement, the distinct sessions that
 --   (a) have scored it (same rule as before), or
---   (b) hold it in an open batch (completed_at IS NULL) and were active within the last 120 minutes
+--   (b) hold it in an open batch (completed_at IS NULL) and were active within the last 60 minutes
 --       (not ended, not excluded, not the calling session; attention-check copies are ignored).
 --   A session that both holds and has scored an item counts once. The two functions are re-created from 0030 and 0031
 --   with ONLY the count source replaced. Round numbers stored with a batch item (batch_items.round, D-07) still use
 --   req_score_sessions (scored sessions only) and are unchanged.
--- The 120-minute window is a parameter of the helper (default argument). Abandoned open batches stop counting after it.
+-- The 60-minute window is a parameter of the helper (default argument). Abandoned open batches stop counting after it.
 -- Run once in Supabase SQL Editor AFTER 0042. Re-run safe (CREATE OR REPLACE).
 
 BEGIN;
 
-CREATE OR REPLACE FUNCTION alloc_session_counts(p_session_id TEXT, p_window_minutes INT DEFAULT 120)
+CREATE OR REPLACE FUNCTION alloc_session_counts(p_session_id TEXT, p_window_minutes INT DEFAULT 60)
 RETURNS TABLE (req_id TEXT, n INT) LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
   SELECT x.req_id, count(DISTINCT x.session_id)::INT
   FROM (
