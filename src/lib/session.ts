@@ -49,7 +49,7 @@ export class ServerRuleError extends Error {
 }
 
 /** The session was ended or withdrawn (FR-SES-009). */
-export const isSessionClosed = (e: unknown) => e instanceof ServerRuleError && /session ended|unknown session/i.test(e.message)
+export const isSessionClosed = (e: unknown) => e instanceof ServerRuleError && /session ended|unknown session|unknown item for this session/i.test(e.message)
 
 /**
  * NFR-REL-001: network/transport failures are retried up to 3 times with exponential back-off

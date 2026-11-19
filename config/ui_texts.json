@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of all annotator-facing screen texts (ADD-02 §7). Screen texts are Turkish for every session (D-23); 'en' blocks are optional. Edit here, then run: python scripts/build_ui_texts_sql.py --out <file>.sql and run the SQL in Supabase SQL Editor. Drafts until advisor and ethics approval (NFR-ETH-001).",
-  "ui_texts_version": "2.33",
+  "ui_texts_version": "2.35",
   "app_name": {
     "en": "Requirements Quality Metrics Evaluation Survey",
     "tr": "Gereksinim Kalite Metrikleri Değerlendirme Araştırması"
@@ -24,13 +24,13 @@
           "heading": "Araştırmanın Amacı ve Kapsamı",
           "paragraphs": [
             "Bu araştırmanın amacı, yazılı gereksinim belirtimlerindeki cümlelerin kalitesini altı ölçüt (Uygunluk, Açıklık, Tamlık, Tekillik, Doğrulanabilirlik ve Biçimsel Uyum) açısından puanlamaktır. Bu puanlar, tezin ilerleyen safhalarında verinin etiketlenmesinde ve yerel bilgisayarlarda çalışacak küçük dil modellerinin eğitilmesinde kullanılacaktır. Eğitilen küçük dil modelleri çevrimdışı (yerel) ortamda çalıştırılarak gereksinimlerin kalitesini otomatik olarak değerlendirecektir.",
-            "Puanlamanız beklenen gereksinimler, açık kaynaklarda yer alan Promise+ veri setinden alınmıştır. Sizden, İngilizce gereksinimleri veya çeviriyle elde edilen Türkçe karşılıklarını, verilen puanlama ölçütüne göre (0, 1 veya 2 puanla) değerlendirmeniz istenecektir. İhtiyaç duyacağınız teknik bilgiler ilerleyen sayfalarda yer alacaktır.  "
+            "Puanlamanız beklenen gereksinimler, açık kaynaklarda yer alan Promise+ veri setinden alınmıştır. Sizden, İngilizce gereksinimleri veya çeviriyle elde edilen Türkçe karşılıklarını, verilen puanlama ölçütüne göre (0, 1 veya 2 puanla) değerlendirmeniz beklenmektedir. İhtiyaç duyacağınız teknik bilgiler ilerleyen sayfalarda yer alacaktır."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişilerin Harcayacağı Süre",
           "paragraphs": [
-            "Araştırma kapsamında gönüllülerden önce Katılımcı Bilgi Formu’nu doldurmaları, ardından çevrimiçi değerlendirme aracında en az 1 set (ortalama 30 gereksinim) tamamlamaları beklenmektedir. Her oturum yaklaşık 1 saat sürer: Aydınlatılmış Onam Formu ve Bilgi formunun doldurulması yaklaşık 5 dakika, ölçüt tanıtımı (brifing) ortalama 15 dakika, değerlendirme ortalama 40 dakika. Değerlendirmeyi uygun olduğunuz zaman ve yerde, çevrimiçi olarak yapabilir; istediğiniz zaman ara verebilirsiniz. Ses veya görüntü kaydı yapılmayacaktır."
+            "Araştırma kapsamında gönüllülerden önce Katılımcı Bilgi Formu’nu doldurmaları, ardından çevrimiçi değerlendirme aracında en az 1 set (ortalama 30 gereksinim) tamamlamaları beklenmektedir. Her oturum yaklaşık 1 saat sürer: Aydınlatılmış Onam Formu ve Bilgi formunun doldurulması yaklaşık 5 dakika, ölçüt tanıtımı (brifing) ortalama 15 dakika, değerlendirme ortalama 40 dakika. Değerlendirmeyi uygun olduğunuz zaman ve yerde, çevrimiçi olarak yapabilir; istediğiniz zaman ara verebilirsiniz."
           ]
         },
         {
@@ -38,22 +38,22 @@
           "paragraphs": [
             "Bu araştırmaya katılmak tamamen gönüllülük esasına dayanmaktadır. Çalışmaya katılmama veya katıldıktan sonra herhangi bir anda çalışmadan çıkma veya oturumu sonlandırma hakkına sahipsiniz. Araştırmaya katılmayı reddetmeniz veya yarıda bırakmanız durumunda herhangi bir olumsuz sonuçla karşılaşmayacaksınız.",
             "Bu araştırmaya katılmanız için sizden herhangi bir ücret talep edilmeyecek ve katılımınız karşılığında size bir ödeme yapılmayacaktır. Elde edilen bilgiler bilimsel araştırma amacıyla kullanılacaktır. Adınız, öğrenci numaranız, e-posta adresiniz gibi kişisel bilgileriniz kaydedilmeyecektir.",
-            "Web form üzerinden verilen onay kaydı, değerlendirme verilerinden ayrı tutulacak ve yalnızca araştırma ekibi tarafından erişilebilecektir.",
-            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm verileriniz anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; yalnızca oturum kimliği ve verilerin silindiğine dair kayıt tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Katılımcı verileri, tez savunması ve bu tezden üretilecek yayınlar tamamlandıktan sonra silinecektir."
+            "Bu araştırmada yer almak tümüyle sizin isteğinize bağlıdır. Araştırmadan çekilmek isterseniz “Oturumu sonlandır ve yanıtlarımı sil” seçeneğini kullanabilirsiniz; bu durumda o oturumda kaydedilen tüm verileriniz anında ve geri alınamaz biçimde silinir. Silinen oturum analizlere alınmaz; yalnızca oturum kimliği ve verilerin silindiğine dair kayıt tutulur. Sizden elde edilen bilgiler gizli tutulacak, şifrelenerek saklanacak ve yayınlarda, sunumlarda kimliğiniz açıklanmayacaktır. Katılımcı verileri, tez savunması ve bu tezden üretilecek yayınlar tamamlandıktan 1 yıl sonra silinecektir."
           ]
         },
         {
           "heading": "Kaydedilen Veriler",
           "paragraphs": [
-            "Araştırma kapsamında yalnızca şu veriler kaydedilir: oturum kimliği, oturum zamanları, değerlendirme dili ve katılımcı türünüz; katılımcı türünüze göre isteğe bağlı olarak rol, çalışma yılı aralığı, öğrenim seviyesi, lisans sınıfı ve okul / bölüm bilgisi; verdiğiniz puanlar, varsa gerekçe notlarınız, her gereksinim için harcanan süre, metrik açıklamalarının görüntülenme süreleri, dikkat sorularına verdiğiniz yanıtlar ile bu yanıtlardan hesaplanan tutarlılık ve hız kontrol göstergeleri; teşekkür ekranında isteğe bağlı olarak yazdığınız yorum.",
-            "Bilgi formundaki “Diğer” ve “Okul / Bölüm” alanlarına yazdığınız metinler kısa olmalıdır (en fazla 50 ve 100 karakter); bu alanlara adınızı ve iletişim bilgilerinizi yazmayınız. Seçmeli isteğe bağlı sorularda “Belirtmek istemiyorum” seçeneği bulunur; metin alanları boş bırakılabilir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir."
+            "Araştırma kapsamında yalnızca şu veriler kaydedilir: oturum kimliği, değerlendirici kodu, onam sürümü, oturum zamanları, değerlendirme dili ve katılımcı türü; katılımcı türüne göre isteğe bağlı olarak çalışılan rol, çalışma yılı aralığı, öğrenim seviyesi, lisans sınıfı ve okul / bölüm bilgisi; verdiğiniz puanlar, varsa açıklayıcı notlarınız, her gereksinim değerlendirmesi için harcanan süre, metrik açıklamalarının görüntülenme süreleri, dikkat sorularına verilen yanıtlar ile bu yanıtlardan hesaplanan tutarlılık ve hız kontrol göstergeleri; hata kayıtları (tarayıcı bilgisi, hata mesajı); teşekkür ekranında isteğe bağlı olarak yazılan yorumlar.",
+            "Ses veya görüntü kaydı yapılmayacaktır.",
+            "Bilgi formundaki serbest metin yazılabilen “Diğer” ve “Okul / Bölüm” gibi alanlara adınızı ve iletişim bilgilerinizi yazmayınız. Seçmeli isteğe bağlı sorular ve metin alanları boş bırakılabilir. Oturum kimliğiniz, değerlendirme sonunda ekranda size gösterilecektir."
           ]
         },
         {
           "heading": "Araştırmaya Katılacak Kişiler için Olası Riskler",
           "paragraphs": [
-            "Araştırma, düşük risk kategorisinde değerlendirilmektedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Olası düşük düzeyli riskler, değerlendirme sırasında yaşanabilecek kısa süreli yorgunluk ve ekran başında uzun süre kalmakla sınırlıdır.",
-            "Olası riskleri en aza indirmek için değerlendirme oturumlarını istediğiniz zaman duraklatabilir veya sonlandırabilirsiniz. Değerlendirmeleriniz hiçbir şekilde notlandırılmayacak, akademik bir değerlendirmede kullanılmayacak ve sizin hakkınızda yargılayıcı bir değerlendirme yapılmayacaktır. Veriler, Supabase üzerinde İrlanda’da (Avrupa Birliği, eu-west-1 bölgesi) şifreli olarak saklanacaktır ve yalnızca araştırma ekibi tarafından erişilebilecektir. Uygulama kodu GitHub’da barındırılmakla birlikte katılımcı verileri GitHub’da tutulmaz."
+            "Araştırma, düşük risk kategorisinde değerlendirilmektedir. Bu araştırmayla ilişkili bilinen fiziksel veya psikolojik bir risk bulunmamaktadır. Olası düşük düzeyli riskler, değerlendirme sırasında yaşanabilecek kısa süreli yorgunluk ve ekran başında uzun süre kalmakla sınırlıdır. Olası riskleri en aza indirmek için değerlendirme oturumlarını istediğiniz zaman duraklatabilir veya sonlandırabilirsiniz.",
+            "Uygulama kodu GitHub’da barındırılacaktır. Uygulama tarafından kaydedilen veriler Supabase üzerinde Türkiye dışında (Avrupa Birliği, eu-west-1 bölgesi - İrlanda’da) şifreli olarak saklanacaktır ve yalnızca araştırma ekibi tarafından erişilebilecektir."
           ]
         },
         {
@@ -90,6 +90,7 @@
       "step": "Adım 1 / 4: Bilgi formu",
       "title": "Bilgi formu",
       "lede": "* ile işaretli sorular zorunludur; diğer sorular isteğe bağlıdır.",
+      "clear_choice": "Seçimi temizle",
       "language_question": "Hangi dilde yazılmış gereksinimleri değerlendirmek istersiniz?",
       "language_hint": "Bu seçim oturum boyunca değiştirilemeyecektir. Yönergeler Türkçedir; gereksinimler ve metrik açıklamaları seçilen dilde gösterilecektir.",
       "language_options": {
@@ -113,8 +114,7 @@
         "project_manager": "Proje yöneticisi",
         "software_developer": "Yazılım geliştirici",
         "academic_researcher": "Akademisyen / Araştırmacı",
-        "other": "Diğer",
-        "prefer_not_to_say": "Belirtmek istemiyorum"
+        "other": "Diğer"
       },
       "experience_question": "Kaç yıldır çalışıyorsunuz? (isteğe bağlı)",
       "experience_options": {
@@ -122,8 +122,7 @@
         "3-5": "3–5 yıl",
         "6-10": "6–10 yıl",
         "11-20": "11–20 yıl",
-        "20+": "20+ yıl",
-        "prefer_not_to_say": "Belirtmek istemiyorum"
+        "20+": "20+ yıl"
       },
       "study_level_question": "Öğrenim seviyeniz nedir? (isteğe bağlı)",
       "study_level_options": {
@@ -316,6 +315,7 @@
       "paused_button": "Şimdi devam et",
       "ended_title": "Oturumunuz sonlandırıldı",
       "ended_body": "Katılımınız için teşekkür ederiz. Yanıtlarınız saklandı. Bu sayfayı kapatabilirsiniz.",
+      "ended_body_unsaved": "Hiçbir yanıt kaydedilmedi. Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
       "withdrawn_body": "Yanıtlarınız silindi. Katılımınız için teşekkür ederiz. Bu sayfayı kapatabilirsiniz.",
       "ended_button": "Başa dön"
     },
@@ -337,6 +337,7 @@
       "paused_button": "Continue now",
       "ended_title": "Your session has ended",
       "ended_body": "Thank you for taking part. Your answers have been saved. You may close this page.",
+      "ended_body_unsaved": "No answers were saved. Thank you for taking part. You may close this page.",
       "withdrawn_body": "Your answers have been deleted. Thank you for taking part. You may close this page.",
       "ended_button": "Back to start"
     }
@@ -363,22 +364,20 @@
     "en": {
       "title": "Thank you very much for your contribution!",
       "body": "You have successfully completed the evaluation of {n} requirements.",
-      "session_label": "Your session ID is:",
-      "session_note": "Please note it down if you would like to reference your participation later.",
+      "session_label": "Your participation reference is:",
       "comment_label": "If you have any comments about the annotation experience, you may leave them below (optional).",
       "comment_placeholder": "Optional comments about the annotation experience...",
-      "button": "Submit and Finish",
+      "button": "Finish",
       "closed": "Thank you, your answer has been saved. You may close this page.",
       "comment_max": "Max 500 characters"
     },
     "tr": {
       "title": "Katkınız için çok teşekkür ederiz!",
       "body": "{n} gereksinimi başarıyla değerlendirdiniz.",
-      "session_label": "Oturum kimliğiniz:",
-      "session_note": "Katılımınıza daha sonra başvurmanız gerekirse bu kimliği not alabilirsiniz.",
+      "session_label": "Katılım referansınız:",
       "comment_label": "Değerlendirme deneyiminize ilişkin yorumlarınızı aşağıya bırakabilirsiniz (isteğe bağlı).",
       "comment_placeholder": "Değerlendirme deneyiminize ilişkin isteğe bağlı yorumlarınız...",
-      "button": "Gönder ve Bitir",
+      "button": "Bitir",
       "closed": "Teşekkürler, yanıtınız kaydedildi. Bu sayfayı kapatabilirsiniz.",
       "comment_max": "En fazla 500 karakter"
     }

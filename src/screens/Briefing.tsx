@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { fill, pickLang, type HintMetric, type LanguagePref, type RubricContent, type RubricMetric, type UiLang } from '../lib/config'
-import { assignBatch, fetchBriefingMinSeconds, getBriefingProgress, saveBriefingView } from '../lib/session'
+import { assignBatch, fetchBriefingMinSeconds, getBriefingProgress, isSessionClosed, saveBriefingView } from '../lib/session'
 
 /**
  * K4b Briefing (SRS v1.4 FR-BRF, D-39, D-40).
@@ -43,11 +43,12 @@ const DEFAULTS_EN = {
   sample_label: 'Example',
 }
 
-export default function Briefing({ config, sessionId, language, onDone }: {
+export default function Briefing({ config, sessionId, language, onDone, onEnded }: {
   config: RubricContent
   sessionId: string
   language: LanguagePref | null
   onDone: () => void
+  onEnded?: () => void // audit B1: the session was closed elsewhere (ended or withdrawn)
 }) {
   const english = language === 'EN'
   const t = { ...DEFAULTS, ...(config.briefing?.tr ?? {}), ...(english ? (config.briefing?.en ?? {}) : {}) }
@@ -88,7 +89,8 @@ export default function Briefing({ config, sessionId, language, onDone }: {
         setLoaded(true)
       } catch (e) {
         console.error(e)
-        if (alive) setError(true)
+        if (!alive) return
+        if (isSessionClosed(e) && onEnded) onEnded(); else setError(true)
       }
     })()
     return () => { alive = false }
@@ -148,7 +150,7 @@ export default function Briefing({ config, sessionId, language, onDone }: {
       else setPage(page + 1)
     } catch (e) {
       console.error(e)
-      setError(true)
+      if (isSessionClosed(e) && onEnded) onEnded(); else setError(true)
     } finally {
       setSaving(false)
     }

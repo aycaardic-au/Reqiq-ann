@@ -56,8 +56,7 @@ export function ThankYou({
       <section className="panel">
         <h1>{t.title}</h1>
         <p className="lede">{fill(t.body, { n: String(total) })}</p>
-        <p>{t.session_label} <code className="sid">{sessionId}</code></p>
-        <p className="hint">{t.session_note}</p>
+        <p style={{ marginBottom: '1.6em' }}>{t.session_label} <code className="sid">{sessionId.slice(0, 8)}</code></p>
         <label htmlFor="comment" className="label">{t.comment_label}</label>
         <textarea id="comment" className="note" rows={4} maxLength={500} placeholder={t.comment_placeholder}
           value={comment} onChange={(e) => setComment(e.target.value)} />

@@ -83,14 +83,14 @@ export default function AnnotatorApp() {
     const sid = readSession()?.session_id
     if (choice === 'pause') { setEnded('pause'); return }
     if (sid) await (choice === 'withdraw' ? withdrawSession(sid) : endSession(sid))
-    clearLocal(); setFlow(INITIAL_FLOW); setEnded(choice)
+    clearLocal(); setFlow(INITIAL_FLOW); setEnded(!sid && choice === 'end' ? 'unsaved' : choice) // A15: no session yet, nothing was saved
   }
   const end = <EndSession t={bar} c={config.common.tr} hasSession={Boolean(readSession())} onChoose={choose} />
 
   if (ended === 'pause') return <Ended title={bar.paused_title} body={bar.paused_body} button={bar.paused_button} onRestart={() => setEnded(null)} />
   if (ended) {
     return <Ended title={bar.ended_title}
-      body={ended === 'withdraw' ? bar.withdrawn_body : ended === 'closed' ? (config.common.tr.session_closed ?? bar.ended_body) : bar.ended_body}
+      body={ended === 'withdraw' ? bar.withdrawn_body : ended === 'closed' ? (config.common.tr.session_closed ?? bar.ended_body) : ended === 'unsaved' ? (bar.ended_body_unsaved ?? bar.ended_body) : bar.ended_body}
       button={bar.ended_button} onRestart={() => setEnded(null)} />
   }
 
@@ -127,7 +127,8 @@ export default function AnnotatorApp() {
         <>
           <TopBar appName={appName} step={(config.briefing?.tr as { step?: string } | undefined)?.step ?? 'Adım 3 / 4: Metrik bilgilendirmesi'} />
           <Briefing config={config} sessionId={readSession()!.session_id} language={flow.language}
-            onDone={() => update({ ...flow, step: 'annotate' })} />
+            onDone={() => update({ ...flow, step: 'annotate' })}
+            onEnded={() => { clearLocal(); setFlow(INITIAL_FLOW); setEnded('closed') }} />
           {end}
         </>
       )

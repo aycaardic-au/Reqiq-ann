@@ -54,6 +54,8 @@ export interface FormTexts {
   study_level_question?: string
   study_level_options?: Record<StudyLevel, string>
   study_year_question?: string
+  /** Link that clears an optional single-choice answer (ui_texts 2.35). */
+  clear_choice?: string
   school_label?: string
   required_error: string
   button: string
@@ -79,6 +81,7 @@ export interface SessionBarTexts {
   paused_button: string
   ended_title: string
   ended_body: string
+  ended_body_unsaved?: string
   withdrawn_body: string
   ended_button: string
 }
@@ -143,7 +146,7 @@ export interface ThankYouTexts {
   title: string
   body: string
   session_label: string
-  session_note: string
+  session_note?: string
   comment_label: string
   comment_placeholder: string
   comment_max: string

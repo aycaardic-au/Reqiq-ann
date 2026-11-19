@@ -15,7 +15,7 @@ const Star = () => <span aria-hidden="true" style={{ color: 'var(--err)' }}> *</
 
 /**
  * K3 Bilgi formu: language (FR-LNG) + annotator type (FR-ONB-003, FR-BKG), both required and marked with *.
- * Optional follow-up questions by type (migrations 0038-0040, ui_texts 2.33), each with "prefer not to say",
+ * Optional follow-up questions by type (migrations 0038-0040), unanswered by default and clearable with a link (ui_texts 2.35),
  * shown directly under the chosen type option:
  * industry → role + years of work experience; student → study level, class year (bachelor only) and an optional
  * free-text school / department (bachelor, master's, PhD). The academic-researcher type was removed on 17 Nov 2026.
@@ -93,7 +93,8 @@ export default function InfoForm({
     if (k === 'industry' && askRole) {
       parts.push(
         <Choice key="role" name="role" question={t.role_question!} keys={ROLE_CATEGORIES} labels={t.role_options!}
-          value={role} onChange={(x) => { setRole(x); if (x !== 'other') setRoleOther('') }}>
+          value={role} onChange={(x) => { setRole(x); if (x !== 'other') setRoleOther('') }}
+          clearText={t.clear_choice} onClear={() => { setRole(null); setRoleOther('') }}>
           {role === 'other' && <OtherText id="role-other" label={t.other_label} warning={t.other_warning} value={roleOther} onChange={setRoleOther} />}
         </Choice>,
       )
@@ -101,7 +102,8 @@ export default function InfoForm({
     if (askExperience && k === 'industry') {
       parts.push(
         <Choice key="exp" name="experience" question={t.experience_question!}
-          keys={EXPERIENCE_BANDS} labels={t.experience_options!} value={experience} onChange={setExperience} />,
+          keys={EXPERIENCE_BANDS} labels={t.experience_options!} value={experience} onChange={setExperience}
+          clearText={t.clear_choice} onClear={() => setExperience(null)} />,
       )
     }
     if (k === 'student' && askLevel) {
@@ -112,7 +114,8 @@ export default function InfoForm({
             if (x !== 'other') setLevelOther('')
             if (x !== 'bachelor') setYear(null)
             if (!SCHOOL_LEVELS.includes(x)) setSchool('')
-          }}>
+          }}
+          clearText={t.clear_choice} onClear={() => { setLevel(null); setLevelOther(''); setYear(null); setSchool('') }}>
           {level === 'other' && <OtherText id="level-other" label={t.other_label} warning={t.other_warning} value={levelOther} onChange={setLevelOther} />}
         </Choice>,
       )
@@ -128,6 +131,7 @@ export default function InfoForm({
                 </label>
               ))}
             </div>
+            {year !== null && t.clear_choice && <button type="button" className="link" onClick={() => setYear(null)}>{t.clear_choice}</button>}
           </fieldset>,
         )
       }
@@ -186,7 +190,7 @@ export default function InfoForm({
 
 /** One optional single-choice follow-up question; no error when left empty. */
 function Choice<K extends string>({
-  name, question, keys, labels, value, onChange, children,
+  name, question, keys, labels, value, onChange, clearText, onClear, children,
 }: {
   name: string
   question: string
@@ -194,6 +198,9 @@ function Choice<K extends string>({
   labels: Record<K, string>
   value: K | null
   onChange: (k: K) => void
+  /** "Seçimi temizle": a radio button cannot be unselected, so the optional question gets a clear link (ui_texts 2.35). */
+  clearText?: string
+  onClear?: () => void
   children?: React.ReactNode
 }) {
   return (
@@ -207,6 +214,7 @@ function Choice<K extends string>({
           </label>
         ))}
       </div>
+      {value !== null && clearText && onClear && <button type="button" className="link" onClick={onClear}>{clearText}</button>}
       {children}
     </fieldset>
   )

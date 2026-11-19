@@ -11,7 +11,7 @@
       "definition": {
         "tr": "Kusur, bu metriğin temel unsurunu (ana yükümlülük, davranış veya sonuç) karşılanamaz kılar.",
         "en": "A defect prevents the core element of this metric (main obligation, behavior, or outcome) from being met.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       }
     },
     "1": {
@@ -22,7 +22,7 @@
       "definition": {
         "tr": "Metriğin temel unsuru (ana yükümlülük, davranış veya sonuç) karşılanır; kusur(lar) yalnızca bunu tamamlayan ayrıntıları (ör. ek koşul, sınır, ölçüt veya ifade biçimi) etkiler.",
         "en": "The core element of this metric (main obligation, behavior, or outcome) is met; the defect(s) affect only supporting details (e.g., an additional condition, limit, criterion, or wording).",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       }
     },
     "2": {
@@ -33,7 +33,7 @@
       "definition": {
         "tr": "Sağlanan metinde bu metriğe ilişkin kusur gözlenmez.",
         "en": "No defect relevant to this metric is observed in the provided text.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       }
     }
   },
@@ -46,28 +46,28 @@
       "question": {
         "tr": "Gereksinim, ihtiyaç duyulan işlevi veya sonucu mu tarif ediyor, yoksa bir çözüm yöntemini mi şart koşuyor?",
         "en": "Does the requirement describe the needed function or outcome, or does it mandate a solution method?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "İşlev veya beklenen sonucu tarif eden ifadeyi, marka/teknoloji/donanım ya da ayrıntılı tasarım dayatmasından ayırınız. Yalnız teknik terim geçmesi kusur değildir. Üst seviye gereksinimler ve tasarım gerekçeleri verilmediğinden bunların varlığını varsaymayınız; belirgin çözüm dayatmasını metne göre puanlayınız. Gereksinim, çözüm kısıtının dokümante edilmiş gerekçesine açıkça atıf yapıyorsa (ör. bir standart veya Arayüz Kontrol Dokümanı) bu kısıtı kusur saymayınız. Puanınız, kısıtın gerçekte gerekçesiz olduğu iddiası değil, metinde gerekçesiz göründüğü tespitidir. Soyutlama düzeyinin uygunluğunu, ilgili sistem seviyesi verilmediğinden ayrıca değerlendirmeyiniz.",
         "en": "Separate the statement describing the function or expected outcome from any mandated brand, technology, hardware, or detailed design. The mere presence of a technical term is not a defect. Higher-level requirements and design rationale are not provided; do not assume that they exist. Score evident solution mandates based on the text. If the requirement explicitly references a documented justification for the solution constraint (e.g., a standard or an Interface Control Document), do not count the constraint as a defect. Your score records that the constraint appears unjustified in the text; it is not a claim that the constraint is actually unjustified. Do not separately assess whether the level of abstraction is appropriate, because the relevant system level is not provided.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "Açık ürün/marka veya ayrıntılı gerçekleştirim çözümü ihtiyacın yerine geçer ya da ihtiyacı karşılayabilecek diğer çözümleri dışlar.",
           "en": "An explicit product/brand or detailed implementation solution replaces the need or excludes other solutions that could meet it.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "İhtiyaç/sonuç anlaşılır; yanında görünür sınırlı bir gerçekleştirim tercihi dayatılır.",
           "en": "The need/outcome is clear, but a visible, limited implementation choice is imposed alongside it.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "Metin ihtiyacı/sonucu belirtir; belirli gerçekleştirim çözümünü dayatan ifade gözlenmez.",
           "en": "The text states the need/outcome; no wording that imposes a specific implementation solution is observed.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [
@@ -103,28 +103,28 @@
       "question": {
         "tr": "Gereksinim yalnızca tek bir makul biçimde yorumlanabiliyor mu?",
         "en": "Can the requirement be interpreted in only one reasonable way?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "Belirsiz sıfat, zarf ve miktar ifadelerini; evrensel niceleyicileri; zaman ifadelerini; göndergesi belirsiz zamirleri; açık uçlu, kaçamak ve gereksiz yeterlilik ifadelerini; mantıksal alternatif için kullanılan eğik çizgiyi; çift olumsuzluğu; koşul ve mantık bağlaçlarını ve atıfların ilgili dokümanı ve geçerli kısmını açıkça tanımlayıp tanımlamadığını inceleyiniz. Metindeki belirsizlik puanı etkiler; sağlanmamış terim sözlüğü veya referans listesi yok diye ayrıca kusur vermeyiniz.",
         "en": "Examine vague adjectives, adverbs, and quantity expressions; universal quantifiers; temporal expressions; pronouns with unclear referents; open-ended clauses, escape clauses, and superfluous infinitives; the oblique symbol ('/') used for logical alternatives; double negatives; conditional and logical connectives; and whether references clearly identify the referenced document and its applicable part. Ambiguity in the text affects the score; do not assign an additional defect because a glossary or reference list is not provided.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "Ana yükümlülük veya kritik koşul birden fazla maddi yoruma açıktır.",
           "en": "The main obligation or a critical condition is open to more than one material interpretation.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "Ana yükümlülük açık, ikincil kapsam veya koşulda sınırlı belirsizlik vardır.",
           "en": "The main obligation is clear; limited ambiguity exists in a secondary scope or condition.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "Sağlanan metnin ilgili anlamı tek makul yoruma elverişlidir.",
           "en": "The relevant meaning of the provided text allows only one reasonable interpretation.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [
@@ -160,28 +160,28 @@
       "question": {
         "tr": "Gereksinimin ifade ettiği davranışı anlamak için gerekli bilgiler yeterli mi?",
         "en": "Is the information needed to understand the behavior stated in the requirement sufficient?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "İfade edilen davranışın öznesini, eylemini, nesnesini, gerekli koşul ve sınırlarını inceleyiniz. Performans kısıtının ilişkili olduğu işlevin, birden fazla koşul arasındaki mantıksal ilişkinin ve gereksinim birden fazla öğe için geçerliyse bu öğelerin belirtilip belirtilmediğini kontrol ediniz. Çözümlenmemiş DSB/TBD, DSÇ/TBR, DST/TBC veya eşdeğer yer tutucuları değerlendiriniz. Yer tutucu, talep edilen davranışın kendisini belirsiz bırakıyorsa (ör. \"Sistem, DSB verilerini kaydetmelidir.\") 0; yalnızca bir sınırı, değeri veya koşulu belirsiz bırakıyorsa (ör. \"… en fazla DSB saniye içinde …\") 1 puan veriniz. Diğer gereksinimlerin veya şemaların içeriğini varsaymayınız. Açıkça tanımlanmış bir atıf (doküman adı veya kimliği ve ilgili bölüm), bilginin o dokümanda verildiğini gösterir ve eksiklik sayılmaz; atıf yapılan dokümanın içeriğinin doğruluğunu veya yeterliliğini değerlendirmeyiniz. Yalnızca gereksinimde gözlemlenebilen bilgiyi puanlayınız.",
         "en": "Examine the subject, action, object, and the necessary conditions and limits of the stated behavior. Check whether a performance constraint states its associated function, whether the logical relationship between multiple conditions is stated, and, if the requirement applies to multiple elements, whether those elements are identified. Evaluate unresolved TBD, TBR, TBC, or equivalent placeholders. If the placeholder leaves the demanded behavior itself undetermined (e.g., 'The system shall record TBD data.'), score 0; if it leaves only a limit, value, or condition undetermined (e.g., '… within TBD seconds …'), score 1. Do not assume the content of other requirements or diagrams. An explicitly identified reference (document name or identifier and the applicable section) shows that the information is provided in that document and is not a defect; do not evaluate the correctness or sufficiency of the referenced content. Score only the information observable in the requirement.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "İfadenin hangi davranışı talep ettiği temel unsurlar eksik olduğu için belirlenemez.",
           "en": "The behavior that the statement demands cannot be determined because essential elements are missing.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "Ana davranış belirtilir; ifade edilen davranışın ilgili koşul/sınırlarından bir kısmı eksiktir.",
           "en": "The main behavior is stated; some of the relevant conditions or limits of the stated behavior are missing.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "İfadenin gerektirdiği davranış ve görünür koşullar yeterince tanımlıdır.",
           "en": "The behavior required by the statement and its visible conditions are sufficiently defined.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [
@@ -217,28 +217,28 @@
       "question": {
         "tr": "Gereksinim tam olarak tek bir bağımsız işlev, yetenek, özellik veya kısıt mı ifade ediyor?",
         "en": "Does the requirement express exactly one independent function, capability, characteristic, or constraint?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "Gereksinimde birden fazla bağımsız işlev, yetenek, özellik veya kısıt bulunup bulunmadığını değerlendiriniz. Koşul, tetikleyici veya sınırlayıcı ifadelerdeki fiiller tek başına tekillik kusuru değildir. Birden fazla fiil, bağlaç veya zarf-fiil eki (\"-ıp/-ip\", \"-arak/-erek\") tek başına kusur sayılmaz; \"Komuta ve Kontrol\" gibi birleşik özel isimler ve alan terimleri tek bir öğedir. Alt maddelerin veya parantezlerin bağımsız ek işlev getirip getirmediğini kontrol ediniz.",
         "en": "Assess whether the requirement contains more than one independent function, capability, characteristic, or constraint. Verbs within conditions, triggers, or qualifications are not by themselves singularity defects. Multiple verbs or conjunctions alone are not defects; compound proper nouns and domain terms (e.g., 'Command and Control') are single items. Check whether enumerated subclauses or parentheses add an independent function.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "Birden fazla açıkça bağımsız temel işlev, yetenek, özellik veya kısıt ifade edilir.",
           "en": "More than one clearly independent core function, capability, characteristic, or constraint is expressed.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "Bir temel işlev, yetenek, özellik veya kısıt bulunur; buna eklenmiş ayrılabilir ikincil bir işlev veya özellik de vardır.",
           "en": "One core function, capability, characteristic, or constraint is present, together with an attached, separable secondary function or characteristic.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "Tam olarak tek bağımsız işlev, yetenek, özellik veya kısıt ifade edilir; koşul ve tetikleyiciler kendi başına ek işlev sayılmaz.",
           "en": "Exactly one independent function, capability, characteristic, or constraint is expressed; conditions and triggers do not by themselves count as additional functions.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [
@@ -274,28 +274,28 @@
       "question": {
         "tr": "Gereksinimin karşılanıp karşılanmadığı nesnel bir doğrulama yöntemiyle belirlenebilir mi?",
         "en": "Can it be determined by an objective verification method whether the requirement has been met?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "Gereksinimin Test, Analiz, Muayene veya Gösterim yöntemlerinden uygun olanıyla nesnel biçimde doğrulanabilir olup olmadığını değerlendiriniz. Nicel değerlerin birimleri açık olmalı; nicel performans gereksinimlerinde sayısal eşik, sınır veya tolerans belirtilmelidir. Zamanlama, performans veya başarılı çalışma açısından önemliyse (ör. haberleşme, veri aktarımı) sınırlandırılmalıdır. Nitel gereksinimlerde sayısal eşik bulunmaması tek başına kusur değildir; nesnel ve gözlemlenebilir kabul ölçütleri yeterlidir.",
         "en": "Assess whether the requirement can be objectively verified by an appropriate method: Test, Analysis, Inspection, or Demonstration. Units of quantitative values need to be clear; quantitative performance requirements need numerical thresholds, limits, or tolerances. Where timing is important for performance or successful operation (e.g., communication or data transfer), it needs to be bounded. For qualitative requirements, the absence of a numerical threshold is not by itself a defect; objective, observable acceptance criteria are sufficient.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "Gereksinimin temel davranışı veya beklenen sonucu nesnel doğrulama yöntemiyle değerlendirilemez.",
           "en": "The core behavior or expected outcome of the requirement cannot be assessed by an objective verification method.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "Temel davranış/sonuç nesnel doğrulanabilir; ancak ek bir doğruluk, performans, zamanlama veya kabul ölçütü yeterince tanımlanmamıştır.",
           "en": "The core behavior/outcome can be objectively verified, but an additional accuracy, performance, timing, or acceptance criterion is not sufficiently defined.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "Test, Analiz, Muayene veya Gösterim ile nesnel uygunluk kararı verilebilir; gerekli nicel birimler, sınırlar veya nitel ölçütler açıktır.",
           "en": "An objective compliance decision can be made by Test, Analysis, Inspection, or Demonstration; the necessary quantitative units, limits, or qualitative criteria are clear.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [
@@ -331,28 +331,28 @@
       "question": {
         "tr": "Gereksinim, ilgili yazım ve dil kurallarına uyuyor mu?",
         "en": "Does the requirement comply with the relevant writing and language rules?",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "guidance": {
         "tr": "Tam cümle, açıkça belirtilmiş sorumlu özne, \"-malıdır/-melidir\" kipi, etken çatı, koşul yan cümlelerinin açıklığı, olumsuz ifadelerin açıklığı, yazım, dil bilgisi, noktalama ve büyük-küçük harf kullanımı ile amaç ya da gerekçe içerip içermediğini inceleyiniz. Edilgen ek (ör. \"alınan\") tek başına edilgenlik kanıtı değildir; ana cümlenin öznesine bakınız. Sağlanmamış proje şablonunun ek hükümlerini varsayarak puan düşürmeyiniz.",
         "en": "Examine whether the requirement is a complete sentence with an explicit responsible subject, 'shall', and active voice; whether condition clauses clearly identify the applicable event, state, or fault; whether negative statements are clear; whether it is free of spelling, grammar, punctuation, and capitalization errors; and whether it includes a purpose or rationale. A past participle (e.g., 'received') alone is not evidence of passive voice; check the subject of the main clause. Do not lower the score based on provisions of a project template that was not provided.",
-        "en_status": "v1.8 workbook (EN; needs review)"
+        "en_status": "v1.8 workbook (EN; reviewed)"
       },
       "anchors": {
         "0": {
           "tr": "Açık yapısal ve dilsel ihlaller cümlenin zorunluluk yapısını ciddi biçimde bozuyor.",
           "en": "Clear structural and linguistic violations seriously disrupt the obligation structure of the sentence.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "1": {
           "tr": "Gereksinim yapısı korunur; bir veya daha fazla sınırlı yazım kuralı ihlali vardır.",
           "en": "The requirement structure is preserved; one or more limited writing-rule violations exist.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         },
         "2": {
           "tr": "Gereksinim, ilgili yazım ve dil kurallarının tümüne uyar; ihlal gözlenmez.",
           "en": "The requirement complies with all relevant writing and language rules; no violation is observed.",
-          "en_status": "v1.8 workbook (EN; needs review)"
+          "en_status": "v1.8 workbook (EN; reviewed)"
         }
       },
       "samples": [

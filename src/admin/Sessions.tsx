@@ -48,11 +48,12 @@ export default function Sessions({ tick }: { tick: number }) {
         <p className="muted">Bayraklar set tamamlanınca sunucuda hesaplanır: tutarlılık = dikkat sorusunda 0↔2 farkı; hız = ortanca süre eşik altında. Bayrak oturumu kendiliğinden dışlamaz. Yalnızca puanı olmayan ve son 60 dakikada etkinliği olmayan oturumlar silinebilir; silinen oturumun kodu yeniden kullanılmaz.</p>
         <div className="scroll">
           <table className="tbl">
-            <thead><tr><th>Kod</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th><th>Sil</th></tr></thead>
+            <thead><tr><th>Kod</th><th>Referans</th><th>Başlangıç</th><th>Dil</th><th>Tür</th><th>Profil (K3)</th><th>Set</th><th>Öğe</th><th>Ortanca sn</th><th>Dikkat eşleşme</th><th>Bayrak</th><th>Durum</th><th>Analize dahil</th><th>Sil</th></tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={String(r.session_id)}>
                   <td title={String(r.session_id)}>{r.rater_code}</td>
+                  <td><code>{String(r.session_id).slice(0, 8)}</code></td>
                   <td>{String(r.created_at).slice(0, 16).replace('T', ' ')}</td>
                   <td>{r.language_pref}</td>
                   <td>{r.annotator_type}{r.annotator_type_other ? ` (${r.annotator_type_other})` : ''}</td>
