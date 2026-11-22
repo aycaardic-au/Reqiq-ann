@@ -135,7 +135,7 @@ export default function Annotate({
   }
 
   return (
-    <main className="annotate">
+    <main className="annotate evaluate">
       <section className="req" aria-labelledby="req-label" ref={reqRef} tabIndex={-1}>
         <div id="req-label" className="req-label">
           <span>{ui.requirement_title}</span>
@@ -240,6 +240,13 @@ function MetricRow({
   const sampleText = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.text_en ?? null : s.text)
   const sampleReason = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.reason_en : s.reason_tr)
   const noteLen = value?.note?.length ?? 0
+  // Note field starts one line high (same height as a metric row) and grows with the text up to about four lines
+  useEffect(() => {
+    const el = noteRef.current
+    if (!noteOpen || !el) return
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, 112)}px`
+  }, [noteOpen, value?.note])
   const toggleNote = () => {
     const open = !noteOpen
     setNoteOpen(open)
@@ -281,7 +288,7 @@ function MetricRow({
 
       {noteOpen && (
         <div className="mrow-note">
-          <textarea ref={noteRef} className="note" maxLength={500} rows={2} placeholder={st.note_placeholder} aria-label={`${st.note_placeholder} — ${m.name_tr}`}
+          <textarea ref={noteRef} className="note" maxLength={500} rows={1} placeholder={st.note_placeholder} aria-label={`${st.note_placeholder} — ${m.name_tr}`}
             value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
           <span className="note-count" aria-hidden="true">{noteLen}/500</span>
         </div>
