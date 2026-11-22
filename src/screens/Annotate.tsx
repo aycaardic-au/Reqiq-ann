@@ -253,9 +253,11 @@ function MetricRow({
     const lh = parseFloat(cs.lineHeight) || 20
     const border = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
     const padTop = parseFloat(cs.paddingTop)
-    const fiveLines = Math.ceil(border + padTop + NOTE_MAX_LINES * lh + parseFloat(cs.paddingBottom)) + 1
+    const padBottom = parseFloat(cs.paddingBottom)
+    // Count lines (not pixels) so font metric differences between browsers cannot turn a short note into a scrolling one
+    const lines = Math.round((el.scrollHeight - padTop - padBottom) / lh)
     const full = el.scrollHeight + border
-    const scrolls = full > fiveLines
+    const scrolls = lines > NOTE_MAX_LINES
     el.classList.toggle('scrolls', scrolls)
     el.style.height = `${scrolls ? Math.ceil(border + padTop + NOTE_MAX_LINES * lh + 2) : full}px`
     el.style.overflowY = scrolls ? 'auto' : 'hidden'

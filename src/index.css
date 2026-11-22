@@ -294,11 +294,9 @@ dialog::backdrop { background: rgba(51, 65, 85, .28); }
 .mrow .score { min-height: 40px; padding: 0; justify-content: center; align-items: center; border-radius: 10px; }
 .mrow .score-head { display: block; font-size: 1.05rem; line-height: 1; }
 .mrow .score-head b { width: auto; height: auto; background: none; margin: 0; font-size: 1.05rem; color: var(--fg); }
-.mrow .score.on { box-shadow: none; }
-.mrow .score.on .score-head b { background: none; color: var(--fg); }
-.mrow .score.s0.on { background: #fbe0dc; border-color: #d27b71; }
-.mrow .score.s1.on { background: #fdeeb8; border-color: #d9b94a; }
-.mrow .score.s2.on { background: #d9efd9; border-color: #6fae78; }
+/* Selected score: one neutral colour for 0, 1 and 2 (no colour meaning, so the colour cannot hint at a "good" or "bad" score) */
+.mrow .score.on { background: #dbe7f5; border-color: #4a78b0; box-shadow: inset 0 0 0 1px #4a78b0; }
+.mrow .score.on .score-head b { background: none; color: #1f4b7a; }
 .note-btn { justify-self: center; background: transparent; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--primary); font-weight: 700; font-size: .85rem; padding: 6px 12px; min-height: 32px; }
 .note-btn:hover { background: var(--surface-2); }
 .note-btn.has, .note-btn[aria-expanded="true"] { background: var(--note-bg); border-color: var(--note-line); border-style: solid; color: var(--note-fg); }
