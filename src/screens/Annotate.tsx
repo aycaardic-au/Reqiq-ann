@@ -18,8 +18,8 @@ function storeDrafts(d: Record<number, Draft>): void {
 }
 
 /**
- * K5 Değerlendirme (FR-ANN-001..011, D-26, D-28, D-33).
- * One requirement per page; six metrics; details and hint panels; back navigation within the open batch;
+ * K5 Değerlendirme (FR-ANN-001..011, D-26, D-28, D-33). Layout B (table with inline note row, 22 Nov 2026).
+ * One requirement per page; six metrics as table rows; details and hint panels open under the row; back navigation within the open batch;
  * visible-time measurement (FR-QC-001); draft persistence (NFR-REL-005).
  */
 export default function Annotate({
@@ -40,6 +40,7 @@ export default function Annotate({
   const cEn = (config.common as unknown as { en?: Partial<typeof config.common.tr> }).en ?? {}
   const cm = (sessionLang === 'EN' ? { ...config.common.tr, ...cEn } : config.common.tr) as typeof config.common.tr
   const metrics = config.metrics
+  const lbl = tableLabels(sessionLang === 'EN', ui)
   const [serverDrafts, setServerDrafts] = useState<Record<number, Draft>>(() => Object.fromEntries(items.map((it) => [it.batch_item_id, toDraft(it.scores)])))
   const [drafts, setDrafts] = useState<Record<number, Draft>>(() => {
     const local = loadDrafts()
@@ -145,19 +146,31 @@ export default function Annotate({
 
       {restored && ui.draft_restored && <p className="notice" role="status">{ui.draft_restored}</p>}
 
-      {metrics.map((m, i) => (
-        <MetricBlock
-          key={`${item.batch_item_id}-${m.id}`}
-          n={i + 1}
-          m={m}
-          lang={lang}
-          config={config}
-          sessionLang={sessionLang}
-          value={draft[m.id]}
-          showError={tried && (draft[m.id]?.score ?? null) === null}
-          onChange={(p) => setMetric(m.id, p)}
-        />
-      ))}
+      <div className="mtable" role="group" aria-label={ui.requirement_title}>
+        <div className="mt-head" aria-hidden="true">
+          <span className="mh-name">{lbl.col_metric}</span>
+          <span className="mh-tools" />
+          <span className="mh-q">
+            <span>{lbl.col_question}</span>
+            <span className="mh-legend" lang={lang}>{(['0', '1', '2'] as const).map((k) => `${k} ${config.scale[k].label[lang]}`).join(' · ')}</span>
+          </span>
+          <span className="mh-score">{lbl.col_score}</span>
+          <span className="mh-note">{lbl.col_note}</span>
+        </div>
+        {metrics.map((m, i) => (
+          <MetricRow
+            key={`${item.batch_item_id}-${m.id}`}
+            n={i + 1}
+            m={m}
+            lang={lang}
+            config={config}
+            sessionLang={sessionLang}
+            value={draft[m.id]}
+            showError={tried && (draft[m.id]?.score ?? null) === null}
+            onChange={(p) => setMetric(m.id, p)}
+          />
+        ))}
+      </div>
 
       {tried && !complete && <p className="err" role="alert">{ui.incomplete}</p>}
       {error && <p className="err" role="alert">{cm.save_error}</p>}
@@ -191,7 +204,16 @@ function Bulb() {
   )
 }
 
-function MetricBlock({
+/** Table labels: taken from ui_texts when present (col_* keys), otherwise the built-in defaults (no ui_texts change needed). */
+function tableLabels(english: boolean, ui: object) {
+  const u = ui as Record<string, string | undefined>
+  const d = english
+    ? { col_metric: 'Metric', col_question: 'Evaluation question', col_score: 'Score', col_note: 'Note', note_short: '✎ Note', hint_short: 'Metric', details_short: 'Scoring' }
+    : { col_metric: 'Metrik', col_question: 'Değerlendirme sorusu', col_score: 'Puan', col_note: 'Not', note_short: '✎ Not', hint_short: 'Metrik', details_short: 'Puanlama' }
+  return Object.fromEntries(Object.entries(d).map(([k, v]) => [k, u[k] ?? v])) as typeof d
+}
+
+function MetricRow({
   n, m, lang, config, sessionLang, value, showError, onChange,
 }: {
   n: number
@@ -203,61 +225,67 @@ function MetricBlock({
   showError: boolean
   onChange: (p: Partial<MetricScore>) => void
 }) {
-  // Labels of the K5 panels and toggles: Turkish from annotate.tr; English requirements use annotate.en (ui_texts 2.17)
+  // Labels of the K5 panels follow the requirement language (ui_texts 2.17); session-level labels follow the participant's choice
   const trT = config.annotate.tr
   const enT = (config.annotate as unknown as { en?: Partial<typeof trT> }).en ?? {}
   const t = (lang === 'en' ? { ...trT, ...enT } : trT) as typeof trT & { hint_heading?: string; details_heading?: string }
-  // Session-level labels (metric number, note toggle and placeholder) follow the participant's language choice
   const st = (sessionLang === 'EN' ? { ...trT, ...enT } : trT) as typeof trT
+  const lbl = tableLabels(sessionLang === 'EN', st)
   const hint = useMemo(() => config.hints?.metrics?.find((h) => h.id === m.id), [config, m.id])
   const [hintOpen, setHintOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [noteOpen, setNoteOpen] = useState(Boolean(value?.note))
+  const noteRef = useRef<HTMLTextAreaElement>(null)
   const group = `${m.id}-score`
   const sampleText = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.text_en ?? null : s.text)
   const sampleReason = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.reason_en : s.reason_tr)
+  const noteLen = value?.note?.length ?? 0
+  const toggleNote = () => {
+    const open = !noteOpen
+    setNoteOpen(open)
+    if (open) setTimeout(() => noteRef.current?.focus({ preventScroll: true }), 0)
+  }
 
   return (
-    <fieldset className={`metric${showError ? ' missing' : ''}`}>
-      <legend>
-        <span className="metric-no">{fill(st.metric_label, { n: String(n) })}</span>
-        <span className="metric-name">{m.name_tr} <span className="metric-en">/ {m.name_en}</span></span>
-      </legend>
-      <p className="question" lang={lang}>{m.question[lang]}</p>
-
-      <div className="score-row">
-      <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
-        {(['0', '1', '2'] as const).map((k) => {
-          const on = value?.score === Number(k)
-          return (
-            <label key={k} className={`score${on ? ' on' : ''}`} title={m.anchors[k][lang]}>
-              <input type="radio" name={group} checked={on}
-                onChange={() => onChange({ score: Number(k) })} />
-              <span className="score-head" lang={lang}><b>{k}</b> {config.scale[k].label[lang]}</span>
-            </label>
-          )
-        })}
-      </div>
-      {!noteOpen && (
-        <button type="button" className="score score-note" onClick={() => setNoteOpen(true)}>{st.note_toggle}</button>
-      )}
+    <fieldset className={`mrow${showError ? ' missing' : ''}`}>
+      <legend className="sr-only">{fill(st.metric_label, { n: String(n) })}: {m.name_tr} / {m.name_en}</legend>
+      <div className="mrow-main">
+        <div className="mc-name">
+          <span className="metric-name">{m.name_tr}</span>
+          <span className="metric-en">{m.name_en}</span>
+        </div>
+        <div className="mc-tools">
+          {hint && (
+            <button type="button" className="chip hint-link" aria-expanded={hintOpen} aria-label={hintOpen ? t.hint_hide : t.hint_button} title={hintOpen ? t.hint_hide : t.hint_button}
+              onClick={() => setHintOpen(!hintOpen)}><Bulb />{lbl.hint_short}</button>
+          )}
+          <button type="button" className="chip hint-link" aria-expanded={detailsOpen} aria-label={detailsOpen ? t.details_hide : t.details_button} title={detailsOpen ? t.details_hide : t.details_button}
+            onClick={() => setDetailsOpen(!detailsOpen)}><Bulb />{lbl.details_short}</button>
+        </div>
+        <p className="question" lang={lang}>{m.question[lang]}</p>
+        <div className="scores" role="radiogroup" aria-label={`${m.name_tr} / ${m.name_en}`}>
+          {(['0', '1', '2'] as const).map((k) => {
+            const on = value?.score === Number(k)
+            return (
+              <label key={k} className={`score s${k}${on ? ' on' : ''}`} title={`${config.scale[k].label[lang]}: ${m.anchors[k][lang]}`}>
+                <input type="radio" name={group} checked={on} aria-label={`${k} ${config.scale[k].label[lang]}`}
+                  onChange={() => onChange({ score: Number(k) })} />
+                <span className="score-head" lang={lang}><b>{k}</b></span>
+              </label>
+            )
+          })}
+        </div>
+        <button type="button" className={`note-btn${noteLen > 0 ? ' has' : ''}`} aria-expanded={noteOpen} aria-label={st.note_toggle} title={st.note_toggle}
+          onClick={toggleNote}>{lbl.note_short}{noteLen > 0 ? ' •' : ''}</button>
       </div>
 
       {noteOpen && (
-        <textarea className="note" maxLength={500} rows={2} placeholder={st.note_placeholder} aria-label={`${st.note_placeholder} — ${m.name_tr}`}
-          value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
+        <div className="mrow-note">
+          <textarea ref={noteRef} className="note" maxLength={500} rows={2} placeholder={st.note_placeholder} aria-label={`${st.note_placeholder} — ${m.name_tr}`}
+            value={value?.note ?? ''} onChange={(e) => onChange({ note: e.target.value })} />
+          <span className="note-count" aria-hidden="true">{noteLen}/500</span>
+        </div>
       )}
-
-      <div className="metric-tools">
-        {hint && (
-          <button type="button" className="link hint-link" aria-expanded={hintOpen} onClick={() => setHintOpen(!hintOpen)}>
-            <Bulb />{hintOpen ? t.hint_hide : t.hint_button}
-          </button>
-        )}
-        <button type="button" className="link hint-link" aria-expanded={detailsOpen} onClick={() => setDetailsOpen(!detailsOpen)}>
-          <Bulb />{detailsOpen ? t.details_hide : t.details_button}
-        </button>
-      </div>
 
       {hintOpen && hint && (
         <div className="hint-panel" lang={lang}>
@@ -306,7 +334,6 @@ function MetricBlock({
           </dl>
         </div>
       )}
-
     </fieldset>
   )
 }
