@@ -136,7 +136,7 @@ export default function AnnotatorApp() {
       const t = config.annotate.tr
       return (
         <>
-          <TopBar appName={appName} step={t.step}
+          <TopBar appName={appName} step={t.step} wide
             right={progress && (
               <span className="progress" aria-live="polite">
                 <span className="bar"><span style={{ width: `${(100 * progress.done) / Math.max(1, progress.total)}%` }} /></span>

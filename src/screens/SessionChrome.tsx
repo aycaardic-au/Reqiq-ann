@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { CommonTexts, SessionBarTexts } from '../lib/config'
 
 /** Top bar with step label (and progress on K5). */
-export function TopBar({ appName, step, right }: { appName: string; step: string; right?: ReactNode }) {
+export function TopBar({ appName, step, right, wide }: { appName: string; step: string; right?: ReactNode; wide?: boolean }) {
   return (
     <header className="top">
-      <div className="top-in">
+      <div className={`top-in${wide ? ' wide' : ''}`}>
         <span className="appname">{appName}</span>
         <span className="stepnow">{step}</span>
         {right && <div className="top-end">{right}</div>}
