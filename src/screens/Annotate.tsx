@@ -4,6 +4,8 @@ import { isSessionClosed, type BatchItem, type MetricScore } from '../lib/sessio
 
 type Draft = Record<string, MetricScore>
 
+/** Longest visible note: this many lines, then the field scrolls. */
+const NOTE_MAX_LINES = 2
 const DRAFT_KEY = 'reqiq_ann_drafts'
 const toDraft = (scores: MetricScore[]): Draft => Object.fromEntries(scores.map((s) => [s.metric_id, { ...s }]))
 const filled = (d: Draft | undefined) => (d ? Object.values(d).filter((s) => s.score !== null).length : 0)
@@ -240,12 +242,23 @@ function MetricRow({
   const sampleText = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.text_en ?? null : s.text)
   const sampleReason = (s: NonNullable<RubricMetric['samples']>[number]) => (lang === 'en' ? s.reason_en : s.reason_tr)
   const noteLen = value?.note?.length ?? 0
-  // Note field starts one line high (same height as a metric row) and grows with the text up to about four lines
+  // Note field starts one line high (same height as a metric row) and grows with the text up to NOTE_MAX_LINES lines
   useEffect(() => {
     const el = noteRef.current
     if (!noteOpen || !el) return
+    // Up to NOTE_MAX_LINES lines the field grows to fit; beyond that it shows exactly that many lines (no half line cut off) and scrolls
+    el.classList.remove('scrolls')
     el.style.height = 'auto'
-    el.style.height = `${Math.min(el.scrollHeight, 112)}px`
+    const cs = getComputedStyle(el)
+    const lh = parseFloat(cs.lineHeight) || 20
+    const border = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
+    const padTop = parseFloat(cs.paddingTop)
+    const fiveLines = Math.ceil(border + padTop + NOTE_MAX_LINES * lh + parseFloat(cs.paddingBottom)) + 1
+    const full = el.scrollHeight + border
+    const scrolls = full > fiveLines
+    el.classList.toggle('scrolls', scrolls)
+    el.style.height = `${scrolls ? Math.ceil(border + padTop + NOTE_MAX_LINES * lh + 2) : full}px`
+    el.style.overflowY = scrolls ? 'auto' : 'hidden'
   }, [noteOpen, value?.note])
   const toggleNote = () => {
     const open = !noteOpen
